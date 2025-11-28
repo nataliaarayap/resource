@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía de Entrega Final - Proyecto Asignatura</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.95;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .section h2 {
+            color: #667eea;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section h3 {
+            color: #764ba2;
+            font-size: 1.4em;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+        
+        .section p, .section li {
+            font-size: 1.1em;
+            line-height: 1.8;
+            color: #333;
+            margin-bottom: 12px;
+        }
+        
+        .subsection {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .subsection h4 {
+            color: #667eea;
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        ul, ol {
+            margin-left: 25px;
+            margin-top: 15px;
+        }
+        
+        li {
+            margin-bottom: 12px;
+            padding-left: 10px;
+        }
+        
+        .badge {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        .highlight {
+            background: #fff3cd;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #ffc107;
+            margin: 20px 0;
+        }
+        
+        .highlight strong {
+            color: #856404;
+            font-size: 1.15em;
+        }
+        
+        .file-list {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+        
+        .file-list li {
+            font-size: 1.1em;
+            color: #1565c0;
+            font-weight: 500;
+        }
+        
+        .icon {
+            font-size: 1.5em;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+        
+        .nav-btn {
+            padding: 15px 30px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .nav-btn:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(118, 75, 162, 0.4);
+        }
+        
+        .footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 25px;
+            font-size: 1em;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .section {
+                padding: 20px;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📋 Entrega Final del Proyecto</h1>
+            <p>Guía Completa para la Entrega 3</p>
+        </div>
+        
+        <div class="content">
+            <div class="nav-buttons">
+                <button class="nav-btn" onclick="scrollToSection('objetivo')">Objetivo</button>
+                <button class="nav-btn" onclick="scrollToSection('informe')">Estructura del Informe</button>
+                <button class="nav-btn" onclick="scrollToSection('powerbi')">Power BI</button>
+                <button class="nav-btn" onclick="scrollToSection('presentacion')">Presentación</button>
+                <button class="nav-btn" onclick="scrollToSection('archivos')">Archivos</button>
+            </div>
+            
+            <div class="section" id="objetivo">
+                <h2><span class="icon">🎯</span> Objetivo del Entregable</h2>
+                <p>Entregar un informe consolidado que documente de manera integral el diagnóstico organizacional, el diseño técnico y funcional de la solución, su implementación y el análisis de resultados obtenidos. Además, se debe demostrar el funcionamiento completo del sistema, su aplicabilidad en el contexto real y el aprendizaje adquirido por el equipo.</p>
+                
+                <div class="highlight">
+                    <strong>Nota Importante:</strong> Esta instancia representa la culminación del trabajo conjunto entre el equipo, la organización socia y el cuerpo docente.
+                </div>
+            </div>
+            
+            <div class="section" id="informe">
+                <h2><span class="icon">📄</span> Estructura del Informe</h2>
+                
+                <div class="subsection">
+                    <h4>Elementos Preliminares</h4>
+                    <ul>
+                        <li><strong>Portada:</strong> Nombre de la asignatura, título del proyecto, nombre de la empresa asesorada, nombres de los integrantes, docentes responsables, institución, fecha</li>
+                        <li><strong>Índice de contenido:</strong> Generado automáticamente, reflejando la jerarquía de secciones y subsecciones numeradas</li>
+                        <li><strong>Índice de Figuras</strong></li>
+                        <li><strong>Índice de Tablas</strong></li>
+                        <li><strong>Resumen Ejecutivo:</strong> Síntesis breve (máximo una página) centrada en el problema identificado, la propuesta de solución y los beneficios esperados</li>
+                    </ul>
+                </div>
+                
+                <h3>Capítulos del Informe</h3>
+                
+                <div class="subsection">
+                    <h4>1. Diagnóstico Organizacional (Situación Actual)</h4>
+                    <ul>
+                        <li>Descripción de la cultura y estructura organizacional</li>
+                        <li>Aplicación de al menos dos herramientas de análisis interno con reflexión crítica del equipo sobre los hallazgos (mínimo obligatorio: FODA y Buyer Persona)</li>
+                        <li>Aplicación de al menos dos herramientas de análisis externo con reflexión crítica del equipo sobre los hallazgos</li>
+                        <li>Descripción de procesos operativos clave</li>
+                    </ul>
+                </div>
+                
+                <div class="subsection">
+                    <h4>2. Contexto de la Problemática</h4>
+                    <p>Análisis detallado del problema identificado, vinculado a la gestión del sistema transaccional.</p>
+                </div>
+                
+                <div class="subsection">
+                    <h4>3. Modelo de Procesos (BPMN antes y después)</h4>
+                    <ul>
+                        <li>Representación del proceso actual y el proceso optimizado con la solución implementada</li>
+                        <li>Identificación de mejoras, automatizaciones y cambios de flujo</li>
+                        <li>Evaluación del impacto que tendrá la solución propuesta en la operación actual</li>
+                    </ul>
+                    <p><em>Nota: El modelo va en ANEXOS y la evaluación del impacto va en este apartado del informe</em></p>
+                </div>
+                
+                <div class="subsection">
+                    <h4>4. Resumen de la Solución Propuesta</h4>
+                    <ul>
+                        <li><strong>Solución conceptual:</strong> Justificación técnica y organizacional</li>
+                        <li><strong>Diseño técnico:</strong> Interacción usuario-sistema, descripción de formularios e interfaces</li>
+                        <li><strong>Modelo de base de datos:</strong> Conceptual y físico</li>
+                        <li><strong>Requerimientos del sistema:</strong> Funcionales y no funcionales, de sistema y de usuarios (la lista de requerimientos va en los anexos utilizando la plantilla trabajada en clases)</li>
+                    </ul>
+                </div>
+                
+                <div class="subsection">
+                    <h4>5. Definición de Objetivos Organizacionales según la solución</h4>
+                    <p>Formulación de al menos 3 objetivos orientados en la solución propuesta. Cada objetivo debe estar claramente vinculado con el Power BI realizado y algunos de los indicadores propuestos.</p>
+                </div>
+                
+                <div class="subsection">
+                    <h4>6. Definición de Indicadores</h4>
+                    <p>Ficha detallada de al menos 7 indicadores o mediciones clave. Debe existir al menos un indicador por objetivo; el resto de indicadores pueden ser complementarios a la solución.</p>
+                </div>
+                
+                <div class="subsection">
+                    <h4>7. Conclusiones</h4>
+                    <p>Reflexión general sobre el proceso de diagnóstico, diseño y desarrollo (1 página de extensión).</p>
+                </div>
+                
+                <div class="subsection">
+                    <h4>8. Referencias Bibliográficas</h4>
+                    <p>Listado de fuentes utilizadas, citadas según norma APA (séptima edición).</p>
+                </div>
+                
+                <div class="subsection">
+                    <h4>9. Anexos</h4>
+                    <p>Material complementario que respalde el desarrollo del informe (ej. entrevistas, formularios preliminares, evidencia de reuniones, etc.), identificados con letras (Ej. Anexo A, Anexo B).</p>
+                </div>
+            </div>
+            
+            <div class="section" id="powerbi">
+                <h2><span class="icon">📊</span> Especificaciones del Power BI</h2>
+                <ul>
+                    <li>El Power BI confeccionado debe estar relacionado con el sistema transaccional, es decir, se suministra de esa información</li>
+                    <li>Debe contener <strong>3 páginas</strong> cada una con sus propias gráficas e interacciones</li>
+                    <li>Se deben proyectar los <strong>7 indicadores</strong> establecidos en el proyecto</li>
+                </ul>
+            </div>
+            
+            <div class="section" id="presentacion">
+                <h2><span class="icon">🎤</span> Especificaciones de la Presentación</h2>
+                
+                <div class="highlight">
+                    <strong>Duración:</strong> Extensión máxima de 13 minutos por grupo + 15 minutos de defensa con preguntas de la comisión evaluadora
+                </div>
+                
+                <h3>Contenido de la Presentación</h3>
+                <ul>
+                    <li><strong>Conclusión de las herramientas de diagnóstico organizacional:</strong> Se sugiere mostrar una interna (FODA) y una externa (ejemplo: PESTEL)</li>
+                    <li><strong>Explicación breve de la problemática y solución propuesta</strong></li>
+                    <li><strong>Presentación del sistema transaccional:</strong> Se sugiere utilizar videos para presentar el funcionamiento de los formularios, con la finalidad de optimizar el tiempo</li>
+                    <li><strong>Presentación en vivo del Power BI realizado</strong></li>
+                </ul>
+                
+                <div class="highlight">
+                    <strong>Importante:</strong> Todos los integrantes deben presentar y la calificación tendrá un componente grupal y uno individual.
+                </div>
+            </div>
+            
+            <div class="section" id="archivos">
+                <h2><span class="icon">📁</span> Archivos Obligatorios para la Entrega</h2>
+                
+                <div class="file-list">
+                    <ol>
+                        <li>Manual de usuario que describa las facilidades y forma de uso de las aplicaciones clientes (.pdf)</li>
+                        <li>Bitácora de Trabajo Final</li>
+                        <li>Informe Final en formato PDF</li>
+                        <li>Archivo de Modelamiento de procesos (.png o .jpg)</li>
+                        <li>Archivos Excel (.xlsm)</li>
+                        <li>Archivos de solución Power BI</li>
+                        <li>Material de apoyo de la presentación (formato libre)</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>💡 ¡Éxito en su entrega final! Recuerden revisar cada punto de esta guía antes de presentar.</p>
+        </div>
+    </div>
+    
+    <script>
+        function scrollToSection(id) {
+            const element = document.getElementById(id);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+        
+        // Efecto de aparición suave al cargar
+        window.addEventListener('load', function() {
+            const sections = document.querySelectorAll('.section');
+            sections.forEach((section, index) => {
+                setTimeout(() => {
+                    section.style.opacity = '0';
+                    section.style.transform = 'translateY(20px)';
+                    section.style.transition = 'all 0.5s ease';
+                    
+                    setTimeout(() => {
+                        section.style.opacity = '1';
+                        section.style.transform = 'translateY(0)';
+                    }, 50);
+                }, index * 100);
+            });
+        });
+    </script>
+</body>
+</html>
