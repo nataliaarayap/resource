@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculador de Horas Efectivas de Práctica</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a1929 0%, #1a3a52 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #0d2c4a 0%, #1a4d6d 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            color: #0d2c4a;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 15px;
+        }
+
+        input[type="date"],
+        input[type="time"],
+        input[type="number"],
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: all 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #1a4d6d;
+            box-shadow: 0 0 0 3px rgba(26, 77, 109, 0.1);
+        }
+
+        .row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .horario-section {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 2px solid #e0e0e0;
+        }
+
+        .horario-section h3 {
+            color: #0d2c4a;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .day-card {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            transition: all 0.3s;
+        }
+
+        .day-card.active {
+            border-color: #1a4d6d;
+            background: #f0f7ff;
+        }
+
+        .day-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .day-header input[type="checkbox"] {
+            width: 22px;
+            height: 22px;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        .day-header label {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            color: #0d2c4a;
+        }
+
+        .time-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .time-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .time-group label {
+            font-size: 12px;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #666;
+        }
+
+        .time-group input {
+            padding: 8px;
+            font-size: 14px;
+        }
+
+        .btn-calculate {
+            background: linear-gradient(135deg, #1a4d6d 0%, #2d6a8f 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn-calculate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(26, 77, 109, 0.4);
+        }
+
+        .result-box {
+            margin-top: 30px;
+            padding: 25px;
+            background: linear-gradient(135deg, #f0f7ff 0%, #e3f2fd 100%);
+            border-radius: 12px;
+            border-left: 5px solid #1a4d6d;
+            display: none;
+        }
+
+        .result-box.show {
+            display: block;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #d0e7f7;
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+        }
+
+        .result-label {
+            color: #0d2c4a;
+            font-weight: 600;
+        }
+
+        .result-value {
+            color: #1a4d6d;
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .total-result {
+            background: #0d2c4a;
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .total-result h3 {
+            font-size: 24px;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        .status-badge.approved {
+            background: #4caf50;
+            color: white;
+        }
+
+        .status-badge.pending {
+            background: #ff9800;
+            color: white;
+        }
+
+        .info-box {
+            background: #fff9e6;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin-bottom: 25px;
+            border-radius: 5px;
+        }
+
+        .info-box p {
+            color: #7d6608;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .desglose-dias {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .desglose-dias h4 {
+            color: #0d2c4a;
+            margin-bottom: 10px;
+        }
+
+        .desglose-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            font-size: 14px;
+            border-bottom: 1px solid #eee;
+        }
+
+        @media (max-width: 768px) {
+            .row, .time-inputs {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 22px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 Calculador de Horas Efectivas de Práctica</h1>
+            <p>Ingeniería en Información y Control de Gestión - UCN</p>
+        </div>
+
+        <div class="content">
+            <div class="info-box">
+                <p><strong>Nota:</strong> Configura el horario específico para cada día de trabajo. Las horas de colación se descuentan automáticamente. Se requieren mínimo 420 horas efectivas continuas.</p>
+            </div>
+
+            <div class="form-group">
+                <label>Fecha de Inicio de Práctica</label>
+                <input type="date" id="fechaInicio">
+            </div>
+
+            <div class="form-group">
+                <label>Fecha de Término de Práctica</label>
+                <input type="date" id="fechaTermino">
+            </div>
+
+            <div class="form-group">
+                <label>Cantidad de Feriados en el Período</label>
+                <input type="number" id="cantidadFeriados" value="0" min="0">
+            </div>
+
+            <div class="horario-section">
+                <h3>⏰ Configuración de Horarios por Día</h3>
+                
+                <div class="day-card" id="card-lunes">
+                    <div class="day-header">
+                        <input type="checkbox" id="check-lunes" onchange="toggleDay('lunes')">
+                        <label for="check-lunes">Lunes</label>
+                    </div>
+                    <div class="time-inputs" id="inputs-lunes" style="display:none;">
+                        <div class="time-group">
+                            <label>Entrada</label>
+                            <input type="time" id="entrada-lunes">
+                        </div>
+                        <div class="time-group">
+                            <label>Salida</label>
+                            <input type="time" id="salida-lunes">
+                        </div>
+                        <div class="time-group">
+                            <label>Colación (min)</label>
+                            <input type="number" id="colacion-lunes" value="60" min="0">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="day-card" id="card-martes">
+                    <div class="day-header">
+                        <input type="checkbox" id="check-martes" onchange="toggleDay('martes')">
+                        <label for="check-martes">Martes</label>
+                    </div>
+                    <div class="time-inputs" id="inputs-martes" style="display:none;">
+                        <div class="time-group">
+                            <label>Entrada</label>
+                            <input type="time" id="entrada-martes">
+                        </div>
+                        <div class="time-group">
+                            <label>Salida</label>
+                            <input type="time" id="salida-martes">
+                        </div>
+                        <div class="time-group">
+                            <label>Colación (min)</label>
+                            <input type="number" id="colacion-martes" value="60" min="0">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="day-card" id="card-miercoles">
+                    <div class="day-header">
+                        <input type="checkbox" id="check-miercoles" onchange="toggleDay('miercoles')">
+                        <label for="check-miercoles">Miércoles</label>
+                    </div>
+                    <div class="time-inputs" id="inputs-miercoles" style="display:none;">
+                        <div class="time-group">
+                            <label>Entrada</label>
+                            <input type="time" id="entrada-miercoles">
+                        </div>
+                        <div class="time-group">
+                            <label>Salida</label>
+                            <input type="time" id="salida-miercoles">
+                        </div>
+                        <div class="time-group">
+                            <label>Colación (min)</label>
+                            <input type="number" id="colacion-miercoles" value="60" min="0">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="day-card" id="card-jueves">
+                    <div class="day-header">
+                        <input type="checkbox" id="check-jueves" onchange="toggleDay('jueves')">
+                        <label for="check-jueves">Jueves</label>
+                    </div>
+                    <div class="time-inputs" id="inputs-jueves" style="display:none;">
+                        <div class="time-group">
+                            <label>Entrada</label>
+                            <input type="time" id="entrada-jueves">
+                        </div>
+                        <div class="time-group">
+                            <label>Salida</label>
+                            <input type="time" id="salida-jueves">
+                        </div>
+                        <div class="time-group">
+                            <label>Colación (min)</label>
+                            <input type="number" id="colacion-jueves" value="60" min="0">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="day-card" id="card-viernes">
+                    <div class="day-header">
+                        <input type="checkbox" id="check-viernes" onchange="toggleDay('viernes')">
+                        <label for="check-viernes">Viernes</label>
+                    </div>
+                    <div class="time-inputs" id="inputs-viernes" style="display:none;">
+                        <div class="time-group">
+                            <label>Entrada</label>
+                            <input type="time" id="entrada-viernes">
+                        </div>
+                        <div class="time-group">
+                            <label>Salida</label>
+                            <input type="time" id="salida-viernes">
+                        </div>
+                        <div class="time-group">
+                            <label>Colación (min)</label>
+                            <input type="number" id="colacion-viernes" value="60" min="0">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="day-card" id="card-sabado">
+                    <div class="day-header">
+                        <input type="checkbox" id="check-sabado" onchange="toggleDay('sabado')">
+                        <label for="check-sabado">Sábado</label>
+                    </div>
+                    <div class="time-inputs" id="inputs-sabado" style="display:none;">
+                        <div class="time-group">
+                            <label>Entrada</label>
+                            <input type="time" id="entrada-sabado">
+                        </div>
+                        <div class="time-group">
+                            <label>Salida</label>
+                            <input type="time" id="salida-sabado">
+                        </div>
+                        <div class="time-group">
+                            <label>Colación (min)</label>
+                            <input type="number" id="colacion-sabado" value="60" min="0">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="day-card" id="card-domingo">
+                    <div class="day-header">
+                        <input type="checkbox" id="check-domingo" onchange="toggleDay('domingo')">
+                        <label for="check-domingo">Domingo</label>
+                    </div>
+                    <div class="time-inputs" id="inputs-domingo" style="display:none;">
+                        <div class="time-group">
+                            <label>Entrada</label>
+                            <input type="time" id="entrada-domingo">
+                        </div>
+                        <div class="time-group">
+                            <label>Salida</label>
+                            <input type="time" id="salida-domingo">
+                        </div>
+                        <div class="time-group">
+                            <label>Colación (min)</label>
+                            <input type="number" id="colacion-domingo" value="60" min="0">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn-calculate" onclick="calcular()">Calcular Horas Efectivas</button>
+
+            <div class="result-box" id="resultBox">
+                <h2 style="color: #0d2c4a; margin-bottom: 20px;">Resultados del Cálculo</h2>
+                
+                <div class="result-item">
+                    <span class="result-label">Días totales del período:</span>
+                    <span class="result-value" id="diasTotales">-</span>
+                </div>
+                
+                <div class="result-item">
+                    <span class="result-label">Días laborables (descontando feriados):</span>
+                    <span class="result-value" id="diasLaborables">-</span>
+                </div>
+
+                <div class="desglose-dias" id="desgloseDias">
+                    <h4>📋 Desglose por Día de la Semana:</h4>
+                    <div id="desgloseLista"></div>
+                </div>
+
+                <div class="total-result">
+                    <h3>TOTAL HORAS EFECTIVAS</h3>
+                    <div style="font-size: 36px; margin: 10px 0;" id="totalHoras">-</div>
+                    <div id="statusBadge"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const diasSemana = {
+            'lunes': 1,
+            'martes': 2,
+            'miercoles': 3,
+            'jueves': 4,
+            'viernes': 5,
+            'sabado': 6,
+            'domingo': 0
+        };
+
+        function toggleDay(dia) {
+            const checkbox = document.getElementById(`check-${dia}`);
+            const inputs = document.getElementById(`inputs-${dia}`);
+            const card = document.getElementById(`card-${dia}`);
+            
+            if (checkbox.checked) {
+                inputs.style.display = 'grid';
+                card.classList.add('active');
+            } else {
+                inputs.style.display = 'none';
+                card.classList.remove('active');
+            }
+        }
+
+        function calcular() {
+            const fechaInicio = new Date(document.getElementById('fechaInicio').value);
+            const fechaTermino = new Date(document.getElementById('fechaTermino').value);
+            const cantidadFeriados = parseInt(document.getElementById('cantidadFeriados').value) || 0;
+
+            if (!document.getElementById('fechaInicio').value || !document.getElementById('fechaTermino').value) {
+                alert('Por favor completa las fechas de inicio y término');
+                return;
+            }
+
+            if (fechaTermino <= fechaInicio) {
+                alert('La fecha de término debe ser posterior a la fecha de inicio');
+                return;
+            }
+
+            const configuracionDias = {};
+            let hayDiaSeleccionado = false;
+
+            for (const [nombreDia, numeroDia] of Object.entries(diasSemana)) {
+                const checkbox = document.getElementById(`check-${nombreDia}`);
+                if (checkbox.checked) {
+                    const entrada = document.getElementById(`entrada-${nombreDia}`).value;
+                    const salida = document.getElementById(`salida-${nombreDia}`).value;
+                    const colacion = parseInt(document.getElementById(`colacion-${nombreDia}`).value) || 0;
+
+                    if (!entrada || !salida) {
+                        alert(`Por favor completa el horario de ${nombreDia}`);
+                        return;
+                    }
+
+                    const [horaE, minE] = entrada.split(':').map(Number);
+                    const [horaS, minS] = salida.split(':').map(Number);
+                    const minutosEntrada = horaE * 60 + minE;
+                    const minutosSalida = horaS * 60 + minS;
+                    
+                    if (minutosSalida <= minutosEntrada) {
+                        alert(`La hora de salida debe ser posterior a la hora de entrada el día ${nombreDia}`);
+                        return;
+                    }
+
+                    const minutosTrabajo = minutosSalida - minutosEntrada;
+                    const horasEfectivas = (minutosTrabajo - colacion) / 60;
+
+                    if (horasEfectivas < 0) {
+                        alert(`El tiempo de colación no puede ser mayor al tiempo de trabajo el día ${nombreDia}`);
+                        return;
+                    }
+
+                    configuracionDias[numeroDia] = {
+                        nombre: nombreDia.charAt(0).toUpperCase() + nombreDia.slice(1),
+                        horasEfectivas: horasEfectivas,
+                        horasTrabajo: minutosTrabajo / 60,
+                        colacion: colacion,
+                        entrada: entrada,
+                        salida: salida
+                    };
+                    hayDiaSeleccionado = true;
+                }
+            }
+
+            if (!hayDiaSeleccionado) {
+                alert('Debe seleccionar al menos un día de trabajo');
+                return;
+            }
+
+            const unDia = 24 * 60 * 60 * 1000;
+            const diasTotales = Math.round(Math.abs((fechaTermino - fechaInicio) / unDia)) + 1;
+
+            const contadorDias = {};
+            let totalHorasEfectivas = 0;
+            const fechaActual = new Date(fechaInicio);
+            
+            while (fechaActual <= fechaTermino) {
+                const diaSemana = fechaActual.getDay();
+                
+                if (configuracionDias[diaSemana]) {
+                    if (!contadorDias[diaSemana]) {
+                        contadorDias[diaSemana] = 0;
+                    }
+                    contadorDias[diaSemana]++;
+                    totalHorasEfectivas += configuracionDias[diaSemana].horasEfectivas;
+                }
+                
+                fechaActual.setDate(fechaActual.getDate() + 1);
+            }
+
+            let diasLaborablesTotal = Object.values(contadorDias).reduce((a, b) => a + b, 0);
+            const horasPorDiaFeriado = diasLaborablesTotal > 0 ? totalHorasEfectivas / diasLaborablesTotal : 0;
+            const horasDescontadasPorFeriados = cantidadFeriados * horasPorDiaFeriado;
+            totalHorasEfectivas -= horasDescontadasPorFeriados;
+            diasLaborablesTotal -= cantidadFeriados;
+
+            document.getElementById('diasTotales').textContent = diasTotales;
+            document.getElementById('diasLaborables').textContent = diasLaborablesTotal;
+
+            let desgloseLista = '';
+            for (const [numeroDia, config] of Object.entries(configuracionDias)) {
+                const cantidad = contadorDias[numeroDia] || 0;
+                const horasTotales = (cantidad * config.horasEfectivas).toFixed(2);
+                desgloseLista += `
+                    <div class="desglose-item">
+                        <span><strong>${config.nombre}:</strong> ${cantidad} días × ${config.horasEfectivas.toFixed(2)} hrs/día (${config.entrada} a ${config.salida}, colación ${config.colacion} min)</span>
+                        <span style="color: #1a4d6d; font-weight: 700;">${horasTotales} hrs</span>
+                    </div>
+                `;
+            }
+
+            if (cantidadFeriados > 0) {
+                desgloseLista += `
+                    <div class="desglose-item" style="color: #d32f2f;">
+                        <span><strong>Descuento por feriados:</strong> ${cantidadFeriados} días × ${horasPorDiaFeriado.toFixed(2)} hrs/día promedio</span>
+                        <span style="font-weight: 700;">-${horasDescontadasPorFeriados.toFixed(2)} hrs</span>
+                    </div>
+                `;
+            }
+
+            document.getElementById('desgloseLista').innerHTML = desgloseLista;
+            document.getElementById('totalHoras').textContent = totalHorasEfectivas.toFixed(2) + ' horas';
+
+            const statusBadge = document.getElementById('statusBadge');
+            if (totalHorasEfectivas >= 420) {
+                statusBadge.innerHTML = '<span class="status-badge approved">✓ CUMPLE CON EL MÍNIMO REQUERIDO</span>';
+            } else {
+                const horasFaltantes = (420 - totalHorasEfectivas).toFixed(2);
+                statusBadge.innerHTML = `<span class="status-badge pending">⚠ FALTAN ${horasFaltantes} HORAS</span>`;
+            }
+
+            document.getElementById('resultBox').classList.add('show');
+            document.getElementById('resultBox').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+    </script>
+</body>
+</html>
