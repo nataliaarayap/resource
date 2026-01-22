@@ -1,0 +1,1466 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Indicadores IICG 2025</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #1e3a8a;
+            --secondary: #3b82f6;
+            --accent: #f97316;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #0f172a;
+            --gray: #64748b;
+            --light: #f1f5f9;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .title-section h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .title-section p {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .nav-tab {
+            padding: 0.75rem 1.5rem;
+            background: var(--light);
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: var(--dark);
+        }
+
+        .nav-tab:hover {
+            background: var(--secondary);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .nav-tab.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .indicator-grid {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .chart-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+        }
+
+        .chart-header {
+            margin-bottom: 1.5rem;
+        }
+
+        .chart-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .chart-subtitle {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 400px;
+        }
+
+        .insights-panel {
+            background: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%);
+            border-radius: 16px;
+            padding: 2rem;
+            border-left: 4px solid var(--accent);
+        }
+
+        .insights-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .insights-title::before {
+            content: '▪';
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .metric-box {
+            background: white;
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .metric-label {
+            font-size: 0.85rem;
+            color: var(--gray);
+            margin-bottom: 0.25rem;
+        }
+
+        .metric-value {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .metric-value.positive {
+            color: var(--success);
+        }
+
+        .metric-value.negative {
+            color: var(--danger);
+        }
+
+        .metric-comparison {
+            font-size: 0.8rem;
+            color: var(--gray);
+            margin-top: 0.25rem;
+        }
+
+        .highlight-text {
+            background: linear-gradient(120deg, #fef3c7 0%, #fde68a 100%);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        .insight-item {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 0.75rem;
+            border-left: 3px solid var(--secondary);
+        }
+
+        .insight-item strong {
+            color: var(--primary);
+        }
+
+        .legend-container {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .legend-color {
+            width: 16px;
+            height: 16px;
+            border-radius: 3px;
+        }
+
+        .legend-label {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 1200px) {
+            .indicator-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-tabs {
+                width: 100%;
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <div class="title-section">
+                <h1>Dashboard Indicadores IICG 2025</h1>
+                <p>Informe de Seguimiento IICG 2025</p>
+            </div>
+            <div class="nav-tabs">
+                <button class="nav-tab active" onclick="scrollToSection('matricula')">Matrícula</button>
+                <button class="nav-tab" onclick="scrollToSection('titulacion')">Titulación</button>
+                <button class="nav-tab" onclick="scrollToSection('retencion')">Retención</button>
+                <button class="nav-tab" onclick="scrollToSection('duracion')">Duración</button>
+                <button class="nav-tab" onclick="scrollToSection('criticas')">Asig. Críticas</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- MATRÍCULA -->
+        <div id="matricula" class="indicator-grid">
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h2 class="chart-title">Evolución de Matrícula</h2>
+                    <p class="chart-subtitle">Estudiantes matriculados por año 2015-2025</p>
+                </div>
+                <div class="chart-container">
+                    <canvas id="chartMatricula"></canvas>
+                </div>
+                <div class="legend-container">
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #94a3b8;"></div>
+                        <span class="legend-label">UCN</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #3b82f6;"></div>
+                        <span class="legend-label">ECIEM</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #f97316;"></div>
+                        <span class="legend-label">IICG</span>
+                    </div>
+                </div>
+            </div>
+            <div class="insights-panel">
+                <h3 class="insights-title">Hallazgos Clave 2025</h3>
+                
+                <div style="background: linear-gradient(135deg, #e0f2fe 0%, #dbeafe 100%); padding: 1rem; border-radius: 8px; margin-bottom: 1rem; border-left: 4px solid #3b82f6;">
+                    <div style="font-weight: 700; color: #1e40af; margin-bottom: 0.5rem;">▪ IICG ECIEM (Coquimbo)</div>
+                    <div style="font-size: 0.9rem; color: #475569;">Matrícula: <strong>343</strong> | 37.6% del total ECIEM</div>
+                </div>
+
+                <div style="background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%); padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; border-left: 4px solid #ef4444;">
+                    <div style="font-weight: 700; color: #991b1b; margin-bottom: 0.5rem;">▪ IICG FACEA (Antofagasta)</div>
+                    <div style="font-size: 0.9rem; color: #475569;">Matrícula: <strong>214</strong> | 22.4% del total FACEA</div>
+                </div>
+
+                <div class="metric-box">
+                    <div class="metric-label">Variación ECIEM 2024-2025</div>
+                    <div class="metric-value negative">-3.7%</div>
+                    <div class="metric-comparison">De 356 a 343 estudiantes</div>
+                </div>
+
+                <div class="metric-box">
+                    <div class="metric-label">Variación FACEA 2024-2025</div>
+                    <div class="metric-value positive">+11.5%</div>
+                    <div class="metric-comparison">De 192 a 214 estudiantes</div>
+                </div>
+
+                <div class="insight-item">
+                    <strong>Contexto:</strong> ECIEM en ajuste post-pandemia | FACEA en crecimiento sostenido
+                </div>
+
+                <div class="insight-item">
+                    <strong>Género ECIEM:</strong> 50.4% mujeres y 49.6% hombres (paridad)
+                </div>
+
+                <div class="insight-item">
+                    <strong>Género FACEA:</strong> 57.6% hombres y 42.4% mujeres
+                </div>
+
+                <div class="insight-item">
+                    <strong>Posicionamiento:</strong> Mayor peso en ECIEM (37.6%) que en FACEA (22.4%)
+                </div>
+            </div>
+        </div>
+
+        <!-- TITULACIÓN OPORTUNA -->
+        <div id="titulacion" class="indicator-grid">
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h2 class="chart-title">Titulación Oportuna</h2>
+                    <p class="chart-subtitle">Porcentaje de estudiantes que se titulan en tiempo teórico</p>
+                </div>
+                <div class="chart-container">
+                    <canvas id="chartTitulacion"></canvas>
+                </div>
+                <div class="legend-container">
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #94a3b8;"></div>
+                        <span class="legend-label">UCN</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #3b82f6;"></div>
+                        <span class="legend-label">ECIEM</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #f97316;"></div>
+                        <span class="legend-label">IICG</span>
+                    </div>
+                </div>
+            </div>
+            <div class="insights-panel">
+                <h3 class="insights-title">Hallazgos Clave 2025</h3>
+                
+                <div style="background: linear-gradient(135deg, #e0f2fe 0%, #dbeafe 100%); padding: 1rem; border-radius: 8px; margin-bottom: 1rem; border-left: 4px solid #3b82f6;">
+                    <div style="font-weight: 700; color: #1e40af; margin-bottom: 0.5rem;">▪ IICG ECIEM (Coquimbo)</div>
+                    <div style="font-size: 0.9rem; color: #475569;">Titulación Oportuna: <strong>58.1%</strong></div>
+                </div>
+
+                <div style="background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%); padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; border-left: 4px solid #ef4444;">
+                    <div style="font-weight: 700; color: #991b1b; margin-bottom: 0.5rem;">▪ IICG FACEA (Antofagasta)</div>
+                    <div style="font-size: 0.9rem; color: #475569;">Titulación Oportuna: <strong>46.88%</strong></div>
+                </div>
+
+                <div class="metric-box">
+                    <div class="metric-label">Comparación UCN</div>
+                    <div class="metric-value positive">29.9%</div>
+                    <div class="metric-comparison">Ambas sedes superan ampliamente UCN</div>
+                </div>
+
+                <div class="metric-box">
+                    <div class="metric-label">Comparación ECIEM General</div>
+                    <div class="metric-value">62.1%</div>
+                    <div class="metric-comparison">IICG levemente bajo promedio ECIEM</div>
+                </div>
+
+                <div class="insight-item">
+                    <strong>Fortaleza:</strong> Ambas sedes superan ampliamente promedio UCN (+28.2pp ECIEM, +16.98pp FACEA)
+                </div>
+
+                <div class="insight-item">
+                    <strong>Liderazgo:</strong> ECIEM (58.1%) supera a FACEA (46.88%) en 11.22 puntos porcentuales
+                </div>
+
+                <div class="insight-item">
+                    <strong>Eficiencia:</strong> Refleja adecuada articulación curricular y acompañamiento
+                </div>
+            </div>
+        </div>
+
+        <!-- RETENCIÓN 1º AÑO -->
+        <div id="retencion" class="indicator-grid">
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h2 class="chart-title">Retención Primer Año</h2>
+                    <p class="chart-subtitle">Tasa de permanencia al finalizar el primer año</p>
+                </div>
+                <div class="chart-container">
+                    <canvas id="chartRetencion1"></canvas>
+                </div>
+                <div class="legend-container">
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #94a3b8;"></div>
+                        <span class="legend-label">UCN</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #3b82f6;"></div>
+                        <span class="legend-label">ECIEM</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #f97316;"></div>
+                        <span class="legend-label">IICG</span>
+                    </div>
+                </div>
+            </div>
+            <div class="insights-panel">
+                <h3 class="insights-title">Hallazgos Clave 2025</h3>
+                
+                <div style="background: linear-gradient(135deg, #e0f2fe 0%, #dbeafe 100%); padding: 1rem; border-radius: 8px; margin-bottom: 1rem; border-left: 4px solid #3b82f6;">
+                    <div style="font-weight: 700; color: #1e40af; margin-bottom: 0.5rem;">▪ IICG ECIEM (Coquimbo)</div>
+                    <div style="font-size: 0.9rem; color: #475569;">Retención 1º Año: <strong>84.3%</strong></div>
+                </div>
+
+                <div style="background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%); padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; border-left: 4px solid #ef4444;">
+                    <div style="font-weight: 700; color: #991b1b; margin-bottom: 0.5rem;">▪ IICG FACEA (Antofagasta)</div>
+                    <div style="font-size: 0.9rem; color: #475569;">Retención 1º Año: <strong>73.53%</strong></div>
+                </div>
+
+                <div class="metric-box">
+                    <div class="metric-label">Comparación UCN</div>
+                    <div class="metric-value">81.8%</div>
+                    <div class="metric-comparison">ECIEM sobre UCN | FACEA bajo UCN</div>
+                </div>
+
+                <div class="metric-box">
+                    <div class="metric-label">Brecha entre Sedes</div>
+                    <div class="metric-value">10.77 pp</div>
+                    <div class="metric-comparison">ECIEM supera a FACEA</div>
+                </div>
+
+                <div class="insight-item">
+                    <strong>Posición ECIEM:</strong> Sobre promedio UCN (+2.5pp), levemente bajo ECIEM general (85.7%)
+                </div>
+
+                <div class="insight-item">
+                    <strong>Alerta FACEA:</strong> Bajo promedio UCN (-8.27pp), requiere intervención temprana
+                </div>
+
+                <div class="insight-item">
+                    <strong>Oportunidad:</strong> Fortalecer acompañamiento en asignaturas críticas del 1º año
+                </div>
+            </div>
+        </div>
+
+        <!-- RETENCIÓN 2º AÑO -->
+        <div class="indicator-grid">
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h2 class="chart-title">Retención Segundo Año</h2>
+                    <p class="chart-subtitle">Tasa de retención acumulada al segundo año</p>
+                </div>
+                <div class="chart-container">
+                    <canvas id="chartRetencion2"></canvas>
+                </div>
+                <div class="legend-container">
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #94a3b8;"></div>
+                        <span class="legend-label">UCN</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #3b82f6;"></div>
+                        <span class="legend-label">ECIEM</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #f97316;"></div>
+                        <span class="legend-label">IICG</span>
+                    </div>
+                </div>
+            </div>
+            <div class="insights-panel">
+                <h3 class="insights-title">Hallazgos Clave 2025</h3>
+                
+                <div style="background: linear-gradient(135deg, #e0f2fe 0%, #dbeafe 100%); padding: 1rem; border-radius: 8px; margin-bottom: 1rem; border-left: 4px solid #3b82f6;">
+                    <div style="font-weight: 700; color: #1e40af; margin-bottom: 0.5rem;">▪ IICG ECIEM (Coquimbo)</div>
+                    <div style="font-size: 0.9rem; color: #475569;">Retención 2º Año: <strong>69.0%</strong></div>
+                </div>
+
+                <div style="background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%); padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; border-left: 4px solid #10b981;">
+                    <div style="font-weight: 700; color: #166534; margin-bottom: 0.5rem;">▪ IICG FACEA (Antofagasta)</div>
+                    <div style="font-size: 0.9rem; color: #475569;">Retención 2º Año: <strong>92.86%</strong></div>
+                </div>
+
+                <div class="metric-box">
+                    <div class="metric-label">Comparación UCN</div>
+                    <div class="metric-value">75.7%</div>
+                    <div class="metric-comparison">ECIEM bajo UCN | FACEA muy superior</div>
+                </div>
+
+                <div class="metric-box">
+                    <div class="metric-label">Brecha entre Sedes</div>
+                    <div class="metric-value positive">+23.86 pp</div>
+                    <div class="metric-comparison">FACEA supera ampliamente a ECIEM</div>
+                </div>
+
+                <div class="insight-item">
+                    <strong>Fortaleza FACEA:</strong> Excelente retención (92.86%), muy superior a UCN (+17.16pp)
+                </div>
+
+                <div class="insight-item">
+                    <strong>Alerta ECIEM:</strong> Bajo promedio UCN (-6.7pp) y ECIEM general (-10.2pp)
+                </div>
+
+                <div class="insight-item">
+                    <strong>Nudo crítico ECIEM:</strong> Ciclo básico-intermedio requiere intervención
+                </div>
+            </div>
+        </div>
+
+        <!-- RETENCIÓN 3º AÑO -->
+        <div class="indicator-grid">
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h2 class="chart-title">Retención Tercer Año</h2>
+                    <p class="chart-subtitle">Tasa de retención acumulada al tercer año</p>
+                </div>
+                <div class="chart-container">
+                    <canvas id="chartRetencion3"></canvas>
+                </div>
+                <div class="legend-container">
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #94a3b8;"></div>
+                        <span class="legend-label">UCN</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #3b82f6;"></div>
+                        <span class="legend-label">ECIEM</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #f97316;"></div>
+                        <span class="legend-label">IICG</span>
+                    </div>
+                </div>
+            </div>
+            <div class="insights-panel">
+                <h3 class="insights-title">Hallazgos Clave 2025</h3>
+                
+                <div style="background: linear-gradient(135deg, #e0f2fe 0%, #dbeafe 100%); padding: 1rem; border-radius: 8px; margin-bottom: 1rem; border-left: 4px solid #3b82f6;">
+                    <div style="font-weight: 700; color: #1e40af; margin-bottom: 0.5rem;">▪ IICG ECIEM (Coquimbo)</div>
+                    <div style="font-size: 0.9rem; color: #475569;">Retención 3º Año: <strong>55.6%</strong></div>
+                </div>
+
+                <div style="background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%); padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; border-left: 4px solid #10b981;">
+                    <div style="font-weight: 700; color: #166534; margin-bottom: 0.5rem;">▪ IICG FACEA (Antofagasta)</div>
+                    <div style="font-size: 0.9rem; color: #475569;">Retención 3º Año: <strong>76.92%</strong></div>
+                </div>
+
+                <div class="metric-box">
+                    <div class="metric-label">Comparación UCN</div>
+                    <div class="metric-value">65.2%</div>
+                    <div class="metric-comparison">ECIEM bajo UCN | FACEA superior</div>
+                </div>
+
+                <div class="metric-box">
+                    <div class="metric-label">Brecha entre Sedes</div>
+                    <div class="metric-value positive">+21.32 pp</div>
+                    <div class="metric-comparison">FACEA supera ampliamente a ECIEM</div>
+                </div>
+
+                <div class="insight-item">
+                    <strong>Fortaleza FACEA:</strong> Retención (76.92%) superior a UCN (+11.72pp)
+                </div>
+
+                <div class="insight-item">
+                    <strong>Alerta ECIEM:</strong> Bajo UCN (-9.6pp), disminución relevante vs histórico
+                </div>
+
+                <div class="insight-item">
+                    <strong>Foco ECIEM:</strong> Revisar asignaturas críticas y progresión curricular
+                </div>
+            </div>
+        </div>
+
+        <!-- RETENCIÓN 4º AÑO -->
+        <div class="indicator-grid">
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h2 class="chart-title">Retención Cuarto Año</h2>
+                    <p class="chart-subtitle">Tasa de retención acumulada al cuarto año</p>
+                </div>
+                <div class="chart-container">
+                    <canvas id="chartRetencion4"></canvas>
+                </div>
+                <div class="legend-container">
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #94a3b8;"></div>
+                        <span class="legend-label">UCN</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #3b82f6;"></div>
+                        <span class="legend-label">ECIEM</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #f97316;"></div>
+                        <span class="legend-label">IICG</span>
+                    </div>
+                </div>
+            </div>
+            <div class="insights-panel">
+                <h3 class="insights-title">Hallazgos Clave 2025</h3>
+                
+                <div style="background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%); padding: 1rem; border-radius: 8px; margin-bottom: 1rem; border-left: 4px solid #10b981;">
+                    <div style="font-weight: 700; color: #166534; margin-bottom: 0.5rem;">▪ IICG ECIEM (Coquimbo)</div>
+                    <div style="font-size: 0.9rem; color: #475569;">Retención 4º Año: <strong>78.1%</strong></div>
+                </div>
+
+                <div style="background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%); padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; border-left: 4px solid #10b981;">
+                    <div style="font-weight: 700; color: #166534; margin-bottom: 0.5rem;">▪ IICG FACEA (Antofagasta)</div>
+                    <div style="font-size: 0.9rem; color: #475569;">Retención 4º Año: <strong>78.13%</strong></div>
+                </div>
+
+                <div class="metric-box">
+                    <div class="metric-label">Comparación UCN</div>
+                    <div class="metric-value positive">56.9%</div>
+                    <div class="metric-comparison">Ambas sedes muy superiores a UCN</div>
+                </div>
+
+                <div class="metric-box">
+                    <div class="metric-label">Comparación ECIEM General</div>
+                    <div class="metric-value">72.9%</div>
+                    <div class="metric-comparison">IICG ECIEM supera promedio ECIEM</div>
+                </div>
+
+                <div class="insight-item">
+                    <strong>Fortaleza:</strong> Ambas sedes con retención similar (~78%), muy superior a UCN (+21pp)
+                </div>
+
+                <div class="insight-item">
+                    <strong>Consolidación:</strong> Quienes superan etapas iniciales completan la carrera
+                </div>
+
+                <div class="insight-item">
+                    <strong>Conclusión:</strong> Estructura curricular favorece continuidad en tramos superiores
+                </div>
+            </div>
+        </div>
+
+        <!-- BRECHA DE DURACIÓN -->
+        <div id="duracion" class="indicator-grid">
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h2 class="chart-title">Brecha de Duración Real</h2>
+                    <p class="chart-subtitle">Años adicionales respecto al tiempo teórico de titulación</p>
+                </div>
+                <div class="chart-container">
+                    <canvas id="chartBrecha"></canvas>
+                </div>
+                <div class="legend-container">
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #94a3b8;"></div>
+                        <span class="legend-label">UCN</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #3b82f6;"></div>
+                        <span class="legend-label">ECIEM</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #f97316;"></div>
+                        <span class="legend-label">IICG</span>
+                    </div>
+                </div>
+            </div>
+            <div class="insights-panel">
+                <h3 class="insights-title">Hallazgos Clave 2025</h3>
+                
+                <div style="background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%); padding: 1rem; border-radius: 8px; margin-bottom: 1rem; border-left: 4px solid #10b981;">
+                    <div style="font-weight: 700; color: #166534; margin-bottom: 0.5rem;">▪ IICG ECIEM (Coquimbo)</div>
+                    <div style="font-size: 0.9rem; color: #475569;">Brecha Duración: <strong>1.05 años</strong></div>
+                </div>
+
+                <div style="background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%); padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; border-left: 4px solid #10b981;">
+                    <div style="font-weight: 700; color: #166534; margin-bottom: 0.5rem;">▪ IICG FACEA (Antofagasta)</div>
+                    <div style="font-size: 0.9rem; color: #475569;">Brecha Duración: <strong>1.26 años</strong></div>
+                </div>
+
+                <div class="metric-box">
+                    <div class="metric-label">Comparación UCN</div>
+                    <div class="metric-value positive">1.34 años</div>
+                    <div class="metric-comparison">Ambas sedes bajo promedio UCN</div>
+                </div>
+
+                <div class="metric-box">
+                    <div class="metric-label">Diferencia entre Sedes</div>
+                    <div class="metric-value">0.21 años</div>
+                    <div class="metric-comparison">ECIEM más eficiente que FACEA</div>
+                </div>
+
+                <div class="insight-item">
+                    <strong>Fortaleza:</strong> Ambas sedes con duración controlada, bajo promedio UCN
+                </div>
+
+                <div class="insight-item">
+                    <strong>Estabilización ECIEM:</strong> En torno a 1.05 años desde 2020, muy estable
+                </div>
+
+                <div class="insight-item">
+                    <strong>Valoración:</strong> Condiciones curriculares contienen aumentos mayores de duración
+                </div>
+            </div>
+        </div>
+
+        <!-- ASIGNATURAS CRÍTICAS ECIEM -->
+        <div id="criticas" style="margin-top: 3rem;">
+            <div class="chart-card" style="background: linear-gradient(135deg, #fee2e2 0%, #fef3c7 100%); border-left: 6px solid #ef4444;">
+                <div class="chart-header">
+                    <h2 class="chart-title" style="color: #991b1b; font-size: 2rem;"> Asignaturas Críticas ECIEM 2025</h2>
+                    <p class="chart-subtitle" style="color: #92400e;">Asignaturas con tasas de reprobación superiores al umbral de criticidad</p>
+                </div>
+
+                <div style="background: white; border-radius: 12px; padding: 1.5rem; margin: 1.5rem 0;">
+                    <h3 style="color: var(--primary); font-size: 1.2rem; margin-bottom: 1rem;">▪ Criterios de Criticidad</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                        <div style="background: #fef2f2; padding: 1rem; border-radius: 8px; border-left: 4px solid #dc2626;">
+                            <strong style="color: #991b1b;">Promedio reprobación:</strong>
+                            <div style="font-size: 1.5rem; font-weight: 800; color: #dc2626;">19.10%</div>
+                        </div>
+                        <div style="background: #fff7ed; padding: 1rem; border-radius: 8px; border-left: 4px solid #ea580c;">
+                            <strong style="color: #9a3412;">Umbral de criticidad:</strong>
+                            <div style="font-size: 1.5rem; font-weight: 800; color: #ea580c;">43.58%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Primer Semestre 2025 -->
+                <div style="margin-bottom: 2rem;">
+                    <h3 style="color: var(--primary); font-size: 1.4rem; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 3px solid var(--accent);">
+                        ▪ Primer Semestre 2025
+                    </h3>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 1rem;">
+                        <!-- Contabilidad y Negocios -->
+                        <div style="background: white; border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-top: 4px solid #dc2626;">
+                            <div style="display: flex; justify-content: between; align-items: start; margin-bottom: 1rem;">
+                                <h4 style="color: #991b1b; font-size: 1.1rem; font-weight: 700; margin: 0;">Contabilidad y Negocios</h4>
+                                <span style="background: #fef2f2; color: #dc2626; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.85rem; font-weight: 700;">87.50%</span>
+                            </div>
+                            <div style="color: #64748b; font-size: 0.9rem; margin-bottom: 0.75rem;">
+                                <strong>Código:</strong> ECCE-00291 | <strong>Inscritos:</strong> 8
+                            </div>
+                            <div style="background: #fef2f2; padding: 0.75rem; border-radius: 6px; margin-bottom: 0.5rem;">
+                                <div style="font-size: 0.85rem; color: #991b1b; font-weight: 600;">Promedio de notas: 2.34</div>
+                            </div>
+                            <div style="font-size: 0.85rem; color: #475569; line-height: 1.5;">
+                                <strong style="color: #1e3a8a;">Variables:</strong> Comprensión de conceptos contables, familiaridad previa, complejidad de lenguaje técnico.
+                            </div>
+                        </div>
+
+                        <!-- Base de Datos -->
+                        <div style="background: white; border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-top: 4px solid #dc2626;">
+                            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
+                                <h4 style="color: #991b1b; font-size: 1.1rem; font-weight: 700; margin: 0;">Base de Datos</h4>
+                                <span style="background: #fef2f2; color: #dc2626; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.85rem; font-weight: 700;">57.81%</span>
+                            </div>
+                            <div style="color: #64748b; font-size: 0.9rem; margin-bottom: 0.75rem;">
+                                <strong>Código:</strong> ECCE-00394 | <strong>Inscritos:</strong> 64
+                            </div>
+                            <div style="background: #fef2f2; padding: 0.75rem; border-radius: 6px; margin-bottom: 0.5rem;">
+                                <div style="font-size: 0.85rem; color: #991b1b; font-weight: 600;">Promedio de notas: 3.4</div>
+                            </div>
+                            <div style="font-size: 0.85rem; color: #475569; line-height: 1.5;">
+                                <strong style="color: #1e3a8a;">Variables:</strong> Alta exigencia técnica, brechas en conocimientos previos, complejidad en articulación teórico-práctica.
+                            </div>
+                        </div>
+
+                        <!-- Programación -->
+                        <div style="background: white; border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-top: 4px solid #dc2626;">
+                            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
+                                <h4 style="color: #991b1b; font-size: 1.1rem; font-weight: 700; margin: 0;">Programación</h4>
+                                <span style="background: #fef2f2; color: #dc2626; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.85rem; font-weight: 700;">57.69%</span>
+                            </div>
+                            <div style="color: #64748b; font-size: 0.9rem; margin-bottom: 0.75rem;">
+                                <strong>Código:</strong> ECCE-00193 | <strong>Inscritos:</strong> 78
+                            </div>
+                            <div style="background: #fef2f2; padding: 0.75rem; border-radius: 6px; margin-bottom: 0.5rem;">
+                                <div style="font-size: 0.85rem; color: #991b1b; font-weight: 600;">Promedio de notas: 3.46</div>
+                            </div>
+                            <div style="font-size: 0.85rem; color: #475569; line-height: 1.5;">
+                                <strong style="color: #1e3a8a;">Variables:</strong> Brechas en competencias digitales, heterogeneidad del estudiantado, carga cognitiva.
+                            </div>
+                        </div>
+
+                        <!-- Aplicaciones Computacionales -->
+                        <div style="background: white; border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-top: 4px solid #dc2626;">
+                            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
+                                <h4 style="color: #991b1b; font-size: 1.1rem; font-weight: 700; margin: 0;">Aplicaciones Computacionales</h4>
+                                <span style="background: #fef2f2; color: #dc2626; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.85rem; font-weight: 700;">51.58%</span>
+                            </div>
+                            <div style="color: #64748b; font-size: 0.9rem; margin-bottom: 0.75rem;">
+                                <strong>Código:</strong> ECCE-00393 | <strong>Inscritos:</strong> 95
+                            </div>
+                            <div style="background: #fef2f2; padding: 0.75rem; border-radius: 6px; margin-bottom: 0.5rem;">
+                                <div style="font-size: 0.85rem; color: #991b1b; font-weight: 600;">Promedio de notas: 3.54</div>
+                            </div>
+                            <div style="font-size: 0.85rem; color: #475569; line-height: 1.5;">
+                                <strong style="color: #1e3a8a;">Variables:</strong> Dificultades en transferencia de conocimientos técnicos, manejo de herramientas digitales.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Segundo Semestre 2025 -->
+                <div style="margin-bottom: 2rem;">
+                    <h3 style="color: var(--primary); font-size: 1.4rem; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 3px solid var(--accent);">
+                        ▪ Segundo Semestre 2025
+                    </h3>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 1rem;">
+                        <!-- Programación Avanzada -->
+                        <div style="background: white; border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-top: 4px solid #dc2626;">
+                            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
+                                <h4 style="color: #991b1b; font-size: 1.1rem; font-weight: 700; margin: 0;">Programación Avanzada</h4>
+                                <span style="background: #fef2f2; color: #dc2626; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.85rem; font-weight: 700;">65.31%</span>
+                            </div>
+                            <div style="color: #64748b; font-size: 0.9rem; margin-bottom: 0.75rem;">
+                                <strong>Código:</strong> ECCE-00294 | <strong>Inscritos:</strong> 49
+                            </div>
+                            <div style="background: #fef2f2; padding: 0.75rem; border-radius: 6px; margin-bottom: 0.5rem;">
+                                <div style="font-size: 0.85rem; color: #991b1b; font-weight: 600;">Promedio de notas: 2.77</div>
+                            </div>
+                            <div style="font-size: 0.85rem; color: #475569; line-height: 1.5;">
+                                <strong style="color: #1e3a8a;">Variables:</strong> Complejidad conceptual elevada, dependencia de aprendizajes previos, heterogeneidad.
+                            </div>
+                        </div>
+
+                        <!-- Economía -->
+                        <div style="background: white; border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-top: 4px solid #dc2626;">
+                            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
+                                <h4 style="color: #991b1b; font-size: 1.1rem; font-weight: 700; margin: 0;">Economía</h4>
+                                <span style="background: #fef2f2; color: #dc2626; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.85rem; font-weight: 700;">55.00%</span>
+                            </div>
+                            <div style="color: #64748b; font-size: 0.9rem; margin-bottom: 0.75rem;">
+                                <strong>Código:</strong> ECCE-00195 | <strong>Inscritos:</strong> 20
+                            </div>
+                            <div style="background: #fef2f2; padding: 0.75rem; border-radius: 6px; margin-bottom: 0.5rem;">
+                                <div style="font-size: 0.85rem; color: #991b1b; font-weight: 600;">Promedio de notas: 3.27</div>
+                            </div>
+                            <div style="font-size: 0.85rem; color: #475569; line-height: 1.5;">
+                                <strong style="color: #1e3a8a;">Variables:</strong> Dificultad en comprensión de conceptos abstractos, razonamiento lógico-matemático.
+                            </div>
+                        </div>
+
+                        <!-- Base de Datos (2° Sem) -->
+                        <div style="background: white; border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-top: 4px solid #ea580c;">
+                            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
+                                <h4 style="color: #9a3412; font-size: 1.1rem; font-weight: 700; margin: 0;">Base de Datos</h4>
+                                <span style="background: #fff7ed; color: #ea580c; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.85rem; font-weight: 700;">38.46%</span>
+                            </div>
+                            <div style="color: #64748b; font-size: 0.9rem; margin-bottom: 0.75rem;">
+                                <strong>Código:</strong> ECCE-00394 | <strong>Inscritos:</strong> 13 (arrastre)
+                            </div>
+                            <div style="background: #fff7ed; padding: 0.75rem; border-radius: 6px; margin-bottom: 0.5rem;">
+                                <div style="font-size: 0.85rem; color: #9a3412; font-weight: 600;">Promedio de notas: 3.61</div>
+                            </div>
+                            <div style="font-size: 0.85rem; color: #475569; line-height: 1.5;">
+                                <strong style="color: #1e3a8a;">Variables:</strong> Alta exigencia técnica, brechas previas, arrastre académico.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hallazgos y Conclusiones -->
+                <div style="background: white; border-radius: 12px; padding: 2rem; border-left: 6px solid var(--accent);">
+                    <h3 style="color: var(--primary); font-size: 1.3rem; margin-bottom: 1.5rem;">▪ Hallazgos Clave</h3>
+                    
+                    <div style="display: grid; gap: 1rem;">
+                        <div style="background: #eff6ff; padding: 1.25rem; border-radius: 8px; border-left: 4px solid #3b82f6;">
+                            <strong style="color: #1e3a8a;">▪ Concentración:</strong>
+                            <p style="margin: 0.5rem 0 0 0; color: #475569;">
+                                Criticidad concentrada en <strong>ciclo inicial y formación base</strong> (matemáticas, programación, contabilidad, economía)
+                            </p>
+                        </div>
+                        
+                        <div style="background: #fef3c7; padding: 1.25rem; border-radius: 8px; border-left: 4px solid #f59e0b;">
+                            <strong style="color: #92400e;">▪ Factores Incidentes:</strong>
+                            <p style="margin: 0.5rem 0 0 0; color: #475569;">
+                                Brechas de entrada, heterogeneidad del estudiantado, alta exigencia técnica, complejidad conceptual
+                            </p>
+                        </div>
+                        
+                        <div style="background: #dcfce7; padding: 1.25rem; border-radius: 8px; border-left: 4px solid #10b981;">
+                            <strong style="color: #166534;">▪ Acciones Implementadas:</strong>
+                            <p style="margin: 0.5rem 0 0 0; color: #475569;">
+                                Clases de apoyo, tutorías, retroalimentación continua, ejercicios prácticos, ajuste de secuenciación
+                            </p>
+                        </div>
+                        
+                        <div style="background: #fce7f3; padding: 1.25rem; border-radius: 8px; border-left: 4px solid #ec4899;">
+                            <strong style="color: #9f1239;">▪ Estrategia:</strong>
+                            <p style="margin: 0.5rem 0 0 0; color: #475569;">
+                                Fortalecer acompañamiento académico temprano, revisión microcurricular focalizada, actualización del Libro de Carrera (2026)
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const colors = {
+            ucn: '#94a3b8',
+            facea: '#3b82f6',
+            eciem: '#3b82f6',
+            iicg: '#f97316'
+        };
+
+        const years = ['2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024', '2025'];
+
+        Chart.register(ChartDataLabels);
+
+        // Matrícula
+        new Chart(document.getElementById('chartMatricula'), {
+            type: 'line',
+            data: {
+                labels: years,
+                datasets: [
+                    {
+                        label: 'IICG',
+                        data: [251, 290, 329, 342, 376, 413, 413, 406, 374, 356, 343],
+                        borderColor: colors.iicg,
+                        backgroundColor: colors.iicg + '33',
+                        borderWidth: 4,
+                        pointBackgroundColor: colors.iicg,
+                        pointRadius: 6,
+                        fill: true,
+                        tension: 0.4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    datalabels: {
+                        backgroundColor: colors.iicg,
+                        borderRadius: 4,
+                        color: '#ffffff',
+                        padding: 6,
+                        font: { weight: 'bold', size: 11 },
+                        anchor: 'end',
+                        align: 'top'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 450,
+                        grid: { color: 'rgba(0, 0, 0, 0.05)' },
+                        ticks: { font: { size: 12 } }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { font: { size: 12 } }
+                    }
+                }
+            }
+        });
+
+        // Titulación Oportuna
+        new Chart(document.getElementById('chartTitulacion'), {
+            type: 'bar',
+            data: {
+                labels: years,
+                datasets: [
+                    {
+                        label: 'UCN',
+                        data: [21.6, 23.6, 21.4, 21.3, 20.8, 34.3, 34.3, 16.7, 38.1, 45.1, 29.9],
+                        backgroundColor: colors.ucn,
+                        borderRadius: 6,
+                        order: 2
+                    },
+                    {
+                        label: 'ECIEM',
+                        data: [23.8, 19.5, 18.8, 37.2, 37.9, 35.0, 34.2, 40.1, 55.1, 67.4, 62.1],
+                        type: 'line',
+                        borderColor: colors.eciem,
+                        backgroundColor: 'transparent',
+                        borderWidth: 3,
+                        pointBackgroundColor: colors.eciem,
+                        pointRadius: 6,
+                        tension: 0.4,
+                        order: 1
+                    },
+                    {
+                        label: 'IICG',
+                        data: [24.8, 25.2, 29.4, 39.8, 37.1, 35.9, 38.2, 51.5, 66.2, 63.9, 58.1],
+                        type: 'line',
+                        borderColor: colors.iicg,
+                        backgroundColor: 'transparent',
+                        borderWidth: 3,
+                        pointBackgroundColor: colors.iicg,
+                        pointRadius: 6,
+                        tension: 0.4,
+                        order: 1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    datalabels: {
+                        display: function(context) {
+                            return context.datasetIndex > 0;
+                        },
+                        backgroundColor: function(context) {
+                            return context.dataset.borderColor;
+                        },
+                        borderRadius: 4,
+                        color: '#ffffff',
+                        padding: 4,
+                        font: { weight: 'bold', size: 10 },
+                        formatter: (value) => value.toFixed(1) + '%',
+                        anchor: 'end',
+                        align: 'top'
+                    }
+                },
+                scales: {
+                    y: {
+                        min: 0,
+                        max: 80,
+                        grid: { color: 'rgba(0, 0, 0, 0.05)' },
+                        ticks: { 
+                            font: { size: 12 },
+                            callback: (value) => value + '%'
+                        }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { font: { size: 12 } }
+                    }
+                }
+            }
+        });
+
+        // Retención 1º Año
+        new Chart(document.getElementById('chartRetencion1'), {
+            type: 'bar',
+            data: {
+                labels: years,
+                datasets: [
+                    {
+                        label: 'UCN',
+                        data: [81.9, 83.2, 83.5, 82.3, 83.7, 81.5, 80.0, 78.9, 71.2, 79.1, 81.8],
+                        backgroundColor: colors.ucn,
+                        borderRadius: 6,
+                        order: 2
+                    },
+                    {
+                        label: 'ECIEM',
+                        data: [87.0, 89.0, 88.4, 87.7, 88.9, 89.3, 90.5, 90.8, 79.3, 84.0, 85.7],
+                        type: 'line',
+                        borderColor: colors.eciem,
+                        backgroundColor: 'transparent',
+                        borderWidth: 3,
+                        pointBackgroundColor: colors.eciem,
+                        pointRadius: 6,
+                        tension: 0.4,
+                        order: 1
+                    },
+                    {
+                        label: 'IICG',
+                        data: [89.1, 86.6, 86.0, 88.7, 85.6, 87.4, 87.0, 88.3, 72.1, 76.6, 84.3],
+                        type: 'line',
+                        borderColor: colors.iicg,
+                        backgroundColor: 'transparent',
+                        borderWidth: 3,
+                        pointBackgroundColor: colors.iicg,
+                        pointRadius: 6,
+                        tension: 0.4,
+                        order: 1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    datalabels: {
+                        display: function(context) {
+                            return context.datasetIndex > 0;
+                        },
+                        backgroundColor: function(context) {
+                            return context.dataset.borderColor;
+                        },
+                        borderRadius: 4,
+                        color: '#ffffff',
+                        padding: 4,
+                        font: { weight: 'bold', size: 10 },
+                        formatter: (value) => value.toFixed(1) + '%',
+                        anchor: 'end',
+                        align: 'top'
+                    }
+                },
+                scales: {
+                    y: {
+                        min: 65,
+                        max: 95,
+                        grid: { color: 'rgba(0, 0, 0, 0.05)' },
+                        ticks: { 
+                            font: { size: 12 },
+                            callback: (value) => value + '%'
+                        }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { font: { size: 12 } }
+                    }
+                }
+            }
+        });
+
+        // Retención 2º Año
+        new Chart(document.getElementById('chartRetencion2'), {
+            type: 'bar',
+            data: {
+                labels: years,
+                datasets: [
+                    {
+                        label: 'UCN',
+                        data: [74.4, 73.7, 74.7, 74.9, 73.2, 75.4, 77.6, 78.8, 74.0, 72.9, 75.7],
+                        backgroundColor: colors.ucn,
+                        borderRadius: 6,
+                        order: 2
+                    },
+                    {
+                        label: 'ECIEM',
+                        data: [72.8, 73.0, 71.9, 76.8, 74.1, 77.2, 81.8, 83.8, 85.3, 82.5, 79.2],
+                        type: 'line',
+                        borderColor: colors.eciem,
+                        backgroundColor: 'transparent',
+                        borderWidth: 3,
+                        pointBackgroundColor: colors.eciem,
+                        pointRadius: 6,
+                        tension: 0.4,
+                        order: 1
+                    },
+                    {
+                        label: 'IICG',
+                        data: [70.2, 64.1, 70.1, 69.0, 66.3, 68.9, 79.3, 76.6, 70.7, 70.7, 69.0],
+                        type: 'line',
+                        borderColor: colors.iicg,
+                        backgroundColor: 'transparent',
+                        borderWidth: 3,
+                        pointBackgroundColor: colors.iicg,
+                        pointRadius: 6,
+                        tension: 0.4,
+                        order: 1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    datalabels: {
+                        display: function(context) {
+                            return context.datasetIndex > 0;
+                        },
+                        backgroundColor: function(context) {
+                            return context.dataset.borderColor;
+                        },
+                        borderRadius: 4,
+                        color: '#ffffff',
+                        padding: 4,
+                        font: { weight: 'bold', size: 10 },
+                        formatter: (value) => value.toFixed(1) + '%',
+                        anchor: 'end',
+                        align: 'top'
+                    }
+                },
+                scales: {
+                    y: {
+                        min: 60,
+                        max: 90,
+                        grid: { color: 'rgba(0, 0, 0, 0.05)' },
+                        ticks: { 
+                            font: { size: 12 },
+                            callback: (value) => value + '%'
+                        }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { font: { size: 12 } }
+                    }
+                }
+            }
+        });
+
+        // Retención 3º Año
+        new Chart(document.getElementById('chartRetencion3'), {
+            type: 'bar',
+            data: {
+                labels: years,
+                datasets: [
+                    {
+                        label: 'UCN',
+                        data: [64.8, 65.7, 65.9, 65.4, 64.9, 65.5, 67.4, 70.0, 68.4, 64.6, 65.2],
+                        backgroundColor: colors.ucn,
+                        borderRadius: 6,
+                        order: 2
+                    },
+                    {
+                        label: 'ECIEM',
+                        data: [66.2, 62.3, 67.6, 68.1, 70.0, 66.7, 75.5, 85.0, 80.5, 75.0, 70.5],
+                        type: 'line',
+                        borderColor: colors.eciem,
+                        backgroundColor: 'transparent',
+                        borderWidth: 3,
+                        pointBackgroundColor: colors.eciem,
+                        pointRadius: 6,
+                        tension: 0.4,
+                        order: 1
+                    },
+                    {
+                        label: 'IICG',
+                        data: [57.7, 54.8, 52.6, 65.4, 64.0, 62.2, 74.7, 79.8, 77.1, 83.6, 55.6],
+                        type: 'line',
+                        borderColor: colors.iicg,
+                        backgroundColor: 'transparent',
+                        borderWidth: 3,
+                        pointBackgroundColor: colors.iicg,
+                        pointRadius: 6,
+                        tension: 0.4,
+                        order: 1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    datalabels: {
+                        display: function(context) {
+                            return context.datasetIndex > 0;
+                        },
+                        backgroundColor: function(context) {
+                            return context.dataset.borderColor;
+                        },
+                        borderRadius: 4,
+                        color: '#ffffff',
+                        padding: 4,
+                        font: { weight: 'bold', size: 10 },
+                        formatter: (value) => value.toFixed(1) + '%',
+                        anchor: 'end',
+                        align: 'top'
+                    }
+                },
+                scales: {
+                    y: {
+                        min: 50,
+                        max: 90,
+                        grid: { color: 'rgba(0, 0, 0, 0.05)' },
+                        ticks: { 
+                            font: { size: 12 },
+                            callback: (value) => value + '%'
+                        }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { font: { size: 12 } }
+                    }
+                }
+            }
+        });
+
+        // Retención 4º Año
+        new Chart(document.getElementById('chartRetencion4'), {
+            type: 'bar',
+            data: {
+                labels: years,
+                datasets: [
+                    {
+                        label: 'UCN',
+                        data: [50.8, 56.3, 54.8, 54.9, 51.7, 52.2, 52.7, 54.4, 57.3, 53.9, 56.9],
+                        backgroundColor: colors.ucn,
+                        borderRadius: 6,
+                        order: 2
+                    },
+                    {
+                        label: 'ECIEM',
+                        data: [46.2, 61.6, 56.6, 62.8, 64.9, 67.9, 65.2, 71.8, 79.6, 75.3, 72.9],
+                        type: 'line',
+                        borderColor: colors.eciem,
+                        backgroundColor: 'transparent',
+                        borderWidth: 3,
+                        pointBackgroundColor: colors.eciem,
+                        pointRadius: 6,
+                        tension: 0.4,
+                        order: 1
+                    },
+                    {
+                        label: 'IICG',
+                        data: [45.0, 53.8, 45.2, 48.7, 63.0, 60.7, 61.1, 71.4, 71.3, 72.4, 78.1],
+                        type: 'line',
+                        borderColor: colors.iicg,
+                        backgroundColor: 'transparent',
+                        borderWidth: 3,
+                        pointBackgroundColor: colors.iicg,
+                        pointRadius: 6,
+                        tension: 0.4,
+                        order: 1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    datalabels: {
+                        display: function(context) {
+                            return context.datasetIndex > 0;
+                        },
+                        backgroundColor: function(context) {
+                            return context.dataset.borderColor;
+                        },
+                        borderRadius: 4,
+                        color: '#ffffff',
+                        padding: 4,
+                        font: { weight: 'bold', size: 10 },
+                        formatter: (value) => value.toFixed(1) + '%',
+                        anchor: 'end',
+                        align: 'top'
+                    }
+                },
+                scales: {
+                    y: {
+                        min: 40,
+                        max: 85,
+                        grid: { color: 'rgba(0, 0, 0, 0.05)' },
+                        ticks: { 
+                            font: { size: 12 },
+                            callback: (value) => value + '%'
+                        }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { font: { size: 12 } }
+                    }
+                }
+            }
+        });
+
+        // Brecha de Duración
+        new Chart(document.getElementById('chartBrecha'), {
+            type: 'line',
+            data: {
+                labels: years,
+                datasets: [
+                    {
+                        label: 'UCN',
+                        data: [1.35, 1.24, 1.19, 1.25, 1.27, 1.22, 1.27, 1.21, 1.24, 1.27, 1.34],
+                        borderColor: colors.ucn,
+                        backgroundColor: colors.ucn + '33',
+                        borderWidth: 3,
+                        pointBackgroundColor: colors.ucn,
+                        pointRadius: 6,
+                        fill: true,
+                        tension: 0.4
+                    },
+                    {
+                        label: 'ECIEM',
+                        data: [1.08, 1.00, 0.92, 1.00, 1.05, 1.09, 1.07, 1.06, 1.04, 1.04, 1.06],
+                        borderColor: colors.eciem,
+                        backgroundColor: colors.eciem + '33',
+                        borderWidth: 3,
+                        pointBackgroundColor: colors.eciem,
+                        pointRadius: 6,
+                        fill: true,
+                        tension: 0.4
+                    },
+                    {
+                        label: 'IICG',
+                        data: [0.49, 0.63, 0.70, 0.81, 0.95, 1.03, 1.10, 1.05, 1.00, 1.01, 1.05],
+                        borderColor: colors.iicg,
+                        backgroundColor: colors.iicg + '33',
+                        borderWidth: 3,
+                        pointBackgroundColor: colors.iicg,
+                        pointRadius: 6,
+                        fill: true,
+                        tension: 0.4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    datalabels: {
+                        backgroundColor: function(context) {
+                            return context.dataset.borderColor;
+                        },
+                        borderRadius: 4,
+                        color: '#ffffff',
+                        padding: 4,
+                        font: { weight: 'bold', size: 10 },
+                        formatter: (value) => value.toFixed(2),
+                        anchor: 'end',
+                        align: 'top'
+                    }
+                },
+                scales: {
+                    y: {
+                        min: 0,
+                        max: 1.5,
+                        grid: { color: 'rgba(0, 0, 0, 0.05)' },
+                        ticks: { 
+                            font: { size: 12 },
+                            callback: (value) => value.toFixed(2) + ' años'
+                        }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { font: { size: 12 } }
+                    }
+                }
+            }
+        });
+
+        // Función de navegación
+        function scrollToSection(id) {
+            const element = document.getElementById(id);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+            
+            // Actualizar tabs activos
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>
