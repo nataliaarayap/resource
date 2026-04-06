@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Medición Plan Estratégico TISL — Presentación Directorio</title>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700;900&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --az1:#0D2B5E;--az2:#1A4A8A;--az3:#2E6DB4;--az4:#5B9BD5;--az5:#C8DEF0;
+  --am3:#F5B800;--am4:#FFDA6A;--am5:#FFF3CC;
+  --bco:#FFFFFF;--gris:#F4F6F9;--gris2:#DDE3EB;--gris3:#6B7280;
+  --neg:#0A1628;
+  --verde:#1A6B4A;--verd2:#D4EDE3;--verd3:#A3D9C0;
+  --narj:#C05621;--nar2:#FDEBD8;
+  --lila:#4A3A9A;--lil2:#E8E4F8;--lil3:#C4B4F0;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Source Sans 3',sans-serif;background:#07152A;display:flex;flex-direction:column;align-items:center;min-height:100vh;padding:20px 16px 40px;gap:16px;}
+nav{display:flex;gap:8px;align-items:center;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.13);border-radius:40px;padding:7px 14px;flex-wrap:wrap;justify-content:center;}
+.nav-dot{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.2);cursor:pointer;transition:all .3s;border:none;}
+.nav-dot.active{background:var(--am3);transform:scale(1.35)}
+.nav-btn{background:none;border:1px solid rgba(255,255,255,.22);color:#fff;border-radius:20px;padding:5px 16px;font-size:13px;font-family:'Source Sans 3',sans-serif;cursor:pointer;transition:all .2s;}
+.nav-btn:hover{background:rgba(255,255,255,.1)}
+.slide-counter{color:rgba(255,255,255,.4);font-size:12px;min-width:44px;text-align:center}
+.slides{position:relative;width:100%;max-width:1100px}
+.slide{width:100%;aspect-ratio:16/9;border-radius:14px;overflow:hidden;display:none;position:relative;box-shadow:0 28px 70px rgba(0,0,0,.65);}
+.slide.active{display:flex}
+
+/* ── UTILIDADES ── */
+.slide-label{font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--az3);margin-bottom:8px;}
+.slide-title{font-family:'Merriweather',serif;font-size:clamp(18px,2.4vw,30px);font-weight:700;color:var(--neg);margin-bottom:18px;line-height:1.2;}
+.slide-title span{color:var(--az3)}
+.badge{font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;display:inline-block;}
+.badge-v{background:var(--verd2);color:var(--verde)}
+.badge-n{background:var(--nar2);color:var(--narj)}
+.badge-l{background:var(--lil2);color:var(--lila)}
+.badge-az{background:var(--az5);color:var(--az1)}
+
+/* ── S1 PORTADA ── */
+#s1{background:var(--az1);flex-direction:row}
+.s1-band{position:absolute;bottom:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--am3),var(--am4))}
+.s1-left{flex:1.15;display:flex;flex-direction:column;justify-content:center;padding:8% 7% 8% 8%;position:relative;z-index:2;}
+.s1-right{flex:.85;background:var(--az2);display:flex;flex-direction:column;justify-content:center;align-items:center;padding:7%;gap:14px;position:relative;}
+.s1-right::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--az2) 0%,#0D3570 100%);}
+.s1-tag{font-size:11px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--am3);margin-bottom:14px;}
+.s1-title{font-family:'Merriweather',serif;font-size:clamp(20px,3vw,38px);font-weight:900;color:#fff;line-height:1.15;margin-bottom:14px;}
+.s1-title em{color:var(--am3);font-style:normal}
+.s1-sub{font-size:clamp(13px,1.4vw,16px);color:rgba(255,255,255,.65);line-height:1.7;max-width:420px;margin-bottom:26px;}
+.s1-logo{position:absolute;top:6%;right:6%;font-family:'Merriweather',serif;font-size:12px;font-weight:700;color:rgba(255,255,255,.25);letter-spacing:.1em;}
+.stat-card{position:relative;z-index:2;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.13);border-radius:10px;padding:14px 18px;width:100%;text-align:center;}
+.stat-n{font-family:'Merriweather',serif;font-size:clamp(26px,3.8vw,42px);font-weight:900;color:var(--am3);line-height:1;margin-bottom:4px;}
+.stat-l{font-size:13px;color:rgba(255,255,255,.55);line-height:1.4}
+.s1-chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{font-size:12px;font-weight:500;padding:5px 14px;border-radius:20px;background:rgba(255,255,255,.1);color:rgba(255,255,255,.8);border:1px solid rgba(255,255,255,.18);}
+
+/* ── S2 EL PLAN QUE TIENEN ── */
+#s2{background:var(--bco);flex-direction:column;padding:6% 8%}
+.plan-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;flex:1}
+.plan-card{border-radius:10px;padding:16px 16px;border:1px solid var(--gris2);display:flex;flex-direction:column;gap:8px;position:relative;}
+.plan-card-num{font-family:'Merriweather',serif;font-size:clamp(32px,4vw,48px);font-weight:900;color:var(--az3);line-height:1;}
+.plan-card-label{font-size:13px;font-weight:600;color:var(--neg);line-height:1.3}
+.plan-card-desc{font-size:12px;color:var(--gris3);line-height:1.55}
+.plan-card.oe1{border-top:3px solid var(--az3)}.plan-card.oe2{border-top:3px solid var(--verde)}
+.plan-card.oe3{border-top:3px solid var(--narj)}.plan-card.oe4{border-top:3px solid #7B241C}
+.plan-card.oe5{border-top:3px solid var(--lila)}.plan-card.oe6{border-top:3px solid #2C3E50}
+.plan-note{background:var(--am5);border:1px solid var(--am4);border-radius:8px;padding:10px 14px;font-size:12px;color:#8B6200;line-height:1.6;margin-top:8px;flex-shrink:0;}
+.plan-note strong{color:#5C3D00}
+
+/* ── S3 LA PROPUESTA ── */
+#s3{background:var(--az1);flex-direction:column;padding:6% 8%}
+#s3 .slide-label{color:var(--am3)}
+#s3 .slide-title{color:#fff}
+.prop-msg{background:rgba(245,184,0,.12);border:1px solid rgba(245,184,0,.3);border-radius:10px;padding:12px 16px;font-size:13px;color:rgba(255,255,255,.8);line-height:1.6;margin-bottom:16px;flex-shrink:0;}
+.prop-msg strong{color:var(--am3)}
+.prop-cols{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;flex:1}
+.prop-card{border-radius:10px;padding:16px 15px;display:flex;flex-direction:column;gap:8px;border:1px solid rgba(255,255,255,.1);}
+.prop-card.pc1{background:rgba(26,107,74,.18);border-color:rgba(46,189,130,.25)}
+.prop-card.pc2{background:rgba(245,184,0,.1);border-color:rgba(245,184,0,.25)}
+.prop-card.pc3{background:rgba(74,58,154,.18);border-color:rgba(139,127,212,.25)}
+.prop-card::before{content:'';display:block;height:3px;border-radius:2px;margin-bottom:4px}
+.prop-card.pc1::before{background:#2EBD82}
+.prop-card.pc2::before{background:var(--am3)}
+.prop-card.pc3::before{background:#8B7FD4}
+.prop-card-n{font-family:'Merriweather',serif;font-size:clamp(28px,3.5vw,44px);font-weight:900;line-height:1;}
+.prop-card.pc1 .prop-card-n{color:#2EBD82}
+.prop-card.pc2 .prop-card-n{color:var(--am3)}
+.prop-card.pc3 .prop-card-n{color:#B8AEFF}
+.prop-card-title{font-size:13px;font-weight:600;color:#fff;line-height:1.3}
+.prop-card-desc{font-size:11px;color:rgba(255,255,255,.5);line-height:1.55;flex:1}
+.prop-card-examples{display:flex;flex-direction:column;gap:3px;margin-top:4px}
+.prop-card-ex{font-size:10px;padding:3px 8px;border-radius:4px;background:rgba(255,255,255,.06);color:rgba(255,255,255,.5);line-height:1.4}
+
+/* ── S4 EL EXCEL ── */
+#s4{background:var(--gris);flex-direction:column;padding:5% 7%}
+#s4 .slide-label{color:var(--az3)}
+.excel-layout{display:grid;grid-template-columns:1fr 1fr;gap:14px;flex:1}
+.excel-hoja{background:var(--bco);border-radius:10px;border:1px solid var(--gris2);padding:14px 16px;display:flex;flex-direction:column;gap:8px;}
+.excel-hoja-head{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+.excel-hoja-icon{width:32px;height:32px;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.excel-hoja-num{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--gris3)}
+.excel-hoja-name{font-size:13px;font-weight:700;color:var(--neg);line-height:1.2}
+.excel-hoja-desc{font-size:12px;color:var(--gris3);line-height:1.55}
+.excel-hoja-detail{display:flex;flex-direction:column;gap:4px;margin-top:4px}
+.excel-detail-item{display:flex;align-items:center;gap:7px;font-size:11px;color:var(--neg)}
+.excel-detail-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.excel-hoja.h1{border-top:3px solid var(--az3)}
+.excel-hoja.h2{border-top:3px solid var(--verde)}
+.excel-hoja.h3{border-top:3px solid var(--narj)}
+.excel-hoja.h4{border-top:3px solid var(--lila)}
+.excel-nota{background:var(--am5);border:1px solid var(--am4);border-radius:8px;padding:9px 14px;font-size:11px;color:#8B6200;line-height:1.6;margin-top:6px;grid-column:1/-1;flex-shrink:0}
+
+/* ── S5 INDICADORES ── */
+#s5{background:var(--bco);flex-direction:column;padding:5% 7%}
+#s5 .slide-label{color:var(--az3)}
+.ind-cats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;flex:1}
+.ind-cat{border-radius:10px;padding:14px 15px;display:flex;flex-direction:column;gap:8px;border:1px solid}
+.ind-cat.cat1{background:var(--verd2);border-color:var(--verd3)}
+.ind-cat.cat2{background:var(--nar2);border-color:#F0C09A}
+.ind-cat.cat3{background:var(--lil2);border-color:var(--lil3)}
+.ind-cat-head{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.ind-cat-num{font-family:'Merriweather',serif;font-size:clamp(26px,3.5vw,40px);font-weight:900;line-height:1;}
+.cat1 .ind-cat-num{color:var(--verde)}.cat2 .ind-cat-num{color:var(--narj)}.cat3 .ind-cat-num{color:var(--lila)}
+.ind-cat-title{font-size:13px;font-weight:700;line-height:1.3}
+.cat1 .ind-cat-title{color:#0D4A2E}.cat2 .ind-cat-title{color:#7A2E0A}.cat3 .ind-cat-title{color:#2D2060}
+.ind-cat-desc{font-size:11px;line-height:1.55;flex:1}
+.cat1 .ind-cat-desc{color:#1A5C3A}.cat2 .ind-cat-desc{color:#944020}.cat3 .ind-cat-desc{color:#3D2E80}
+.ind-examples{display:flex;flex-direction:column;gap:4px;margin-top:2px}
+.ind-ex{font-size:10px;padding:4px 9px;border-radius:5px;line-height:1.4}
+.cat1 .ind-ex{background:rgba(26,107,74,.12);color:#0D4A2E}
+.cat2 .ind-ex{background:rgba(192,86,33,.1);color:#7A2E0A}
+.cat3 .ind-ex{background:rgba(74,58,154,.1);color:#2D2060}
+.ind-message{background:var(--az1);border-radius:8px;padding:11px 16px;font-size:12px;color:rgba(255,255,255,.75);line-height:1.6;margin-top:8px;flex-shrink:0;grid-column:1/-1}
+.ind-message strong{color:var(--am3)}
+
+/* ── S6 HITOS DE HABILITACIÓN ── */
+#s6{background:var(--bco);flex-direction:column;padding:5% 7%}
+#s6 .slide-label{color:var(--az3)}
+.hab-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;flex:1}
+.hab-col-title{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:7px;}
+.hab-col-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.hab-list{display:flex;flex-direction:column;gap:6px}
+.hab-item{border-radius:8px;padding:9px 12px;display:flex;gap:9px;align-items:flex-start;border:1px solid}
+.hab-item.cat2{background:var(--nar2);border-color:#F0C09A}
+.hab-item.cat3{background:var(--lil2);border-color:var(--lil3)}
+.hab-ref{font-size:10px;font-weight:700;border-radius:4px;padding:2px 7px;flex-shrink:0;margin-top:1px;}
+.hab-item.cat2 .hab-ref{background:#F5C09A;color:var(--narj)}
+.hab-item.cat3 .hab-ref{background:#D4CCFA;color:var(--lila)}
+.hab-body{flex:1}
+.hab-hito{font-size:11px;font-weight:600;color:var(--neg);line-height:1.35;margin-bottom:2px}
+.hab-ind{font-size:10px;color:var(--gris3);line-height:1.3}
+.hab-footer{background:var(--az1);border-radius:8px;padding:10px 14px;font-size:12px;color:rgba(255,255,255,.7);line-height:1.6;margin-top:10px;flex-shrink:0;grid-column:1/-1}
+.hab-footer strong{color:var(--am3)}
+
+/* ── S7 & S8 DASHBOARDS ── */
+.db-slide{background:#F0F2F5;flex-direction:column;padding:0}
+.db-header{background:var(--az1);padding:9px 18px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.db-header-left .db-title{font-family:'Merriweather',serif;font-size:12px;font-weight:700;color:#fff}
+.db-header-left .db-sub{font-size:9px;color:rgba(255,255,255,.5);margin-top:1px}
+.db-badges{display:flex;gap:6px;align-items:center}
+.db-badge{font-size:9px;font-weight:600;padding:3px 9px;border-radius:20px;background:rgba(255,255,255,.12);color:rgba(255,255,255,.7)}
+.db-badge.am{background:rgba(245,184,0,.25);color:var(--am3)}
+.db-body{flex:1;display:flex;overflow:hidden}
+.db-side{background:#E8EBF0;width:130px;flex-shrink:0;padding:10px 9px;display:flex;flex-direction:column;gap:9px;border-right:1px solid #D0D5DD}
+.db-side-t{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#6B7280;margin-bottom:3px}
+.db-chip{font-size:9px;padding:4px 8px;border-radius:4px;color:#374151;margin-bottom:2px;}
+.db-chip.sel{background:var(--az3);color:#fff;font-weight:600}
+.db-chip:not(.sel){background:rgba(255,255,255,.6)}
+.db-main{flex:1;padding:10px;display:flex;flex-direction:column;gap:8px;overflow:hidden}
+.db-kpi-row{display:flex;gap:8px;flex-shrink:0}
+.db-kpi{background:#fff;border-radius:7px;border:1px solid #E5E7EB;padding:9px 12px;flex:1;display:flex;flex-direction:column;justify-content:center}
+.db-kpi-n{font-family:'Merriweather',serif;font-size:clamp(16px,2.5vw,26px);font-weight:900;line-height:1}
+.db-kpi-l{font-size:9px;color:#6B7280;margin-top:2px}
+.db-charts{flex:1;display:grid;gap:8px;overflow:hidden}
+.db-card{background:#fff;border-radius:7px;border:1px solid #E5E7EB;padding:10px 12px;display:flex;flex-direction:column;gap:6px;overflow:hidden}
+.db-card-t{font-size:9px;font-weight:700;color:#374151;text-transform:uppercase;letter-spacing:.07em}
+.bar-g{display:flex;flex-direction:column;gap:4px}
+.bar-gi{display:flex;align-items:center;gap:7px}
+.bar-gl{font-size:9px;color:#6B7280;min-width:120px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar-gt{height:13px;flex:1;background:#F3F4F6;border-radius:3px;overflow:hidden;position:relative}
+.bar-gf{height:100%;border-radius:3px;position:absolute;left:0;top:0}
+.bar-gv{font-size:9px;color:#6B7280;min-width:28px;text-align:right;flex-shrink:0}
+.tbl{width:100%;border-collapse:collapse;font-size:9px}
+.tbl th{background:#F3F4F6;color:#374151;font-weight:700;padding:4px 7px;text-align:left;border-bottom:2px solid #E5E7EB;text-transform:uppercase;letter-spacing:.05em}
+.tbl td{padding:4px 7px;border-bottom:1px solid #F3F4F6;color:#374151;vertical-align:middle}
+.tbl tr:last-child td{border-bottom:none}
+.sp{font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px}
+.sp-c{background:#D1FAE5;color:#065F46}.sp-e{background:#FEF3C7;color:#92400E}.sp-n{background:#FEE2E2;color:#991B1B}
+.pct-b{display:flex;align-items:center;gap:5px}
+.pct-t{height:7px;background:#F3F4F6;border-radius:3px;overflow:hidden;flex:1}
+.pct-f{height:100%;border-radius:3px}
+.sem-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:4px}
+.sem-it{background:#F9FAFB;border:1px solid #E5E7EB;border-radius:5px;padding:5px 3px;text-align:center}
+.sem-dot{width:9px;height:9px;border-radius:50%;margin:0 auto 3px}
+.sem-lbl{font-size:8px;color:#6B7280;line-height:1.2}
+.sem-ref{font-size:8px;font-weight:700;color:#374151;margin-bottom:1px}
+.ind-tbl{width:100%;border-collapse:collapse;font-size:9px}
+.ind-tbl th{background:#F3F4F6;color:#374151;font-weight:700;padding:4px 7px;text-align:left;border-bottom:2px solid #E5E7EB;text-transform:uppercase;letter-spacing:.05em}
+.ind-tbl td{padding:5px 7px;border-bottom:1px solid #F3F4F6;color:#374151;vertical-align:middle}
+.ind-tbl tr:last-child td{border-bottom:none}
+.it-c{background:var(--verd2);color:var(--verde)}.it-n{background:var(--nar2);color:var(--narj)}.it-l{background:var(--lil2);color:var(--lila)}
+.it-badge{font-size:8px;font-weight:700;padding:2px 7px;border-radius:20px}
+.trend-up{color:var(--verde);font-weight:700}.trend-na{color:#9CA3AF}
+.wm{position:absolute;bottom:8px;right:12px;font-size:8px;color:rgba(0,0,0,.15);letter-spacing:.08em;text-transform:uppercase}
+
+/* ── S9 PRÓXIMOS PASOS ── */
+#s9{background:var(--az2);flex-direction:column;padding:6% 8%}
+#s9 .slide-label{color:var(--am3)}
+#s9 .slide-title{color:#fff;margin-bottom:16px}
+.pasos-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;flex:1}
+.paso{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.13);border-radius:10px;padding:16px 14px;display:flex;flex-direction:column;gap:6px;position:relative;}
+.paso-n{font-family:'Merriweather',serif;font-size:26px;font-weight:900;color:rgba(255,255,255,.12);position:absolute;top:10px;right:12px;}
+.paso-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:4px;}
+.paso-title{font-size:13px;font-weight:600;color:#fff;line-height:1.3;max-width:140px}
+.paso-desc{font-size:11px;color:rgba(255,255,255,.5);line-height:1.55}
+.paso-tag{font-size:10px;font-weight:600;padding:3px 10px;border-radius:20px;background:rgba(245,184,0,.2);color:var(--am3);align-self:flex-start;margin-top:auto;}
+.pasos-footer{margin-top:12px;padding:10px 14px;background:rgba(245,184,0,.1);border-radius:8px;border:1px solid rgba(245,184,0,.25);font-size:12px;color:rgba(255,255,255,.65);text-align:center;line-height:1.5;flex-shrink:0}
+.pasos-footer strong{color:var(--am3)}
+
+.leyenda{display:flex;gap:16px;align-items:center;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:30px;padding:8px 20px;flex-wrap:wrap;justify-content:center;}
+.ley-item{display:flex;align-items:center;gap:6px;font-size:12px;color:rgba(255,255,255,.55)}
+.ley-dot{width:9px;height:9px;border-radius:50%}
+</style>
+</head>
+<body>
+
+<nav>
+  <button class="nav-btn" onclick="changeSlide(-1)">← Anterior</button>
+  <button class="nav-dot active" onclick="goTo(0)"></button>
+  <button class="nav-dot" onclick="goTo(1)"></button>
+  <button class="nav-dot" onclick="goTo(2)"></button>
+  <button class="nav-dot" onclick="goTo(3)"></button>
+  <button class="nav-dot" onclick="goTo(4)"></button>
+  <button class="nav-dot" onclick="goTo(5)"></button>
+  <button class="nav-dot" onclick="goTo(6)"></button>
+  <button class="nav-dot" onclick="goTo(7)"></button>
+  <button class="nav-dot" onclick="goTo(8)"></button>
+  <span class="slide-counter" id="counter">1 / 9</span>
+  <button class="nav-btn" onclick="changeSlide(1)">Siguiente →</button>
+</nav>
+
+<div class="slides">
+
+<!-- S1 PORTADA -->
+<div class="slide active" id="s1">
+  <div class="s1-band"></div>
+  <div class="s1-logo">TISL</div>
+  <div class="s1-left">
+    <div class="s1-tag">The International School La Serena</div>
+    <h1 class="s1-title">Propuesta de <em>medición y seguimiento</em> del Plan Estratégico 2026–2030</h1>
+    <p class="s1-sub">Estructurar el plan existente para que sea medible, manteniendo su base intacta y complementándola con indicadores e hitos de medición.</p>
+    <div class="s1-chips">
+      <span class="chip">6 Objetivos estratégicos</span>
+      <span class="chip">25 Iniciativas</span>
+      <span class="chip">Dashboard Power BI</span>
+    </div>
+  </div>
+  <div class="s1-right">
+    <div class="stat-card"><div class="stat-n">6</div><div class="stat-l">Objetivos estratégicos del plan</div></div>
+    <div class="stat-card"><div class="stat-n">25</div><div class="stat-l">Iniciativas a ejecutar 2026–2030</div></div>
+    <div class="stat-card"><div class="stat-n">127</div><div class="stat-l">Hitos desglosados y medibles</div></div>
+  </div>
+</div>
+
+<!-- S2 EL PLAN QUE TIENEN -->
+<div class="slide" id="s2">
+  <span class="slide-label">El plan estratégico vigente</span>
+  <h2 class="slide-title">El colegio cuenta con un plan <span>bien construido.</span><br>Lo que sigue es darle seguimiento.</h2>
+  <div class="plan-grid">
+    <div class="plan-card oe1">
+      <div class="plan-card-num">OE1</div>
+      <div class="plan-card-label">Proyecto Educativo</div>
+      <div class="plan-card-desc">4 iniciativas — actualizar el PEI, cuadro de metas, bilingüismo y plan NEE.</div>
+    </div>
+    <div class="plan-card oe2">
+      <div class="plan-card-num">OE2</div>
+      <div class="plan-card-label">Gestión de Personas y Formación</div>
+      <div class="plan-card-desc">8 iniciativas — planes de formación por estamento, evaluación de desempeño, retiro y reemplazo.</div>
+    </div>
+    <div class="plan-card oe3">
+      <div class="plan-card-num">OE3</div>
+      <div class="plan-card-label">Comunidad</div>
+      <div class="plan-card-desc">4 iniciativas — conexión con comunidad externa, estudiantes, familias y ex alumnos.</div>
+    </div>
+    <div class="plan-card oe4">
+      <div class="plan-card-num">OE4</div>
+      <div class="plan-card-label">Administración y Sostenibilidad</div>
+      <div class="plan-card-desc">4 iniciativas — infraestructura, procedimientos, políticas psicosociales e informática.</div>
+    </div>
+    <div class="plan-card oe5">
+      <div class="plan-card-num">OE5</div>
+      <div class="plan-card-label">Comunicación</div>
+      <div class="plan-card-desc">3 iniciativas — política de comunicaciones, rediseño web y aniversario 50.</div>
+    </div>
+    <div class="plan-card oe6">
+      <div class="plan-card-num">OE6</div>
+      <div class="plan-card-label">Seguridad en Actividades Académicas</div>
+      <div class="plan-card-desc">2 iniciativas — respuesta ante emergencias e incremento de condiciones de seguridad.</div>
+    </div>
+  </div>
+  <div class="plan-note">
+    <strong>Principio fundamental de esta propuesta:</strong> ningún objetivo, iniciativa ni acción del plan será modificado. La propuesta consiste exclusivamente en estructurar el plan en un formato que permita medir y hacer seguimiento de su ejecución.
+  </div>
+</div>
+
+<!-- S3 LA PROPUESTA -->
+<div class="slide" id="s3">
+  <span class="slide-label">¿Qué se propone?</span>
+  <h2 class="slide-title">Convertir el plan en un sistema de seguimiento,<br>sin cambiar nada de su contenido.</h2>
+  <div class="prop-msg">
+    La base del plan — objetivos, iniciativas, actividades e hitos — <strong>se mantiene sin cambios</strong>. Lo que se propone es complementarla con indicadores de resultado e hitos de medición que permitan saber si el plan se está ejecutando.
+  </div>
+  <div class="prop-cols">
+    <div class="prop-card pc1">
+      <div class="prop-card-n">127</div>
+      <div class="prop-card-title">Hitos de cumplimiento</div>
+      <div class="prop-card-desc">Los hitos ya definidos en el plan se estructuran en una base de datos: una fila por hito, con estado por año. Aplica a las 25 iniciativas sin excepción. Es la base de toda la medición.</div>
+      <div class="prop-card-examples">
+        <div class="prop-card-ex">Ej: "Aprobación del PEI por el board" → Completado / En proceso / No iniciado</div>
+        <div class="prop-card-ex">Ej: "Catastro de docentes en edad de retiro" → Completado</div>
+      </div>
+    </div>
+    <div class="prop-card pc2">
+      <div class="prop-card-n">26</div>
+      <div class="prop-card-title">Indicadores de resultado</div>
+      <div class="prop-card-desc">Se complementa el plan con indicadores cuantitativos que miden el impacto real de la ejecución, no solo si se hizo. Organizados en 3 categorías según si ya están en el plan o son nuevos.</div>
+      <div class="prop-card-examples">
+        <div class="prop-card-ex">Ej: "N° de alianzas activas con comunidad externa"</div>
+        <div class="prop-card-ex">Ej: "% de profesores certificados en bilingüismo"</div>
+      </div>
+    </div>
+    <div class="prop-card pc3">
+      <div class="prop-card-n">1</div>
+      <div class="prop-card-title">Dashboard de gestión</div>
+      <div class="prop-card-desc">Toda la información se centraliza en un dashboard Power BI que permite ver el avance del plan en tiempo real, filtrar por objetivo, responsable o año.</div>
+      <div class="prop-card-examples">
+        <div class="prop-card-ex">Vista 1: seguimiento de hitos por objetivo estratégico</div>
+        <div class="prop-card-ex">Vista 2: evolución de indicadores de resultado</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- S4 EL EXCEL -->
+<div class="slide" id="s4">
+  <span class="slide-label">El instrumento de trabajo</span>
+  <h2 class="slide-title">El plan se reorganiza en un <span>Excel estructurado</span><br>que alimenta el dashboard directamente.</h2>
+  <div class="excel-layout">
+    <div class="excel-hoja h1">
+      <div class="excel-hoja-head">
+        <div class="excel-hoja-icon" style="background:#E6F1FB">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2E6DB4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+        </div>
+        <div><div class="excel-hoja-num">Hoja 1</div><div class="excel-hoja-name">Base de Datos — Hitos</div></div>
+      </div>
+      <div class="excel-hoja-desc">Una fila por cada hito del plan. Es la fuente principal del dashboard. Se actualiza semestralmente con el estado de cada hito.</div>
+      <div class="excel-hoja-detail">
+        <div class="excel-detail-item"><div class="excel-detail-dot" style="background:#2E6DB4"></div>127 filas — una por hito</div>
+        <div class="excel-detail-item"><div class="excel-detail-dot" style="background:#2E6DB4"></div>Estado por año 2026 a 2030</div>
+        <div class="excel-detail-item"><div class="excel-detail-dot" style="background:#2E6DB4"></div>Semáforo automático por color</div>
+      </div>
+    </div>
+    <div class="excel-hoja h2">
+      <div class="excel-hoja-head">
+        <div class="excel-hoja-icon" style="background:#D4EDE3">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1A6B4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/></svg>
+        </div>
+        <div><div class="excel-hoja-num">Hoja 2</div><div class="excel-hoja-name">Indicadores de Resultado</div></div>
+      </div>
+      <div class="excel-hoja-desc">Los 26 indicadores cuantitativos organizados en 3 categorías. Con valor base 2025 y meta 2030 para cada uno.</div>
+      <div class="excel-hoja-detail">
+        <div class="excel-detail-item"><div class="excel-detail-dot" style="background:#1A6B4A"></div>12 indicadores ya en el plan</div>
+        <div class="excel-detail-item"><div class="excel-detail-dot" style="background:#C05621"></div>5 que necesitan hito de registro</div>
+        <div class="excel-detail-item"><div class="excel-detail-dot" style="background:#4A3A9A"></div>9 indicadores nuevos propuestos</div>
+      </div>
+    </div>
+    <div class="excel-hoja h3">
+      <div class="excel-hoja-head">
+        <div class="excel-hoja-icon" style="background:#FDEBD8">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C05621" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+        </div>
+        <div><div class="excel-hoja-num">Hoja 3</div><div class="excel-hoja-name">Hitos de Habilitación</div></div>
+      </div>
+      <div class="excel-hoja-desc">Los hitos adicionales propuestos para habilitar la medición de indicadores de Categorías 2 y 3. Requieren aprobación del Directorio.</div>
+      <div class="excel-hoja-detail">
+        <div class="excel-detail-item"><div class="excel-detail-dot" style="background:#C05621"></div>12 hitos propuestos</div>
+        <div class="excel-detail-item"><div class="excel-detail-dot" style="background:#C05621"></div>No modifican objetivos ni iniciativas</div>
+        <div class="excel-detail-item"><div class="excel-detail-dot" style="background:#C05621"></div>Sujetos a aprobación del Directorio</div>
+      </div>
+    </div>
+    <div class="excel-hoja h4">
+      <div class="excel-hoja-head">
+        <div class="excel-hoja-icon" style="background:#E8E4F8">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4A3A9A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <div><div class="excel-hoja-num">Hoja 4</div><div class="excel-hoja-name">Resumen por Responsable</div></div>
+      </div>
+      <div class="excel-hoja-desc">Vista consolidada de las 25 iniciativas agrupadas por quien las ejecuta, con tipo de medición y cantidad de indicadores asignados.</div>
+      <div class="excel-hoja-detail">
+        <div class="excel-detail-item"><div class="excel-detail-dot" style="background:#4A3A9A"></div>25 iniciativas con responsable</div>
+        <div class="excel-detail-item"><div class="excel-detail-dot" style="background:#4A3A9A"></div>Tipo de medición por iniciativa</div>
+        <div class="excel-detail-item"><div class="excel-detail-dot" style="background:#4A3A9A"></div>N° de indicadores de resultado</div>
+      </div>
+    </div>
+  </div>
+  <div class="excel-nota">
+    El Excel es el único lugar donde se ingresa información. El dashboard Power BI lee este archivo automáticamente — no hay doble ingreso de datos.
+  </div>
+</div>
+
+<!-- S5 INDICADORES -->
+<div class="slide" id="s5">
+  <span class="slide-label">Indicadores de resultado</span>
+  <h2 class="slide-title">26 indicadores organizados en <span>3 categorías</span><br>según su origen y lo que requieren.</h2>
+  <div class="ind-cats">
+    <div class="ind-cat cat1">
+      <div class="ind-cat-head">
+        <div class="ind-cat-num">12</div>
+      </div>
+      <div class="ind-cat-title">Ya están en el plan — no requieren nada nuevo</div>
+      <div class="ind-cat-desc">El dato emerge directamente de los hitos ya definidos en el plan original. Solo hay que leerlo y registrarlo sistemáticamente.</div>
+      <div class="ind-examples">
+        <div class="ind-ex">N° de actividades con la comunidad externa (OE3)</div>
+        <div class="ind-ex">% de cargos con descripción actualizada (OE2)</div>
+        <div class="ind-ex">% de requisitos Ley Karin implementados (OE4)</div>
+        <div class="ind-ex">% del presupuesto de infraestructura ejecutado (OE4)</div>
+        <div class="ind-ex">N° de ex alumnos en la base de datos (OE3)</div>
+      </div>
+    </div>
+    <div class="ind-cat cat2">
+      <div class="ind-cat-head">
+        <div class="ind-cat-num">5</div>
+      </div>
+      <div class="ind-cat-title">Casi en el plan — solo falta un paso de registro</div>
+      <div class="ind-cat-desc">La actividad ya está contemplada en el plan. Solo se necesita agregar el paso de "anotar el número". No se crea ninguna iniciativa nueva.</div>
+      <div class="ind-examples">
+        <div class="ind-ex">% de simulacros ejecutados vs programados (OE6)</div>
+        <div class="ind-ex">Tiempo promedio de evacuación en simulacros (OE6)</div>
+        <div class="ind-ex">% actividades escolares con evaluación de riesgo (OE6)</div>
+        <div class="ind-ex">N° de incidentes críticos de infraestructura (OE4)</div>
+        <div class="ind-ex">% de mentorías activas sobre planificadas (OE2)</div>
+      </div>
+    </div>
+    <div class="ind-cat cat3">
+      <div class="ind-cat-head">
+        <div class="ind-cat-num">9</div>
+      </div>
+      <div class="ind-cat-title">Nuevos — sin nueva iniciativa, con hito de habilitación</div>
+      <div class="ind-cat-desc">No existen hoy. Se pueden crear sin modificar ningún objetivo ni iniciativa, agregando hitos de habilitación que requieren aprobación del Directorio.</div>
+      <div class="ind-examples">
+        <div class="ind-ex">N° horas de capacitación por estamento / año (OE2)</div>
+        <div class="ind-ex">% disponibilidad servicios tecnológicos — uptime (OE4)</div>
+        <div class="ind-ex">N° usuarios únicos mensuales en la web (OE5)</div>
+        <div class="ind-ex">% satisfacción con capacitaciones ejecutadas (OE2)</div>
+        <div class="ind-ex">% funcionarios evaluados con nuevo sistema (OE2)</div>
+      </div>
+    </div>
+  </div>
+  <div class="ind-message">
+    Las Categorías 2 y 3 requieren hitos de habilitación que serán presentados para su visto bueno. Ninguno modifica los objetivos ni las iniciativas del plan — solo agregan pasos de registro o medición que complementan lo que ya existe.
+  </div>
+</div>
+
+<!-- S6 HITOS DE HABILITACIÓN -->
+<div class="slide" id="s6">
+  <span class="slide-label">Hitos de habilitación — propuesta complementaria al plan</span>
+  <h2 class="slide-title">12 hitos adicionales propuestos.<br><span>Ninguno modifica el plan estratégico.</span></h2>
+  <div class="hab-grid">
+    <div>
+      <div class="hab-col-title" style="color:var(--narj)">
+        <div class="hab-col-dot" style="background:var(--narj)"></div>
+        Categoría 2 — Hitos de registro (5)
+      </div>
+      <div class="hab-list">
+        <div class="hab-item cat2">
+          <span class="hab-ref">6.1</span>
+          <div class="hab-body"><div class="hab-hito">Registro formal de simulacros realizados vs programados</div><div class="hab-ind">Habilita: % simulacros ejecutados + tiempo de evacuación</div></div>
+        </div>
+        <div class="hab-item cat2">
+          <span class="hab-ref">6.2</span>
+          <div class="hab-body"><div class="hab-hito">Checklist de evaluación de riesgo por actividad escolar</div><div class="hab-ind">Habilita: % actividades con evaluación de riesgo previa</div></div>
+        </div>
+        <div class="hab-item cat2">
+          <span class="hab-ref">4.1</span>
+          <div class="hab-body"><div class="hab-hito">Libro de incidentes críticos de infraestructura</div><div class="hab-ind">Habilita: N° de incidentes críticos por período</div></div>
+        </div>
+        <div class="hab-item cat2">
+          <span class="hab-ref">2.6</span>
+          <div class="hab-body"><div class="hab-hito">Seguimiento semestral de mentorías activas vs planificadas</div><div class="hab-ind">Habilita: % mentorías activas sobre planificadas</div></div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="hab-col-title" style="color:var(--lila)">
+        <div class="hab-col-dot" style="background:var(--lila)"></div>
+        Categoría 3 — Hitos de habilitación nuevos (7)
+      </div>
+      <div class="hab-list">
+        <div class="hab-item cat3">
+          <span class="hab-ref">2.1</span>
+          <div class="hab-body"><div class="hab-hito">Encuesta breve de satisfacción post-capacitación (3 preguntas)</div><div class="hab-ind">Habilita: % satisfacción con capacitaciones. Ya con visto bueno.</div></div>
+        </div>
+        <div class="hab-item cat3">
+          <span class="hab-ref">2.1–2.5</span>
+          <div class="hab-body"><div class="hab-hito">Registro anual de horas de capacitación por estamento</div><div class="hab-ind">Habilita: N° horas de capacitación por estamento / año</div></div>
+        </div>
+        <div class="hab-item cat3">
+          <span class="hab-ref">4.4</span>
+          <div class="hab-body"><div class="hab-hito">Sistema de monitoreo TI y mesa de ayuda con tickets</div><div class="hab-ind">Habilita: % uptime + tiempo resolución de incidentes TI</div></div>
+        </div>
+        <div class="hab-item cat3">
+          <span class="hab-ref">5.2</span>
+          <div class="hab-body"><div class="hab-hito">Google Analytics en la nueva web + política de contenidos</div><div class="hab-ind">Habilita: N° usuarios web + % secciones actualizadas</div></div>
+        </div>
+        <div class="hab-item cat3">
+          <span class="hab-ref">2.8</span>
+          <div class="hab-body"><div class="hab-hito">Registro de cobertura del sistema de evaluación de desempeño</div><div class="hab-ind">Habilita: % funcionarios evaluados en el ciclo anual</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="hab-footer">
+    Estos hitos no crean nuevos objetivos ni iniciativas. Son pasos de medición que se incorporan a la ejecución del plan ya aprobado, sin alterar su estructura ni su contenido.
+  </div>
+</div>
+
+<!-- S7 DASHBOARD HITOS -->
+<div class="slide db-slide" id="s7">
+  <div class="db-header">
+    <div class="db-header-left">
+      <div class="db-title">Dashboard de Seguimiento — Plan Estratégico TISL 2026–2030</div>
+      <div class="db-sub">Vista 1: Seguimiento por hitos · Todos los objetivos · Año 2026</div>
+    </div>
+    <div class="db-badges">
+      <span class="db-badge">Actualizado: Jun 2026</span>
+      <span class="db-badge am">Año 1 de 5</span>
+    </div>
+  </div>
+  <div class="db-body">
+    <div class="db-side">
+      <div><div class="db-side-t">Objetivo</div>
+        <div class="db-chip sel">Todos</div>
+        <div class="db-chip">OE1 Proy. Educ.</div>
+        <div class="db-chip">OE2 Personas</div>
+        <div class="db-chip">OE3 Comunidad</div>
+        <div class="db-chip">OE4 Admin.</div>
+        <div class="db-chip">OE5 Comun.</div>
+        <div class="db-chip">OE6 Seguridad</div>
+      </div>
+      <div><div class="db-side-t">Responsable</div>
+        <div class="db-chip sel">Todos</div>
+        <div class="db-chip">Rectoría</div>
+        <div class="db-chip">Dir. Adm.</div>
+      </div>
+      <div><div class="db-side-t">Año</div>
+        <div class="db-chip sel">2026</div>
+        <div class="db-chip">2027</div>
+        <div class="db-chip">2028–30</div>
+      </div>
+    </div>
+    <div class="db-main">
+      <div class="db-kpi-row">
+        <div class="db-kpi"><div class="db-kpi-n" style="color:var(--az3)">127</div><div class="db-kpi-l">Total hitos del plan</div></div>
+        <div class="db-kpi"><div class="db-kpi-n" style="color:#065F46">54</div><div class="db-kpi-l">Hitos completados</div></div>
+        <div class="db-kpi"><div class="db-kpi-n" style="color:#92400E">38</div><div class="db-kpi-l">En proceso</div></div>
+        <div class="db-kpi"><div class="db-kpi-n" style="color:#991B1B">35</div><div class="db-kpi-l">No iniciados</div></div>
+        <div class="db-kpi"><div class="db-kpi-n" style="color:var(--az3)">43%</div><div class="db-kpi-l">Avance global</div></div>
+      </div>
+      <div class="db-charts" style="grid-template-columns:1.2fr 1fr;grid-template-rows:1fr 1fr">
+        <div class="db-card">
+          <div class="db-card-t">Avance por objetivo estratégico (%)</div>
+          <div class="bar-g">
+            <div class="bar-gi"><div class="bar-gl">OE1 Proyecto Educativo</div><div class="bar-gt"><div class="bar-gf" style="width:72%;background:#2E6DB4"></div></div><div class="bar-gv">72%</div></div>
+            <div class="bar-gi"><div class="bar-gl">OE2 Gestión de Personas</div><div class="bar-gt"><div class="bar-gf" style="width:38%;background:#1A6B4A"></div></div><div class="bar-gv">38%</div></div>
+            <div class="bar-gi"><div class="bar-gl">OE3 Comunidad</div><div class="bar-gt"><div class="bar-gf" style="width:55%;background:#C05621"></div></div><div class="bar-gv">55%</div></div>
+            <div class="bar-gi"><div class="bar-gl">OE4 Administración</div><div class="bar-gt"><div class="bar-gf" style="width:30%;background:#7B241C"></div></div><div class="bar-gv">30%</div></div>
+            <div class="bar-gi"><div class="bar-gl">OE5 Comunicación</div><div class="bar-gt"><div class="bar-gf" style="width:80%;background:#4A3A9A"></div></div><div class="bar-gv">80%</div></div>
+            <div class="bar-gi"><div class="bar-gl">OE6 Seguridad</div><div class="bar-gt"><div class="bar-gf" style="width:50%;background:#2C3E50"></div></div><div class="bar-gv">50%</div></div>
+          </div>
+        </div>
+        <div class="db-card">
+          <div class="db-card-t">Estado de iniciativas</div>
+          <div class="sem-grid">
+            <div class="sem-it"><div class="sem-ref">1.1</div><div class="sem-dot" style="background:#10B981"></div><div class="sem-lbl">Completado</div></div>
+            <div class="sem-it"><div class="sem-ref">1.2</div><div class="sem-dot" style="background:#F59E0B"></div><div class="sem-lbl">En proceso</div></div>
+            <div class="sem-it"><div class="sem-ref">1.4</div><div class="sem-dot" style="background:#10B981"></div><div class="sem-lbl">Completado</div></div>
+            <div class="sem-it"><div class="sem-ref">2.1</div><div class="sem-dot" style="background:#F59E0B"></div><div class="sem-lbl">En proceso</div></div>
+            <div class="sem-it"><div class="sem-ref">3.1</div><div class="sem-dot" style="background:#10B981"></div><div class="sem-lbl">Completado</div></div>
+            <div class="sem-it"><div class="sem-ref">3.3</div><div class="sem-dot" style="background:#F59E0B"></div><div class="sem-lbl">En proceso</div></div>
+            <div class="sem-it"><div class="sem-ref">4.1</div><div class="sem-dot" style="background:#EF4444"></div><div class="sem-lbl">No iniciado</div></div>
+            <div class="sem-it"><div class="sem-ref">5.3</div><div class="sem-dot" style="background:#10B981"></div><div class="sem-lbl">Completado</div></div>
+            <div class="sem-it"><div class="sem-ref">6.1</div><div class="sem-dot" style="background:#F59E0B"></div><div class="sem-lbl">En proceso</div></div>
+            <div class="sem-it"><div class="sem-ref">6.2</div><div class="sem-dot" style="background:#EF4444"></div><div class="sem-lbl">No iniciado</div></div>
+          </div>
+          <div style="display:flex;gap:6px;margin-top:6px">
+            <div style="flex:1;text-align:center;font-size:9px"><div style="font-weight:700;color:#065F46;font-size:13px">10</div><div style="color:#6B7280">Completadas</div></div>
+            <div style="flex:1;text-align:center;font-size:9px"><div style="font-weight:700;color:#92400E;font-size:13px">10</div><div style="color:#6B7280">En proceso</div></div>
+            <div style="flex:1;text-align:center;font-size:9px"><div style="font-weight:700;color:#991B1B;font-size:13px">5</div><div style="color:#6B7280">No iniciadas</div></div>
+          </div>
+        </div>
+        <div class="db-card" style="grid-column:1/-1">
+          <div class="db-card-t">Detalle de avance por iniciativa — selección</div>
+          <table class="tbl">
+            <thead><tr><th>Ref.</th><th>Iniciativa</th><th>Responsable</th><th>Hitos completados</th><th>Avance</th><th>Estado</th></tr></thead>
+            <tbody>
+              <tr><td style="font-weight:700;color:#2E6DB4">1.1</td><td>Proyecto educativo actualizado</td><td>Rectoría</td><td>8 / 8</td><td><div class="pct-b"><div class="pct-t"><div class="pct-f" style="width:100%;background:#10B981"></div></div><span style="font-size:8px;font-weight:700;color:#065F46">100%</span></div></td><td><span class="sp sp-c">Completado</span></td></tr>
+              <tr><td style="font-weight:700;color:#2E6DB4">1.2</td><td>Cuadro de metas de gestión rectoría</td><td>Rectoría</td><td>2 / 4</td><td><div class="pct-b"><div class="pct-t"><div class="pct-f" style="width:50%;background:#F59E0B"></div></div><span style="font-size:8px;font-weight:700;color:#92400E">50%</span></div></td><td><span class="sp sp-e">En proceso</span></td></tr>
+              <tr><td style="font-weight:700;color:#C05621">3.1</td><td>Conexión con comunidad externa</td><td>Rectoría</td><td>5 / 5</td><td><div class="pct-b"><div class="pct-t"><div class="pct-f" style="width:100%;background:#10B981"></div></div><span style="font-size:8px;font-weight:700;color:#065F46">100%</span></div></td><td><span class="sp sp-c">Completado</span></td></tr>
+              <tr><td style="font-weight:700;color:#7B241C">4.1</td><td>Plan de inversión e infraestructura</td><td>Dir. Adm. y Fin.</td><td>0 / 4</td><td><div class="pct-b"><div class="pct-t"><div class="pct-f" style="width:0%;background:#EF4444"></div></div><span style="font-size:8px;font-weight:700;color:#991B1B">0%</span></div></td><td><span class="sp sp-n">No iniciado</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="wm">Vista referencial — los datos serán reales</div>
+</div>
+
+<!-- S8 DASHBOARD INDICADORES -->
+<div class="slide db-slide" id="s8">
+  <div class="db-header">
+    <div class="db-header-left">
+      <div class="db-title">Dashboard de Resultados — Plan Estratégico TISL 2026–2030</div>
+      <div class="db-sub">Vista 2: Indicadores de resultado · Comparativa valor base 2025 vs 2026</div>
+    </div>
+    <div class="db-badges">
+      <span class="db-badge">Actualizado: Jun 2026</span>
+      <span class="db-badge am">26 indicadores activos</span>
+    </div>
+  </div>
+  <div class="db-body">
+    <div class="db-side">
+      <div><div class="db-side-t">Categoría</div>
+        <div class="db-chip sel">Todas</div>
+        <div class="db-chip">Cat.1 — En el plan</div>
+        <div class="db-chip">Cat.2 — Registro</div>
+        <div class="db-chip">Cat.3 — Nuevos</div>
+      </div>
+      <div><div class="db-side-t">Objetivo</div>
+        <div class="db-chip sel">Todos</div>
+        <div class="db-chip">OE2 Personas</div>
+        <div class="db-chip">OE3 Comunidad</div>
+        <div class="db-chip">OE4 Admin.</div>
+        <div class="db-chip">OE6 Seguridad</div>
+      </div>
+      <div><div class="db-side-t">Año</div>
+        <div class="db-chip sel">2026</div>
+        <div class="db-chip">2025 (base)</div>
+        <div class="db-chip">Tendencia</div>
+      </div>
+    </div>
+    <div class="db-main">
+      <div class="db-kpi-row">
+        <div class="db-kpi"><div class="db-kpi-n" style="color:var(--verde)">12</div><div class="db-kpi-l">Indicadores Cat. 1 — en el plan</div></div>
+        <div class="db-kpi"><div class="db-kpi-n" style="color:var(--narj)">5</div><div class="db-kpi-l">Indicadores Cat. 2 — con registro</div></div>
+        <div class="db-kpi"><div class="db-kpi-n" style="color:var(--lila)">9</div><div class="db-kpi-l">Indicadores Cat. 3 — nuevos</div></div>
+        <div class="db-kpi"><div class="db-kpi-n" style="color:var(--az3)">26</div><div class="db-kpi-l">Total indicadores propuestos</div></div>
+      </div>
+      <div class="db-charts" style="grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr">
+        <div class="db-card">
+          <div class="db-card-t">OE3 Comunidad — actividades realizadas</div>
+          <div style="display:flex;gap:10px;align-items:flex-end;flex:1;padding-top:4px">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:3px;flex:1">
+              <div style="font-size:16px;font-weight:700;color:#374151">8</div>
+              <div style="width:100%;height:36px;background:#CBD5E0;border-radius:3px 3px 0 0"></div>
+              <div style="font-size:8px;color:#6B7280">Base 2025</div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:3px;flex:1">
+              <div style="font-size:16px;font-weight:700;color:var(--verde)">14</div>
+              <div style="width:100%;height:63px;background:#1A6B4A;border-radius:3px 3px 0 0"></div>
+              <div style="font-size:8px;color:#6B7280">2026</div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:3px;flex:1">
+              <div style="font-size:16px;font-weight:700;color:#374151">20</div>
+              <div style="width:100%;height:90px;background:#D4EDE3;border-radius:3px 3px 0 0;border:2px dashed #A3D9C0"></div>
+              <div style="font-size:8px;color:#6B7280">Meta 2030</div>
+            </div>
+            <div style="text-align:center">
+              <div style="font-size:11px;font-weight:700;color:var(--verde)">+75%</div>
+              <div style="font-size:8px;color:#6B7280;margin-top:2px">vs base</div>
+            </div>
+          </div>
+        </div>
+        <div class="db-card">
+          <div class="db-card-t">OE2 — Horas de capacitación por estamento</div>
+          <div class="bar-g" style="flex:1;justify-content:center">
+            <div class="bar-gi"><div class="bar-gl">Directivos</div><div class="bar-gt"><div class="bar-gf" style="width:75%;background:#2E6DB4"></div></div><div class="bar-gv">18h</div></div>
+            <div class="bar-gi"><div class="bar-gl">Docentes</div><div class="bar-gt"><div class="bar-gf" style="width:90%;background:#1A6B4A"></div></div><div class="bar-gv">22h</div></div>
+            <div class="bar-gi"><div class="bar-gl">Prof. Jefes</div><div class="bar-gt"><div class="bar-gf" style="width:65%;background:#C05621"></div></div><div class="bar-gv">16h</div></div>
+            <div class="bar-gi"><div class="bar-gl">Asistentes</div><div class="bar-gt"><div class="bar-gf" style="width:55%;background:#7B241C"></div></div><div class="bar-gv">13h</div></div>
+            <div class="bar-gi"><div class="bar-gl">Administrativos</div><div class="bar-gt"><div class="bar-gf" style="width:50%;background:#4A3A9A"></div></div><div class="bar-gv">12h</div></div>
+          </div>
+        </div>
+        <div class="db-card" style="grid-column:1/-1">
+          <div class="db-card-t">Tabla de indicadores de resultado — estado general</div>
+          <table class="ind-tbl">
+            <thead><tr><th>Ref.</th><th>Indicador</th><th>Categoría</th><th>Valor base 2025</th><th>Valor 2026</th><th>Meta 2030</th><th>Tendencia</th></tr></thead>
+            <tbody>
+              <tr><td style="font-weight:700;color:#C05621">3.1</td><td>N° actividades comunidad externa / año</td><td><span class="it-badge it-c">Cat. 1</span></td><td>8 actividades</td><td>14 actividades</td><td>20 actividades</td><td class="trend-up">▲ +75%</td></tr>
+              <tr><td style="font-weight:700;color:#C05621">3.4</td><td>N° ex alumnos en base de datos</td><td><span class="it-badge it-c">Cat. 1</span></td><td>0 (nueva)</td><td>145 personas</td><td>500 personas</td><td class="trend-up">▲ +145</td></tr>
+              <tr><td style="font-weight:700;color:#2C3E50">6.1</td><td>% simulacros ejecutados sobre programados</td><td><span class="it-badge it-n">Cat. 2</span></td><td>Sin datos</td><td>100%</td><td>100%</td><td class="trend-up">▲ Nuevo</td></tr>
+              <tr><td style="font-weight:700;color:#2C3E50">6.1</td><td>Tiempo promedio de evacuación (minutos)</td><td><span class="it-badge it-n">Cat. 2</span></td><td>Sin datos</td><td>5.2 min</td><td>≤ 4 min</td><td class="trend-up">▲ Medición iniciada</td></tr>
+              <tr><td style="font-weight:700;color:#1A6B4A">2.1–2.5</td><td>N° horas capacitación por estamento / año</td><td><span class="it-badge it-l">Cat. 3</span></td><td>Sin datos</td><td>18h prom.</td><td>≥ 20h/año</td><td class="trend-up">▲ Nuevo</td></tr>
+              <tr><td style="font-weight:700;color:#4A3A9A">5.2</td><td>N° usuarios únicos mensuales web</td><td><span class="it-badge it-l">Cat. 3</span></td><td>Sin datos</td><td>—</td><td>+20% vs base</td><td class="trend-na">Pendiente Analytics</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="wm">Vista referencial — los datos serán reales</div>
+</div>
+
+<!-- S9 PRÓXIMOS PASOS -->
+<div class="slide" id="s9">
+  <span class="slide-label">Hoja de ruta</span>
+  <h2 class="slide-title">Próximos pasos</h2>
+  <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:8px;flex:1">
+    <div class="paso">
+      <div class="paso-n">1</div>
+      <div class="paso-icon" style="background:rgba(245,184,0,.15)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F5B800" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20,6 9,17 4,12"/></svg>
+      </div>
+      <div class="paso-title" style="max-width:none;font-size:12px">Visto bueno de la propuesta de indicadores</div>
+      <div class="paso-desc">Validación y aprobación de los indicadores de resultado propuestos, incluyendo los hitos de habilitación de categorías 2 y 3.</div>
+    </div>
+    <div class="paso">
+      <div class="paso-n">2</div>
+      <div class="paso-icon" style="background:rgba(46,109,180,.2)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5B9BD5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </div>
+      <div class="paso-title" style="max-width:none;font-size:12px">Levantamiento de información faltante</div>
+      <div class="paso-desc">Reuniones con responsables para identificar estado actual de hitos, datos existentes y valores base de indicadores.</div>
+    </div>
+    <div class="paso">
+      <div class="paso-n">3</div>
+      <div class="paso-icon" style="background:rgba(46,189,130,.15)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2EBD82" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+      </div>
+      <div class="paso-title" style="max-width:none;font-size:12px">Generar la estructura de datos</div>
+      <div class="paso-desc">Poblar el Excel con el estado real de hitos e indicadores. Definir responsable del dato y frecuencia de actualización.</div>
+    </div>
+    <div class="paso">
+      <div class="paso-n">4</div>
+      <div class="paso-icon" style="background:rgba(139,127,212,.2)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#B8AEFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/></svg>
+      </div>
+      <div class="paso-title" style="max-width:none;font-size:12px">Construcción del dashboard</div>
+      <div class="paso-desc">Desarrollo del dashboard Power BI con las vistas de seguimiento por hitos e indicadores de resultado.</div>
+    </div>
+    <div class="paso">
+      <div class="paso-n">5</div>
+      <div class="paso-icon" style="background:rgba(192,86,33,.15)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C05621" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+      </div>
+      <div class="paso-title" style="max-width:none;font-size:12px">Entrega de la primera versión piloto</div>
+      <div class="paso-desc">Presentación del dashboard operativo con los primeros datos reales ingresados para revisión y validación.</div>
+    </div>
+    <div class="paso">
+      <div class="paso-n">6</div>
+      <div class="paso-icon" style="background:rgba(26,107,74,.15)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2EBD82" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      </div>
+      <div class="paso-title" style="max-width:none;font-size:12px">Retroalimentación y ajustes</div>
+      <div class="paso-desc">Recepción de observaciones de Rectoría y ajustes al dashboard según las necesidades identificadas en el piloto.</div>
+    </div>
+    <div class="paso">
+      <div class="paso-n">7</div>
+      <div class="paso-icon" style="background:rgba(245,184,0,.2)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F5B800" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>
+      </div>
+      <div class="paso-title" style="max-width:none;font-size:12px">Entrega final</div>
+      <div class="paso-desc">Presentación del sistema completo y operativo. Traspaso del dashboard con capacitación al equipo responsable de su actualización.</div>
+    </div>
+  </div>
+  <div class="pasos-footer">
+    El proceso comienza con el visto bueno de esta propuesta. Cada paso siguiente depende de la información que el colegio pueda proveer en el levantamiento.
+  </div>
+</div>
+
+</div><!-- /slides -->
+
+<div class="leyenda">
+  <div class="ley-item"><div class="ley-dot" style="background:#2EBD82"></div>Indicadores Cat. 1 — ya en el plan (12)</div>
+  <div class="ley-item"><div class="ley-dot" style="background:var(--narj)"></div>Indicadores Cat. 2 — con hito de registro (5)</div>
+  <div class="ley-item"><div class="ley-dot" style="background:var(--lila)"></div>Indicadores Cat. 3 — nuevos con habilitación (9)</div>
+</div>
+
+<script>
+let cur=0,tot=9;
+const slides=document.querySelectorAll('.slide');
+const dots=document.querySelectorAll('.nav-dot');
+const counter=document.getElementById('counter');
+function goTo(n){
+  slides[cur].classList.remove('active');
+  dots[cur].classList.remove('active');
+  cur=(n+tot)%tot;
+  slides[cur].classList.add('active');
+  dots[cur].classList.add('active');
+  counter.textContent=`${cur+1} / ${tot}`;
+}
+function changeSlide(d){goTo(cur+d)}
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key==='ArrowDown')changeSlide(1);
+  if(e.key==='ArrowLeft'||e.key==='ArrowUp')changeSlide(-1);
+});
+</script>
+</body>
+</html>
