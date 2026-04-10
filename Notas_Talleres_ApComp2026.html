@@ -34,199 +34,70 @@
       align-items: center;
       gap: 32px;
     }
-    .inst-logo img {
-      height: 62px;
-      width: auto;
-      display: block;
-    }
-    .inst-divider {
-      width: 1.5px;
-      height: 56px;
-      background: rgba(126,158,194,0.35);
-      flex-shrink: 0;
-    }
+    .inst-logo img { height: 62px; width: auto; display: block; }
+    .inst-divider { width: 1.5px; height: 56px; background: rgba(126,158,194,0.35); flex-shrink: 0; }
     .inst-titles { flex: 1; }
     .inst-titles .career {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--lt);
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      margin-bottom: 4px;
+      font-size: 13px; font-weight: 600; color: var(--lt);
+      letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 4px;
     }
     .inst-titles h1 {
       font-family: "Libre Baskerville", serif;
-      font-size: 26px;
-      color: var(--white);
-      line-height: 1.2;
+      font-size: 26px; color: var(--white); line-height: 1.2;
     }
-    .inst-titles .prof {
-      font-size: 15px;
-      color: var(--lt);
-      margin-top: 4px;
-    }
-    .stripe {
-      height: 5px;
-      background: linear-gradient(90deg, var(--navy) 0%, var(--mid) 50%, var(--lt) 100%);
-    }
-    main {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 52px 20px;
-    }
+    .inst-titles .prof { font-size: 15px; color: var(--lt); margin-top: 4px; }
+    .stripe { height: 5px; background: linear-gradient(90deg, var(--navy) 0%, var(--mid) 50%, var(--lt) 100%); }
+    main { flex: 1; display: flex; align-items: center; justify-content: center; padding: 52px 20px; }
     .card {
-      background: var(--white);
-      border-radius: 16px;
-      box-shadow: 0 8px 32px rgba(0,11,93,0.10);
-      width: 100%;
-      max-width: 640px;
-      overflow: hidden;
+      background: var(--white); border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0,11,93,0.10); width: 100%; max-width: 640px; overflow: hidden;
     }
-    .card-header {
-      background: var(--mid);
-      padding: 26px 40px;
-      display: flex;
-      align-items: center;
-      gap: 18px;
-    }
-    .card-header-text h2 {
-      font-family: "Libre Baskerville", serif;
-      font-size: 24px;
-      color: var(--white);
-    }
-    .card-header-text p {
-      font-size: 16px;
-      color: rgba(255,255,255,0.75);
-      margin-top: 4px;
-    }
+    .card-header { background: var(--mid); padding: 26px 40px; display: flex; align-items: center; gap: 18px; }
+    .card-header-text h2 { font-family: "Libre Baskerville", serif; font-size: 24px; color: var(--white); }
+    .card-header-text p { font-size: 16px; color: rgba(255,255,255,0.75); margin-top: 4px; }
     .card-body { padding: 38px 40px; }
     .instructions {
-      background: #eef2f8;
-      border-left: 4px solid var(--lt);
-      border-radius: 0 8px 8px 0;
-      padding: 18px 22px;
-      margin-bottom: 30px;
-      font-size: 17px;
-      line-height: 1.65;
-      color: var(--body);
+      background: #eef2f8; border-left: 4px solid var(--lt);
+      border-radius: 0 8px 8px 0; padding: 18px 22px; margin-bottom: 30px;
+      font-size: 17px; line-height: 1.65; color: var(--body);
     }
     .instructions strong { color: var(--navy); font-weight: 700; }
     .instructions .eg { font-size: 15px; color: #8a93a8; margin-top: 6px; }
     .instructions .eg strong { color: var(--mid); }
-    .input-label {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 17px;
-      font-weight: 700;
-      color: var(--navy);
-      margin-bottom: 10px;
-    }
+    .input-label { display: flex; align-items: center; gap: 8px; font-size: 17px; font-weight: 700; color: var(--navy); margin-bottom: 10px; }
     .rut-input {
-      width: 100%;
-      font-family: "Source Sans 3", sans-serif;
-      font-size: 22px;
-      color: var(--body);
-      border: 2px solid var(--border);
-      border-radius: 10px;
-      padding: 14px 18px;
-      outline: none;
-      transition: border-color 0.2s, box-shadow 0.2s;
-      letter-spacing: 0.04em;
-      background: #fafbfd;
+      width: 100%; font-family: "Source Sans 3", sans-serif; font-size: 22px; color: var(--body);
+      border: 2px solid var(--border); border-radius: 10px; padding: 14px 18px; outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s; letter-spacing: 0.04em; background: #fafbfd;
     }
-    .rut-input:focus {
-      border-color: var(--mid);
-      box-shadow: 0 0 0 3px rgba(22,87,141,0.13);
-      background: var(--white);
-    }
-    .input-hint {
-      font-size: 15px;
-      color: #8a93a8;
-      margin-top: 7px;
-      margin-bottom: 26px;
-    }
+    .rut-input:focus { border-color: var(--mid); box-shadow: 0 0 0 3px rgba(22,87,141,0.13); background: var(--white); }
+    .input-hint { font-size: 15px; color: #8a93a8; margin-top: 7px; margin-bottom: 26px; }
     .btn-consultar {
-      width: 100%;
-      background: var(--navy);
-      color: var(--white);
-      border: none;
-      border-radius: 10px;
-      font-family: "Source Sans 3", sans-serif;
-      font-size: 20px;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-      padding: 16px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      transition: background 0.18s, transform 0.1s;
+      width: 100%; background: var(--navy); color: var(--white); border: none; border-radius: 10px;
+      font-family: "Source Sans 3", sans-serif; font-size: 20px; font-weight: 700; letter-spacing: 0.04em;
+      padding: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+      gap: 12px; transition: background 0.18s, transform 0.1s;
     }
     .btn-consultar:hover { background: var(--mid); }
     .btn-consultar:active { transform: scale(0.98); }
     #result { margin-top: 30px; display: none; }
     .result-box {
-      border-radius: 12px;
-      padding: 30px 32px;
-      display: flex;
-      align-items: center;
-      gap: 24px;
-      background: #eef2f8;
-      border: 2px solid var(--lt);
+      border-radius: 12px; padding: 30px 32px; display: flex; align-items: center;
+      gap: 24px; background: #eef2f8; border: 2px solid var(--lt);
     }
-    .result-nota {
-      font-family: "Libre Baskerville", serif;
-      font-size: 62px;
-      font-weight: 700;
-      line-height: 1;
-      color: var(--navy);
-    }
-    .result-label {
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--mid);
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      margin-bottom: 4px;
-    }
+    .result-nota { font-family: "Libre Baskerville", serif; font-size: 62px; font-weight: 700; line-height: 1; color: var(--navy); }
+    .result-label { font-size: 15px; font-weight: 600; color: var(--mid); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 4px; }
     .result-sub { font-size: 16px; color: var(--body); margin-top: 4px; }
     .error-msg {
-      background: #fef2f2;
-      border: 2px solid #fca5a5;
-      border-radius: 12px;
-      padding: 20px 24px;
-      display: flex;
-      align-items: flex-start;
-      gap: 14px;
-      font-size: 17px;
-      color: var(--danger);
-      font-weight: 600;
-      line-height: 1.5;
+      background: #fef2f2; border: 2px solid #fca5a5; border-radius: 12px;
+      padding: 20px 24px; display: flex; align-items: flex-start; gap: 14px;
+      font-size: 17px; color: var(--danger); font-weight: 600; line-height: 1.5;
     }
     #lockNotice {
-      display: none;
-      background: #fff7ed;
-      border: 2px solid #fdba74;
-      border-radius: 12px;
-      padding: 18px 22px;
-      font-size: 17px;
-      color: var(--warn);
-      font-weight: 600;
-      margin-top: 18px;
-      text-align: center;
+      display: none; background: #fff7ed; border: 2px solid #fdba74; border-radius: 12px;
+      padding: 18px 22px; font-size: 17px; color: var(--warn); font-weight: 600; margin-top: 18px; text-align: center;
     }
-    footer {
-      background: var(--navy);
-      padding: 18px 48px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-    }
+    footer { background: var(--navy); padding: 18px 48px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
     footer p { font-size: 15px; color: var(--lt); }
     .footer-divider { width: 1px; height: 22px; background: rgba(126,158,194,0.35); }
     @media (max-width: 680px) {
@@ -249,7 +120,7 @@
   <div class="inst-titles">
     <div class="career">Ingenier&iacute;a en Informaci&oacute;n y Control de Gesti&oacute;n</div>
     <h1>Aplicaciones Computacionales</h1>
-    <div class="prof">Profesora: Natalia Araya Plaza - Primer Semestre 2026</div>
+    <div class="prof">Profesora: Natalia Araya Plaza</div>
   </div>
 </div>
 <div class="stripe"></div>
@@ -286,7 +157,7 @@
       <input type="text" id="rutInput" class="rut-input"
         placeholder="Ej: 123456789 &oacute; 12345678K"
         maxlength="10" autocomplete="off" autocorrect="off" spellcheck="false">
-      <div class="input-hint"></div>
+      <div class="input-hint">Incluya el d&iacute;gito verificador al final, sin gui&oacute;n.</div>
 
       <button class="btn-consultar" onclick="consultarNota()">
         <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
@@ -322,7 +193,7 @@
 (function() {
   "use strict";
   const SALT = "ApComp_UCN_2025_S1";
-  const DB = {"315da8718ca2279b8d2fce5d1f228a64cb63595feb7b4884ae7865fd9fe1895e":"4,31,9","1fa33a5a859958ae6a0db50b9d05ed5a38678513e09e59f3156f1172bf8716de":"42,49,39","140f19d82bf78a948eacb439e85b3b78e3ef613441ddccd6531cf798e85d459c":"32,58,37","11f6d08a884f05ce42dfc12a61da4d4bdbd0f6537513e8d9323785ddacb39d42":"37,63,38","6f41f7912461f45ebcaf97aff6fa2a4eec6ac9b2ea1dd1f94c53a11cc86b2f0b":"90,65,87","7f7c1c23d05f11a21f61b911ba1ff76f4f878eb128d701af0f39a74d8e4445fe":"74,81,76","c545925330da07ed38c08956277a10e8d8d251f028616e72f7f3833d959ccc61":"240,235,253","56ee436be5dd011ad8d427d398ba4a8a77b750d219eb1e9e57872ee8e16f39c1":"98,120,97","844f72c3ee1b4b53694e583af6794e8603f433b8ede19652236a431dda1c5914":"178,170,176","a2e2b4dc559baa4ef4bc652bbd2516df0f100f9473dfca2d53cf15b3a2cb8563":"151,140,145","cc38323727b70fb2f1c1e91fd153ca8571d1565843bf47e9e1bff68de8ffb58e":"250,226,248","e51a0b6468641304f399f4dca27c8e6d7fe7095f71e6ab04d1671734a5f3d9c1":"211,203,209","9da26efa421e089ed7fb1b1f7e608b2e2e2cee9eb5c7f5af3c9e5914cc53ba2d":"171,179,169","45cc81ed76f04cf8a258b704859dc4eb151a36b55550e88431180cb2c2d2007c":"113,107,116","15fd33b53ad39fa29036104345987abb8ddad77436761a174152c037e6464a3c":"38,59,32","d1f3bed20bc2cdf90c6a8675cc9bef72ca996ff5c61e459b8f7e8f405a47425f":"230","c5b1ac007cd5b8bbc95c97c6bbfd4e45fcc8f3ea8aedbe4185b21ceb2ef9692c":"240,235,253","acb933dd2effca949b9425460fc879c6fded9e28b481bbedd86c1e0aec01dedc":"152,130,155","7b936d30859fa38aa8b91a657c8bdc2190ca01ef269d420ff5762130c853250c":"78,85,72","36aa0f1647d6f09943d11632ee640a3c293ee9ca172fcd256d1151f5b90f85d3":"3,24,5","77ae56dba20ce0e9dd16941feeab4e610a284ee971a69ad2df075683e0b00962":"66,89,79","13d325979d8cf1ff3bc0224b5292f5ee05f1e7d94a798648be112ae3404898c6":"38,61,32","93af39ed47a78b63c6c2ff71fc17e19e5f1616f68c9962d5b94e97704f43a8de":"164","fabe2c848644b79d08282de7fdba69fb329c943c6b88846426e47fff687d820d":"205","1cc372fe1ff8c3a1e601d7d2d30276ac9e6be3b7ae8981cda18016e97c64e8b5":"42,50,40","283abf7972fcf62abdc1a280006d3b784ce5be74bc77f1bc598dfdff592bd867":"29,6,27","fb9c75729744c050cc7f1fb8ca313eafac3e6668c85e9feca65d07bae9753e4f":"204","3407e765d36666a664407b253e5ba49aa1c0c5c8d16f96c3807ff941e72e2876":"1,26,12","4298f671eaf7f86a8dce9c33df00cff04489a8c5a7ca32ac42eccb36e6d220ef":"118,108,115","dadd4850ed6879cb77d10bb60e7f58999b1ca3421eee0384af2bb64cf275a9ee":"238,244,237","58f89f5fe32c7e41e038d1d57f28f52a53611acb5def3202d24c299f93878a87":"107,118,109","b1a6717a91aa41b48184dd611e037f5f450a41d208fc553b38918761a03ad288":"135,159,133","ffc26abf827dba7d9fb75241eca834b0e50660fe122a5236c545aa30bf18a059":"203,209,200","2ff14320213bf310c4f4de09a507ceebf5fd5b34e968e21779ac1609a4adc562":"25,1,27","f7655313183a79234a583aee262237c88b4a3e6911acd3f5b00fa161c9f5f0a5":"193,217,195","6cfb7fd8842a6822e5884ba664f9d2c1da0fa7afda57bfeb272d5134bcfe4f54":"89,66,84","fd00e628b3ced0adbbacde23ce8c451f08acaa2ad398575d4f34492f98f5a8a4":"203,211,201","19c03979b866faa3b4713a98ce6a6f7f585e1d80ec9df688078a5ed3c644bcfa":"44,55,33","45a3b02deadd0999a61f8d50f44ca20beb941de6a9391646652dc89c2809bd24":"113,107,114","d7e334a8537ef74734ed1e323fc36378b6338b7145369b1a034de5bdc53df0a0":"227,249,224","b5774285a3527354d603c28e594ebd79ed7748dfe73213171aa0ce935ff52ec8":"128,155,141","729442ce228529e96acbe23ad1fbcfba6b18034cb6bcbc6517b41f87f6790d3b":"68,92,70","3394a7414113784609ce776a3e39b664c180f704a2cef3b00ffaa940216462d6":"1,29,10","dab74e4ef559cd65ee0198ec1a257f887c8f978db2dd87e142ad321f9447f6b3":"239,244,226","5065e03b2a74d2f414e9fe689b070069e83231e9d32556006ea3be97496eb97c":"99,126,101","5dd83abba58617995d13a1054d99fb6ee96a60e69e36410d1e8c20db066f2333":"104,115,101","16d9698278c7f099cdc57cb0e263b9a85c61132f9547835901f5330edeb9593a":"35,56,46","2d3fc2af6c74f34e407ab6769a4d47feac5cb95d3ebc1536edef8c7e912b2d01":"30,3,24","7638b1a774f0ca05f62f207b196ecd900451a1610ef07d3d09ee8ac980ea4a0a":"64,88,68","59b48a03bbc01bafb7741855cf095879559d76f5524fa00450f610e71269949a":"107,119,97","ac76bb191e30249d1c81e69b8a2e0b60b0f20e50e4fb0dc9dcb2715cca68f3ca":"159,130,159","997f3f570441490f0bbeb8460dc3f8e3d27bec424ec2575381dc718910c46e08":"172,183,172","12c6ff61790246ed5c2192bf67780fa50206b79840e5eca05334366ea84e5319":"36,60,43","e3ab826fbd3467d441cf76d6bf670320d36f0b175d96845f0167a8224a72a84b":"214","e4bd8bece0c0cefa201fddf4c83816a8e5972a0eed59918e922a69a191b574fe":"208,202,215","6791a8ec08313ba3b9a0bfa5f43549f9512d1579be7fa66a7d86932b8b0cbf8f":"82,73,82","6e0f0514355a2ed5e3ff5844cf311bf1ad061592d48a797fca2b60d3e08dc833":"91","e6f3cdf24e2269b1110d51a817fd3fc8f8aaf55918e76b9e657e7bc41efde302":"208,200,212","c645cc6883b82d59ed57eb0302904a966e7fe75ff7d1ebec90bb88549bd61814":"245,232,245","e47a73a4cbf2d3ff563bceab27f798cd12d68e59bdb45771e20ae185630d194d":"209,202,209","dbb8aca59c1bac80a31f157d55fbeff3884f841c6b3737ecd801ab1ab553c68b":"233,245,232","0f788c917a27da4e720238b27bff9b4a4c47f7a6063de599a76230e2781bc173":"60,33,56","5d639fa5d4521f197e02a45e934d9f7b8f030cba8b8f8ca1e6100b8bb5645a45":"105,115,110","978e64411c5d318f8a7494a90b15db67867669ecf65d55a98b2f2750f4248374":"163,185,164","ff7bd45048c2c8b0db6c671d89d0856d6b7cdd7afae1f4b9c9eb642171013152":"204,209,200","3fa19025a07aecbed51d373d313bc3728aebad8609030b8f947a7367b55d9e07":"10,17,10","e48b5348741c1e597906da1ebd64340f6c1a7c576f014e50ae806c2b3161b62e":"210,202,214","c9be81045222359d270392c118591ae477c15c396c28a7f08ce82c607fa526d8":"255,231,251","7fa69d4fd47c9eb8bddb9f78f5cc33612a3b503bd4a5031dc53f4dee022c1b0b":"75,81,76","00da2c08a73b7cf63a8a2d1fa91c262534a0e0c76d01741af0cf63447eff48de":"53,46,53","1c9d99a8563f793406c70c3d3554479b4e963cdf324000a94205c2bb20b6e424":"41","3d8460ffd8c3bb164fee561b36868c4f2e1ec8a95babb75363e12cf3edfef505":"9,19,14","10e0801663fb2d0567195e13f07aed005c3cb862f2eea53d308ea356e8511598":"36,62,35","126b4cb0c2edb459f378fd76767bbb637e6228d1e3b5286b89724ac891f76181":"39","564da71ca0329227b6fa0dfbaa1d5e268dea4ad34f9c06fec15e5bc50f698e64":"101,120,101","86de6bb17a0992446fda3bb5923cb5bedb0666de3a66b3299706f489bf1545bc":"178,168,181","470ff0fd83f16a93b2c01e6d9d2efda869db870b2e462cf4a8dbaf503387ce54":"115,105,116","a9a685db121e7fec3a0d050649f457d49145397d4f129921bfbe4c0b11c3ad71":"154,135,154","b9b812d186dc58b9345adabb153962bec7fd8cdfe7cc9082a7829b92aa421ff9":"140","7e3ca1ae0e30093f7e69cd6a2966f954682e7f6e5130108a4a4be262a073b243":"72,80,76","ec720caa0defececf02fd6c633d65ad5366002a04d90e3cfeffe5a1f4e58f058":"217","57a69df709f4b2a05822c6f4ca669c43983a8c93a1701fa2e064cba2dcc3ba2d":"101,121,111","4fb03ab0c986f6d5474f71a43fd066b0d51847e243e22e62c70c707aa6beb430":"124,97,124","0207d1d88828ad34173ed960922cafb81e120d77bbce518e0d5cc70ef6f11e63":"55","21479557808c5c26fbac46b7c93aaa6938634bf6477d5abdf0bfb64e5367b50d":"20","5180de6a404f0c20180e1a81553998875724cec7a65bd8105acb74d31d757335":"103,127,99","0e506a4145a34b3ab31a23aa0ae5fcc9a49858e26de9e4492ae3cea6abddb1aa":"56,32,60","70bd1d83d2337493a1bfb6ab4d0fc9725c4453c37cda1f8fac57ed3ff92e5ac3":"67,94,71","0d6b2b56251369e38098ed495ce4ece648ac1affc6b1fde02843a3b18654557e":"56"};
+  const DB = {"315da8718ca2279b8d2fce5d1f228a64cb63595feb7b4884ae7865fd9fe1895e":"4,31,9","1fa33a5a859958ae6a0db50b9d05ed5a38678513e09e59f3156f1172bf8716de":"42,49,39","140f19d82bf78a948eacb439e85b3b78e3ef613441ddccd6531cf798e85d459c":"32,58,37","11f6d08a884f05ce42dfc12a61da4d4bdbd0f6537513e8d9323785ddacb39d42":"37,63,38","6f41f7912461f45ebcaf97aff6fa2a4eec6ac9b2ea1dd1f94c53a11cc86b2f0b":"90,65,87","7f7c1c23d05f11a21f61b911ba1ff76f4f878eb128d701af0f39a74d8e4445fe":"74,81,76","c545925330da07ed38c08956277a10e8d8d251f028616e72f7f3833d959ccc61":"240,235,253","56ee436be5dd011ad8d427d398ba4a8a77b750d219eb1e9e57872ee8e16f39c1":"98,120,97","844f72c3ee1b4b53694e583af6794e8603f433b8ede19652236a431dda1c5914":"178,170,176","a2e2b4dc559baa4ef4bc652bbd2516df0f100f9473dfca2d53cf15b3a2cb8563":"151,140,145","cc38323727b70fb2f1c1e91fd153ca8571d1565843bf47e9e1bff68de8ffb58e":"250,226,248","e51a0b6468641304f399f4dca27c8e6d7fe7095f71e6ab04d1671734a5f3d9c1":"211,203,209","9da26efa421e089ed7fb1b1f7e608b2e2e2cee9eb5c7f5af3c9e5914cc53ba2d":"171,179,169","45cc81ed76f04cf8a258b704859dc4eb151a36b55550e88431180cb2c2d2007c":"113,107,116","15fd33b53ad39fa29036104345987abb8ddad77436761a174152c037e6464a3c":"38,59,32","d1f3bed20bc2cdf90c6a8675cc9bef72ca996ff5c61e459b8f7e8f405a47425f":"230","c5b1ac007cd5b8bbc95c97c6bbfd4e45fcc8f3ea8aedbe4185b21ceb2ef9692c":"240,235,253","acb933dd2effca949b9425460fc879c6fded9e28b481bbedd86c1e0aec01dedc":"152,130,155","7b936d30859fa38aa8b91a657c8bdc2190ca01ef269d420ff5762130c853250c":"78,85,72","36aa0f1647d6f09943d11632ee640a3c293ee9ca172fcd256d1151f5b90f85d3":"3,24,5","77ae56dba20ce0e9dd16941feeab4e610a284ee971a69ad2df075683e0b00962":"66,89,79","13d325979d8cf1ff3bc0224b5292f5ee05f1e7d94a798648be112ae3404898c6":"38,61,32","93af39ed47a78b63c6c2ff71fc17e19e5f1616f68c9962d5b94e97704f43a8de":"164","fabe2c848644b79d08282de7fdba69fb329c943c6b88846426e47fff687d820d":"205","1cc372fe1ff8c3a1e601d7d2d30276ac9e6be3b7ae8981cda18016e97c64e8b5":"42,50,40","283abf7972fcf62abdc1a280006d3b784ce5be74bc77f1bc598dfdff592bd867":"29,6,27","fb9c75729744c050cc7f1fb8ca313eafac3e6668c85e9feca65d07bae9753e4f":"204","3407e765d36666a664407b253e5ba49aa1c0c5c8d16f96c3807ff941e72e2876":"1,26,12","4298f671eaf7f86a8dce9c33df00cff04489a8c5a7ca32ac42eccb36e6d220ef":"118,108,115","dadd4850ed6879cb77d10bb60e7f58999b1ca3421eee0384af2bb64cf275a9ee":"238,244,237","58f89f5fe32c7e41e038d1d57f28f52a53611acb5def3202d24c299f93878a87":"107,118,109","b1a6717a91aa41b48184dd611e037f5f450a41d208fc553b38918761a03ad288":"135,159,133","ffc26abf827dba7d9fb75241eca834b0e50660fe122a5236c545aa30bf18a059":"203,209,200","2ff14320213bf310c4f4de09a507ceebf5fd5b34e968e21779ac1609a4adc562":"25,1,27","f7655313183a79234a583aee262237c88b4a3e6911acd3f5b00fa161c9f5f0a5":"193,217,195","6cfb7fd8842a6822e5884ba664f9d2c1da0fa7afda57bfeb272d5134bcfe4f54":"89,66,84","fd00e628b3ced0adbbacde23ce8c451f08acaa2ad398575d4f34492f98f5a8a4":"203,211,201","19c03979b866faa3b4713a98ce6a6f7f585e1d80ec9df688078a5ed3c644bcfa":"44,55,33","45a3b02deadd0999a61f8d50f44ca20beb941de6a9391646652dc89c2809bd24":"113,107,114","d7e334a8537ef74734ed1e323fc36378b6338b7145369b1a034de5bdc53df0a0":"227,249,224","b5774285a3527354d603c28e594ebd79ed7748dfe73213171aa0ce935ff52ec8":"128,155,141","729442ce228529e96acbe23ad1fbcfba6b18034cb6bcbc6517b41f87f6790d3b":"68,92,70","3394a7414113784609ce776a3e39b664c180f704a2cef3b00ffaa940216462d6":"1,29,10","dab74e4ef559cd65ee0198ec1a257f887c8f978db2dd87e142ad321f9447f6b3":"239,244,226","5065e03b2a74d2f414e9fe689b070069e83231e9d32556006ea3be97496eb97c":"99,126,101","5dd83abba58617995d13a1054d99fb6ee96a60e69e36410d1e8c20db066f2333":"104,115,101","16d9698278c7f099cdc57cb0e263b9a85c61132f9547835901f5330edeb9593a":"35,56,46","2d3fc2af6c74f34e407ab6769a4d47feac5cb95d3ebc1536edef8c7e912b2d01":"30,3,24","7638b1a774f0ca05f62f207b196ecd900451a1610ef07d3d09ee8ac980ea4a0a":"64,88,69","59b48a03bbc01bafb7741855cf095879559d76f5524fa00450f610e71269949a":"107,119,97","ac76bb191e30249d1c81e69b8a2e0b60b0f20e50e4fb0dc9dcb2715cca68f3ca":"159,130,159","997f3f570441490f0bbeb8460dc3f8e3d27bec424ec2575381dc718910c46e08":"172,183,175","12c6ff61790246ed5c2192bf67780fa50206b79840e5eca05334366ea84e5319":"37","e3ab826fbd3467d441cf76d6bf670320d36f0b175d96845f0167a8224a72a84b":"214","e4bd8bece0c0cefa201fddf4c83816a8e5972a0eed59918e922a69a191b574fe":"208,202,215","6791a8ec08313ba3b9a0bfa5f43549f9512d1579be7fa66a7d86932b8b0cbf8f":"82,73,81","6e0f0514355a2ed5e3ff5844cf311bf1ad061592d48a797fca2b60d3e08dc833":"91","e6f3cdf24e2269b1110d51a817fd3fc8f8aaf55918e76b9e657e7bc41efde302":"208,200,213","c645cc6883b82d59ed57eb0302904a966e7fe75ff7d1ebec90bb88549bd61814":"245,232,245","e47a73a4cbf2d3ff563bceab27f798cd12d68e59bdb45771e20ae185630d194d":"209,202,210","dbb8aca59c1bac80a31f157d55fbeff3884f841c6b3737ecd801ab1ab553c68b":"233,245,239","0f788c917a27da4e720238b27bff9b4a4c47f7a6063de599a76230e2781bc173":"60,33,56","5d639fa5d4521f197e02a45e934d9f7b8f030cba8b8f8ca1e6100b8bb5645a45":"105,115,110","978e64411c5d318f8a7494a90b15db67867669ecf65d55a98b2f2750f4248374":"163,185,164","ff7bd45048c2c8b0db6c671d89d0856d6b7cdd7afae1f4b9c9eb642171013152":"204,209,200","3fa19025a07aecbed51d373d313bc3728aebad8609030b8f947a7367b55d9e07":"10,17,9","e48b5348741c1e597906da1ebd64340f6c1a7c576f014e50ae806c2b3161b62e":"210,202,215","c9be81045222359d270392c118591ae477c15c396c28a7f08ce82c607fa526d8":"255,231,250","7fa69d4fd47c9eb8bddb9f78f5cc33612a3b503bd4a5031dc53f4dee022c1b0b":"75,81,76","00da2c08a73b7cf63a8a2d1fa91c262534a0e0c76d01741af0cf63447eff48de":"53,46,54","1c9d99a8563f793406c70c3d3554479b4e963cdf324000a94205c2bb20b6e424":"41","3d8460ffd8c3bb164fee561b36868c4f2e1ec8a95babb75363e12cf3edfef505":"9,19,14","10e0801663fb2d0567195e13f07aed005c3cb862f2eea53d308ea356e8511598":"36,62,35","126b4cb0c2edb459f378fd76767bbb637e6228d1e3b5286b89724ac891f76181":"39","564da71ca0329227b6fa0dfbaa1d5e268dea4ad34f9c06fec15e5bc50f698e64":"101,120,101","86de6bb17a0992446fda3bb5923cb5bedb0666de3a66b3299706f489bf1545bc":"178,168,181","470ff0fd83f16a93b2c01e6d9d2efda869db870b2e462cf4a8dbaf503387ce54":"115,105,116","a9a685db121e7fec3a0d050649f457d49145397d4f129921bfbe4c0b11c3ad71":"154,135,154","b9b812d186dc58b9345adabb153962bec7fd8cdfe7cc9082a7829b92aa421ff9":"140","7e3ca1ae0e30093f7e69cd6a2966f954682e7f6e5130108a4a4be262a073b243":"72,80,77","ec720caa0defececf02fd6c633d65ad5366002a04d90e3cfeffe5a1f4e58f058":"217","57a69df709f4b2a05822c6f4ca669c43983a8c93a1701fa2e064cba2dcc3ba2d":"101,121,111","4fb03ab0c986f6d5474f71a43fd066b0d51847e243e22e62c70c707aa6beb430":"124,97,124","0207d1d88828ad34173ed960922cafb81e120d77bbce518e0d5cc70ef6f11e63":"55","21479557808c5c26fbac46b7c93aaa6938634bf6477d5abdf0bfb64e5367b50d":"20","5180de6a404f0c20180e1a81553998875724cec7a65bd8105acb74d31d757335":"103,127,98","0e506a4145a34b3ab31a23aa0ae5fcc9a49858e26de9e4492ae3cea6abddb1aa":"56,32,61","70bd1d83d2337493a1bfb6ab4d0fc9725c4453c37cda1f8fac57ed3ff92e5ac3":"67,94,71","0d6b2b56251369e38098ed495ce4ece648ac1affc6b1fde02843a3b18654557e":"56"};
   let attempts = 0, locked = false;
 
   async function sha256hex(str) {
