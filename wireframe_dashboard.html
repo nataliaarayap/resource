@@ -1,0 +1,1553 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wireframe Dashboard — Transforma Hídrico Coquimbo</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:       #F0F0F0;
+    --chrome:   #1A1A1A;
+    --frame:    #FFFFFF;
+    --wf-bg:    #E8E8E8;
+    --wf-dark:  #BDBDBD;
+    --wf-med:   #D0D0D0;
+    --wf-light: #EBEBEB;
+    --wf-white: #F7F7F7;
+    --wf-text:  #5A5A5A;
+    --wf-label: #888888;
+    --wf-border:#C0C0C0;
+    --accent:   #3A3A3A;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'IBM Plex Sans', sans-serif;
+  }
+
+  body {
+    font-family: var(--sans);
+    background: var(--bg);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px 16px 48px;
+  }
+
+  /* ─── CHROME BROWSER BAR ─── */
+  .browser-chrome {
+    width: 100%;
+    max-width: 1280px;
+    background: var(--chrome);
+    border-radius: 10px 10px 0 0;
+    padding: 10px 16px 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .dots { display: flex; gap: 6px; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; }
+  .dot-r { background: #FF5F57; }
+  .dot-y { background: #FFBD2E; }
+  .dot-g { background: #28C840; }
+  .url-bar {
+    flex: 1;
+    background: #2E2E2E;
+    border-radius: 4px;
+    padding: 4px 12px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: #888;
+  }
+  .wf-badge {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: #666;
+    letter-spacing: 1px;
+    padding-bottom: 10px;
+  }
+
+  /* ─── POWER BI FRAME (16:9) ─── */
+  .pbi-frame {
+    width: 100%;
+    max-width: 1280px;
+    aspect-ratio: 16/9;
+    background: var(--frame);
+    border: 1px solid #CCC;
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    overflow: hidden;
+    position: relative;
+    display: none;
+  }
+  .pbi-frame.active { display: flex; }
+
+  /* ─── NAV CONTROLS ─── */
+  .nav-controls {
+    width: 100%;
+    max-width: 1280px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 4px;
+    margin-top: 4px;
+  }
+  .nav-pages {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+  }
+  .nav-btn {
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 5px 10px;
+    border: 1px solid #CCC;
+    border-radius: 4px;
+    background: white;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.15s;
+    letter-spacing: 0.5px;
+  }
+  .nav-btn:hover { background: #F0F0F0; border-color: #999; color: #333; }
+  .nav-btn.active { background: var(--chrome); color: white; border-color: var(--chrome); }
+  .nav-arrows { display: flex; gap: 8px; }
+  .arrow-btn {
+    width: 32px; height: 32px;
+    border: 1px solid #CCC;
+    border-radius: 4px;
+    background: white;
+    cursor: pointer;
+    font-size: 14px;
+    color: #666;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+  }
+  .arrow-btn:hover { background: #F0F0F0; color: #333; }
+
+  /* ─── ANNOTATION ─── */
+  .annotation {
+    width: 100%;
+    max-width: 1280px;
+    background: #FFFDE7;
+    border: 1px solid #F0E060;
+    border-radius: 6px;
+    padding: 10px 16px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: #6B5800;
+    margin-top: 4px;
+    line-height: 1.6;
+  }
+  .annotation strong { color: #3A2E00; }
+
+  /* ════════════════════════════════
+     WIREFRAME COMPONENTS
+  ════════════════════════════════ */
+
+  /* Layout helpers */
+  .wf-full { width: 100%; height: 100%; display: flex; }
+
+  /* Sidebar */
+  .wf-sidebar {
+    width: 200px;
+    min-width: 200px;
+    height: 100%;
+    background: var(--wf-dark);
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    border-right: 2px solid var(--wf-border);
+  }
+  .wf-sidebar-header {
+    background: var(--accent);
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .wf-logo-box {
+    background: var(--wf-dark);
+    border-radius: 3px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--mono);
+    font-size: 9px;
+    color: #AAA;
+    letter-spacing: 1px;
+  }
+  .wf-sidebar-nav {
+    flex: 1;
+    padding: 12px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .wf-nav-item {
+    padding: 8px 16px;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--wf-text);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: default;
+  }
+  .wf-nav-item.active {
+    background: var(--wf-white);
+    color: var(--accent);
+    font-weight: 500;
+    border-left: 3px solid var(--accent);
+  }
+  .wf-nav-item .nav-icon {
+    width: 14px; height: 14px;
+    background: var(--wf-border);
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+  .wf-nav-item.active .nav-icon { background: var(--accent); }
+  .wf-nav-sep {
+    height: 1px;
+    background: var(--wf-border);
+    margin: 6px 16px;
+  }
+  .wf-sidebar-footer {
+    padding: 10px 16px;
+    border-top: 1px solid var(--wf-border);
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--wf-label);
+    text-align: center;
+  }
+
+  /* Main content area */
+  .wf-main {
+    flex: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: var(--wf-white);
+  }
+
+  /* Top bar */
+  .wf-topbar {
+    height: 44px;
+    min-height: 44px;
+    background: var(--wf-light);
+    border-bottom: 1px solid var(--wf-border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+  }
+  .wf-topbar-title {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent);
+    font-weight: 500;
+    letter-spacing: 0.5px;
+  }
+  .wf-topbar-right {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .wf-chip {
+    background: var(--wf-med);
+    border-radius: 12px;
+    padding: 3px 10px;
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--wf-text);
+    letter-spacing: 0.5px;
+  }
+  .wf-chip.active-filter {
+    background: var(--accent);
+    color: white;
+  }
+
+  /* Content body */
+  .wf-body {
+    flex: 1;
+    padding: 16px 20px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  /* Generic box */
+  .wf-box {
+    background: var(--wf-med);
+    border: 1px dashed var(--wf-border);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 4px;
+    position: relative;
+  }
+  .wf-box-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--wf-label);
+    text-align: center;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    line-height: 1.4;
+    padding: 4px 8px;
+  }
+  .wf-box-sublabel {
+    font-family: var(--mono);
+    font-size: 8px;
+    color: #AAA;
+    text-align: center;
+    letter-spacing: 0.3px;
+  }
+
+  /* KPI card */
+  .wf-kpi {
+    background: var(--wf-white);
+    border: 1px solid var(--wf-border);
+    border-radius: 4px;
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .wf-kpi-value {
+    font-family: var(--mono);
+    font-size: 22px;
+    color: var(--accent);
+    font-weight: 500;
+    line-height: 1;
+  }
+  .wf-kpi-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--wf-label);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    line-height: 1.3;
+  }
+  .wf-kpi-bar {
+    height: 3px;
+    background: var(--wf-med);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .wf-kpi-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 2px;
+  }
+
+  /* Progress bar row */
+  .wf-progress-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+  }
+  .wf-progress-name {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--wf-text);
+    min-width: 80px;
+    max-width: 80px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .wf-progress-track {
+    flex: 1;
+    height: 14px;
+    background: var(--wf-med);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .wf-progress-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 2px;
+    opacity: 0.7;
+  }
+  .wf-progress-pct {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--wf-text);
+    min-width: 28px;
+    text-align: right;
+  }
+
+  /* Grid helpers */
+  .wf-row { display: flex; gap: 12px; width: 100%; }
+  .wf-col { display: flex; flex-direction: column; gap: 12px; }
+  .f1 { flex: 1; }
+  .f2 { flex: 2; }
+  .f3 { flex: 3; }
+
+  /* Table mock */
+  .wf-table { width: 100%; border-collapse: collapse; }
+  .wf-table th {
+    background: var(--wf-dark);
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--wf-text);
+    padding: 6px 8px;
+    text-align: left;
+    border: 1px solid var(--wf-border);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .wf-table td {
+    padding: 5px 8px;
+    border: 1px solid var(--wf-border);
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--wf-text);
+  }
+  .wf-table tr:nth-child(even) td { background: var(--wf-light); }
+  .wf-table .td-bar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .wf-table .td-mini-bar {
+    flex: 1;
+    height: 8px;
+    background: var(--wf-med);
+    border-radius: 1px;
+    overflow: hidden;
+  }
+  .wf-table .td-mini-fill {
+    height: 100%;
+    background: var(--accent);
+    opacity: 0.6;
+  }
+
+  /* Filter strip */
+  .wf-filter-strip {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    padding: 8px 12px;
+    background: var(--wf-light);
+    border-bottom: 1px solid var(--wf-border);
+    flex-shrink: 0;
+  }
+  .wf-filter-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--wf-label);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-right: 4px;
+  }
+  .wf-filter-btn {
+    font-family: var(--mono);
+    font-size: 9px;
+    padding: 3px 10px;
+    border: 1px solid var(--wf-border);
+    border-radius: 10px;
+    background: var(--wf-white);
+    color: var(--wf-text);
+    letter-spacing: 0.3px;
+    cursor: default;
+  }
+  .wf-filter-btn.sel {
+    background: var(--accent);
+    color: white;
+    border-color: var(--accent);
+  }
+
+  /* Donut placeholder */
+  .wf-donut {
+    width: 70px; height: 70px;
+    border-radius: 50%;
+    border: 12px solid var(--wf-dark);
+    position: relative;
+    flex-shrink: 0;
+  }
+  .wf-donut::after {
+    content: '';
+    position: absolute;
+    inset: -12px;
+    border-radius: 50%;
+    border: 12px solid transparent;
+    border-top-color: var(--accent);
+    border-right-color: var(--accent);
+    transform: rotate(-30deg);
+  }
+
+  /* Separator label */
+  .wf-section-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--wf-label);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 4px 0;
+    border-bottom: 1px solid var(--wf-border);
+    margin-bottom: 4px;
+  }
+
+  /* Map placeholder */
+  .wf-map {
+    background: var(--wf-light);
+    border: 1px dashed var(--wf-border);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .wf-map-icon {
+    font-size: 24px;
+    opacity: 0.3;
+  }
+
+  /* Page tag */
+  .wf-page-tag {
+    position: absolute;
+    top: 6px;
+    right: 8px;
+    font-family: var(--mono);
+    font-size: 8px;
+    color: #BBB;
+    letter-spacing: 1px;
+  }
+
+  /* Cover specific */
+  .cover-wrap {
+    width: 100%;
+    height: 100%;
+    background: var(--wf-light);
+    display: flex;
+    flex-direction: column;
+  }
+  .cover-header {
+    background: var(--accent);
+    padding: 20px 36px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .cover-logo-strip {
+    display: flex;
+    gap: 12px;
+  }
+  .cover-logo-box {
+    background: rgba(255,255,255,0.15);
+    border-radius: 3px;
+    padding: 6px 14px;
+    font-family: var(--mono);
+    font-size: 9px;
+    color: rgba(255,255,255,0.7);
+    letter-spacing: 0.5px;
+  }
+  .cover-title-block {
+    font-family: var(--mono);
+    color: white;
+    text-align: right;
+  }
+  .cover-title-block .ct-main { font-size: 13px; font-weight: 500; letter-spacing: 0.5px; }
+  .cover-title-block .ct-sub { font-size: 9px; color: rgba(255,255,255,0.5); margin-top: 3px; letter-spacing: 1px; }
+  .cover-body {
+    flex: 1;
+    display: flex;
+    padding: 24px 36px;
+    gap: 24px;
+  }
+  .cover-left {
+    width: 240px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .cover-menu-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--wf-label);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+  }
+  .cover-menu-item {
+    background: var(--wf-white);
+    border: 1px solid var(--wf-border);
+    border-radius: 4px;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: default;
+  }
+  .cover-menu-num {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: #AAA;
+    min-width: 16px;
+  }
+  .cover-menu-text {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--accent);
+  }
+  .cover-menu-arrow {
+    margin-left: auto;
+    font-size: 10px;
+    color: #CCC;
+  }
+  .cover-right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .cover-kpis {
+    display: flex;
+    gap: 12px;
+  }
+  .cover-desc {
+    flex: 1;
+    background: var(--wf-white);
+    border: 1px dashed var(--wf-border);
+    border-radius: 4px;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .cover-desc-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--wf-label);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .cover-desc-lines {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .cover-desc-line {
+    height: 8px;
+    background: var(--wf-med);
+    border-radius: 2px;
+  }
+</style>
+</head>
+<body>
+
+<!-- BROWSER CHROME -->
+<div class="browser-chrome">
+  <div class="dots">
+    <div class="dot dot-r"></div>
+    <div class="dot dot-y"></div>
+    <div class="dot dot-g"></div>
+  </div>
+  <div class="url-bar">app.powerbi.com / transforma-hidrico-coquimbo</div>
+  <div class="wf-badge">WIREFRAME v1</div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     PÁGINA 1 — PORTADA / MENÚ NAVEGACIÓN
+═══════════════════════════════════════════ -->
+<div class="pbi-frame active" id="page-1">
+  <div class="wf-page-tag">PÁG 01 / 08</div>
+  <div class="cover-wrap">
+    <div class="cover-header">
+      <div class="cover-logo-strip">
+        <div class="cover-logo-box">LOGO PROGRAMA</div>
+        <div class="cover-logo-box">DPS</div>
+        <div class="cover-logo-box">CORFO</div>
+        <div class="cover-logo-box">GORE COQUIMBO</div>
+      </div>
+      <div class="cover-title-block">
+        <div class="ct-main">Transforma Hídrico Coquimbo</div>
+        <div class="ct-sub">DASHBOARD DE SEGUIMIENTO · 2024–2026</div>
+      </div>
+    </div>
+    <div class="cover-body">
+      <!-- MENÚ IZQUIERDO -->
+      <div class="cover-left">
+        <div class="cover-menu-label">Navegación</div>
+        <div class="cover-menu-item">
+          <div class="cover-menu-num">02</div>
+          <div class="cover-menu-text">Resumen Ejecutivo</div>
+          <div class="cover-menu-arrow">→</div>
+        </div>
+        <div class="cover-menu-item">
+          <div class="cover-menu-num">03</div>
+          <div class="cover-menu-text">Indicadores por Eje</div>
+          <div class="cover-menu-arrow">→</div>
+        </div>
+        <div class="cover-menu-item">
+          <div class="cover-menu-num">04</div>
+          <div class="cover-menu-text">Indicadores por Sector</div>
+          <div class="cover-menu-arrow">→</div>
+        </div>
+        <div class="cover-menu-item">
+          <div class="cover-menu-num">05</div>
+          <div class="cover-menu-text">Avance de Acciones</div>
+          <div class="cover-menu-arrow">→</div>
+        </div>
+        <div class="cover-menu-item">
+          <div class="cover-menu-num">06</div>
+          <div class="cover-menu-text">Análisis Presupuestario</div>
+          <div class="cover-menu-arrow">→</div>
+        </div>
+        <div class="cover-menu-item">
+          <div class="cover-menu-num">07</div>
+          <div class="cover-menu-text">Vista Territorial</div>
+          <div class="cover-menu-arrow">→</div>
+        </div>
+        <div class="cover-menu-item">
+          <div class="cover-menu-num">08</div>
+          <div class="cover-menu-text">Gobernanza</div>
+          <div class="cover-menu-arrow">→</div>
+        </div>
+      </div>
+      <!-- PANEL DERECHO -->
+      <div class="cover-right">
+        <div class="cover-kpis">
+          <div class="wf-kpi f1">
+            <div class="wf-kpi-value">51.1%</div>
+            <div class="wf-kpi-label">Eficiencia Hídrica<br>Actual (Región)</div>
+            <div class="wf-kpi-bar"><div class="wf-kpi-fill" style="width:51%"></div></div>
+          </div>
+          <div class="wf-kpi f1">
+            <div class="wf-kpi-value">—</div>
+            <div class="wf-kpi-label">N° Empresas<br>Beneficiadas</div>
+            <div class="wf-kpi-bar"><div class="wf-kpi-fill" style="width:30%"></div></div>
+          </div>
+          <div class="wf-kpi f1">
+            <div class="wf-kpi-value">—</div>
+            <div class="wf-kpi-label">M3 Agua<br>Disponibilizada</div>
+            <div class="wf-kpi-bar"><div class="wf-kpi-fill" style="width:20%"></div></div>
+          </div>
+          <div class="wf-kpi f1">
+            <div class="wf-kpi-value">34%</div>
+            <div class="wf-kpi-label">Avance General<br>del Programa</div>
+            <div class="wf-kpi-bar"><div class="wf-kpi-fill" style="width:34%"></div></div>
+          </div>
+        </div>
+        <div class="cover-desc">
+          <div class="cover-desc-label">Descripción del programa</div>
+          <div class="cover-desc-lines">
+            <div class="cover-desc-line" style="width:100%"></div>
+            <div class="cover-desc-line" style="width:90%"></div>
+            <div class="cover-desc-line" style="width:95%"></div>
+            <div class="cover-desc-line" style="width:70%"></div>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:6px;flex-wrap:wrap;">
+            <div class="wf-chip">AGRICULTURA</div>
+            <div class="wf-chip">MINERÍA</div>
+            <div class="wf-chip">TURISMO</div>
+            <div class="wf-chip">INDUSTRIA</div>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:4px;flex-wrap:wrap;">
+            <div class="wf-chip">EJE C</div>
+            <div class="wf-chip">EJE T</div>
+            <div class="wf-chip">EJE I</div>
+            <div class="wf-chip">EJE G</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     PÁGINA 2 — RESUMEN EJECUTIVO
+═══════════════════════════════════════════ -->
+<div class="pbi-frame" id="page-2">
+  <div class="wf-page-tag">PÁG 02 / 08</div>
+  <div class="wf-full">
+    <div class="wf-sidebar">
+      <div class="wf-sidebar-header">
+        <div class="wf-logo-box">LOGO PROGRAMA</div>
+        <div class="wf-logo-box" style="height:20px;font-size:8px;">DPS · CORFO · GORE</div>
+      </div>
+      <div class="wf-sidebar-nav">
+        <div class="wf-nav-item active"><div class="nav-icon"></div>Resumen Ejecutivo</div>
+        <div class="wf-nav-item"><div class="nav-icon"></div>Indicadores / Eje</div>
+        <div class="wf-nav-item"><div class="nav-icon"></div>Indicadores / Sector</div>
+        <div class="wf-nav-item"><div class="nav-icon"></div>Avance Acciones</div>
+        <div class="wf-nav-sep"></div>
+        <div class="wf-nav-item"><div class="nav-icon"></div>Presupuesto</div>
+        <div class="wf-nav-item"><div class="nav-icon"></div>Territorio</div>
+        <div class="wf-nav-item"><div class="nav-icon"></div>Gobernanza</div>
+      </div>
+      <div class="wf-sidebar-footer">Actualizado: [fecha]</div>
+    </div>
+    <div class="wf-main">
+      <div class="wf-topbar">
+        <div class="wf-topbar-title">Resumen Ejecutivo — Programa Completo</div>
+        <div class="wf-topbar-right">
+          <div class="wf-chip">SIN FILTROS</div>
+          <div class="wf-chip">AÑO: TODOS</div>
+        </div>
+      </div>
+      <div class="wf-body">
+        <!-- KPIs fila 1 -->
+        <div class="wf-row" style="flex-shrink:0;">
+          <div class="wf-kpi f1">
+            <div class="wf-kpi-value">26</div>
+            <div class="wf-kpi-label">Total Acciones</div>
+          </div>
+          <div class="wf-kpi f1">
+            <div class="wf-kpi-value">—</div>
+            <div class="wf-kpi-label">N° Empresas Beneficiadas</div>
+          </div>
+          <div class="wf-kpi f1">
+            <div class="wf-kpi-value">—</div>
+            <div class="wf-kpi-label">N° Hectáreas</div>
+          </div>
+          <div class="wf-kpi f1">
+            <div class="wf-kpi-value">—</div>
+            <div class="wf-kpi-label">M3 Disponibilizados</div>
+          </div>
+          <div class="wf-kpi f1">
+            <div class="wf-kpi-value">—</div>
+            <div class="wf-kpi-label">N° Participantes</div>
+          </div>
+          <div class="wf-kpi f1">
+            <div class="wf-kpi-value">—</div>
+            <div class="wf-kpi-label">% Monto Apalancado</div>
+          </div>
+        </div>
+        <!-- Fila 2: avance por eje + donut -->
+        <div class="wf-row" style="flex:1;min-height:0;">
+          <div class="wf-col f2">
+            <div class="wf-section-label">Avance por Eje Estratégico</div>
+            <div class="wf-progress-row">
+              <div class="wf-progress-name">C — Capacidades</div>
+              <div class="wf-progress-track"><div class="wf-progress-fill" style="width:48%"></div></div>
+              <div class="wf-progress-pct">48%</div>
+            </div>
+            <div class="wf-progress-row">
+              <div class="wf-progress-name">T — Innovación</div>
+              <div class="wf-progress-track"><div class="wf-progress-fill" style="width:7%"></div></div>
+              <div class="wf-progress-pct">7%</div>
+            </div>
+            <div class="wf-progress-row">
+              <div class="wf-progress-name">I — Inversión</div>
+              <div class="wf-progress-track"><div class="wf-progress-fill" style="width:31%"></div></div>
+              <div class="wf-progress-pct">31%</div>
+            </div>
+            <div class="wf-progress-row">
+              <div class="wf-progress-name">G — Gobernanza</div>
+              <div class="wf-progress-track"><div class="wf-progress-fill" style="width:20%"></div></div>
+              <div class="wf-progress-pct">20%</div>
+            </div>
+            <div class="wf-section-label" style="margin-top:6px;">Estado de Acciones</div>
+            <div class="wf-row">
+              <div class="wf-kpi f1" style="align-items:center;">
+                <div class="wf-kpi-value" style="font-size:16px;">4</div>
+                <div class="wf-kpi-label" style="text-align:center;">Completadas</div>
+              </div>
+              <div class="wf-kpi f1" style="align-items:center;">
+                <div class="wf-kpi-value" style="font-size:16px;">8</div>
+                <div class="wf-kpi-label" style="text-align:center;">En Progreso</div>
+              </div>
+              <div class="wf-kpi f1" style="align-items:center;">
+                <div class="wf-kpi-value" style="font-size:16px;">14</div>
+                <div class="wf-kpi-label" style="text-align:center;">No Iniciadas</div>
+              </div>
+            </div>
+          </div>
+          <div class="wf-col f1">
+            <div class="wf-section-label">Distribución Presupuesto</div>
+            <div class="wf-box f1" style="min-height:80px;">
+              <div class="wf-box-label">GRÁFICO<br>BASAL vs APALANCADO</div>
+              <div class="wf-box-sublabel">Donut / Barras apiladas</div>
+            </div>
+            <div class="wf-section-label">Avance General</div>
+            <div class="wf-box" style="height:60px;">
+              <div class="wf-box-label">INDICADOR CIRCULAR<br>% CUMPLIMIENTO PROGRAMA</div>
+            </div>
+          </div>
+          <div class="wf-col f1">
+            <div class="wf-section-label">Indicadores Resumen</div>
+            <div class="wf-kpi">
+              <div class="wf-kpi-label">N° Profesionales Capacitados</div>
+              <div class="wf-kpi-value" style="font-size:16px;">—</div>
+            </div>
+            <div class="wf-kpi">
+              <div class="wf-kpi-label">Monto Público Apalancado</div>
+              <div class="wf-kpi-value" style="font-size:16px;">—</div>
+            </div>
+            <div class="wf-kpi">
+              <div class="wf-kpi-label">Monto Privado Apalancado</div>
+              <div class="wf-kpi-value" style="font-size:16px;">—</div>
+            </div>
+            <div class="wf-kpi">
+              <div class="wf-kpi-label">N° Part. Gobernanza</div>
+              <div class="wf-kpi-value" style="font-size:16px;">—</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     PÁGINA 3 — INDICADORES POR EJE
+═══════════════════════════════════════════ -->
+<div class="pbi-frame" id="page-3">
+  <div class="wf-page-tag">PÁG 03 / 08</div>
+  <div class="wf-full">
+    <div class="wf-sidebar">
+      <div class="wf-sidebar-header">
+        <div class="wf-logo-box">LOGO PROGRAMA</div>
+        <div class="wf-logo-box" style="height:20px;font-size:8px;">DPS · CORFO · GORE</div>
+      </div>
+      <div class="wf-sidebar-nav">
+        <div class="wf-nav-item"><div class="nav-icon"></div>Resumen Ejecutivo</div>
+        <div class="wf-nav-item active"><div class="nav-icon"></div>Indicadores / Eje</div>
+        <div class="wf-nav-item"><div class="nav-icon"></div>Indicadores / Sector</div>
+        <div class="wf-nav-item"><div class="nav-icon"></div>Avance Acciones</div>
+        <div class="wf-nav-sep"></div>
+        <div class="wf-nav-item"><div class="nav-icon"></div>Presupuesto</div>
+        <div class="wf-nav-item"><div class="nav-icon"></div>Territorio</div>
+        <div class="wf-nav-item"><div class="nav-icon"></div>Gobernanza</div>
+      </div>
+      <div class="wf-sidebar-footer">Actualizado: [fecha]</div>
+    </div>
+    <div class="wf-main">
+      <div class="wf-topbar">
+        <div class="wf-topbar-title">Indicadores — Vista por Eje Estratégico</div>
+        <div class="wf-topbar-right">
+          <div class="wf-chip">PPTO: TODOS</div>
+        </div>
+      </div>
+      <!-- FILTRO EJE -->
+      <div class="wf-filter-strip">
+        <div class="wf-filter-label">Eje:</div>
+        <div class="wf-filter-btn sel">C — Capacidades de Gestión</div>
+        <div class="wf-filter-btn">T — Innovación y Tecnología</div>
+        <div class="wf-filter-btn">I — Inversión y Equipamiento</div>
+        <div class="wf-filter-btn">G — Gobernanza</div>
+        <div style="margin-left:auto;" class="wf-filter-label">PPTO:</div>
+        <div class="wf-filter-btn sel">Todos</div>
+        <div class="wf-filter-btn">Basal</div>
+        <div class="wf-filter-btn">Apalancado</div>
+      </div>
+      <div class="wf-body">
+        <div class="wf-row" style="flex-shrink:0;">
+          <div class="wf-kpi f1">
+            <div class="wf-kpi-label">N° Empresas Beneficiadas — Eje C</div>
+            <div class="wf-kpi-value">—</div>
+            <div class="wf-kpi-bar"><div class="wf-kpi-fill" style="width:40%"></div></div>
+          </div>
+          <div class="wf-kpi f1">
+            <div class="wf-kpi-label">N° Hectáreas — Eje C</div>
+            <div class="wf-kpi-value">—</div>
+            <div class="wf-kpi-bar"><div class="wf-kpi-fill" style="width:55%"></div></div>
+          </div>
+          <div class="wf-kpi f1">
+            <div class="wf-kpi-label">M3 Disponibilizados — Eje C</div>
+            <div class="wf-kpi-value">—</div>
+            <div class="wf-kpi-bar"><div class="wf-kpi-fill" style="width:25%"></div></div>
+          </div>
+          <div class="wf-kpi f1">
+            <div class="wf-kpi-label">% Monto Apalancado — Eje C</div>
+            <div class="wf-kpi-value">—</div>
+            <div class="wf-kpi-bar"><div class="wf-kpi-fill" style="width:60%"></div></div>
+          </div>
+        </div>
+        <div class="wf-row" style="flex:1;min-height:0;">
+          <div class="wf-col f2">
+            <div class="wf-section-label">Cumplimiento de Indicadores por Acción — Eje C</div>
+            <table class="wf-table" style="font-size:9px;">
+              <thead>
+                <tr>
+                  <th>ID Acción</th>
+                  <th>Nombre</th>
+                  <th>Indicador</th>
+                  <th>Meta</th>
+                  <th>Cumplimiento</th>
+                  <th style="width:120px;">Avance</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>C1.1</td><td>Tres cursos y día de campo</td><td>N° empresas</td><td>15</td><td>—</td><td class="td-bar"><div class="td-mini-bar"><div class="td-mini-fill" style="width:40%"></div></div>—%</td></tr>
+                <tr><td>C1.2</td><td>Cursos sector minero/turismo</td><td>N° empresas</td><td>15</td><td>—</td><td class="td-bar"><div class="td-mini-bar"><div class="td-mini-fill" style="width:20%"></div></div>—%</td></tr>
+                <tr><td>C1.3</td><td>Seminario difusión</td><td>N° empresas</td><td>—</td><td>—</td><td class="td-bar"><div class="td-mini-bar"><div class="td-mini-fill" style="width:0%"></div></div>—%</td></tr>
+                <tr><td>C2.2</td><td>Grupos Transfer. Tecnológica</td><td>N° empresas</td><td>—</td><td>—</td><td class="td-bar"><div class="td-mini-bar"><div class="td-mini-fill" style="width:65%"></div></div>—%</td></tr>
+                <tr><td>C2.3</td><td>Transferencia cap. gestión PDT</td><td>N° hectáreas</td><td>—</td><td>—</td><td class="td-bar"><div class="td-mini-bar"><div class="td-mini-fill" style="width:80%"></div></div>—%</td></tr>
+                <tr><td>...</td><td colspan="4" style="color:#AAA;font-style:italic;">resto de acciones eje C</td><td></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="wf-col f1">
+            <div class="wf-section-label">Distribución por Tipo de Indicador</div>
+            <div class="wf-box" style="flex:1;min-height:80px;">
+              <div class="wf-box-label">GRÁFICO DE BARRAS<br>Agrupado por Tipo Indicador<br>(IND_EMP / IND_HEC / IND_M3...)</div>
+            </div>
+            <div class="wf-section-label">Acciones del Eje C</div>
+            <div class="wf-progress-row">
+              <div class="wf-progress-name">Completadas</div>
+              <div class="wf-progress-track"><div class="wf-progress-fill" style="width:40%"></div></div>
+              <div class="wf-progress-pct">4</div>
+            </div>
+            <div class="wf-progress-row">
+              <div class="wf-progress-name">En progreso</div>
+              <div class="wf-progress-track"><div class="wf-progress-fill" style="width:30%"></div></div>
+              <div class="wf-progress-pct">3</div>
+            </div>
+            <div class="wf-progress-row">
+              <div class="wf-progress-name">No iniciadas</div>
+              <div class="wf-progress-track"><div class="wf-progress-fill" style="width:30%"></div></div>
+              <div class="wf-progress-pct">3</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     PÁGINA 4 — INDICADORES POR SECTOR
+═══════════════════════════════════════════ -->
+<div class="pbi-frame" id="page-4">
+  <div class="wf-page-tag">PÁG 04 / 08</div>
+  <div class="wf-full">
+    <div class="wf-sidebar">
+      <div class="wf-sidebar-header">
+        <div class="wf-logo-box">LOGO PROGRAMA</div>
+        <div class="wf-logo-box" style="height:20px;font-size:8px;">DPS · CORFO · GORE</div>
+      </div>
+      <div class="wf-sidebar-nav">
+        <div class="wf-nav-item"><div class="nav-icon"></div>Resumen Ejecutivo</div>
+        <div class="wf-nav-item"><div class="nav-icon"></div>Indicadores / Eje</div>
+        <div class="wf-nav-item active"><div class="nav-icon"></div>Indicadores / Sector</div>
+        <div class="wf-nav-item"><div class="nav-icon"></div>Avance Acciones</div>
+        <div class="wf-nav-sep"></div>
+        <div class="wf-nav-item"><div class="nav-icon"></div>Presupuesto</div>
+        <div class="wf-nav-item"><div class="nav-icon"></div>Territorio</div>
+        <div class="wf-nav-item"><div class="nav-icon"></div>Gobernanza</div>
+      </div>
+      <div class="wf-sidebar-footer">Actualizado: [fecha]</div>
+    </div>
+    <div class="wf-main">
+      <div class="wf-topbar">
+        <div class="wf-topbar-title">Indicadores — Vista por Sector Productivo</div>
+        <div class="wf-topbar-right">
+          <div class="wf-chip">EJE: TODOS</div>
+        </div>
+      </div>
+      <div class="wf-filter-strip">
+        <div class="wf-filter-label">Sector:</div>
+        <div class="wf-filter-btn sel">Agrícola</div>
+        <div class="wf-filter-btn">Minería</div>
+        <div class="wf-filter-btn">Turismo</div>
+        <div class="wf-filter-btn">Industria</div>
+        <div class="wf-filter-btn">Todos</div>
+        <div style="margin-left:auto;" class="wf-filter-label">EJE:</div>
+        <div class="wf-filter-btn sel">Todos</div>
+        <div class="wf-filter-btn">C</div>
+        <div class="wf-filter-btn">T</div>
+        <div class="wf-filter-btn">I</div>
+      </div>
+      <div class="wf-body">
+        <div class="wf-row" style="flex-shrink:0;">
+          <div class="wf-kpi f1">
+            <div class="wf-kpi-label">N° Empresas — Sector Agrícola</div>
+            <div class="wf-kpi-value">—</div>
+          </div>
+          <div class="wf-kpi f1">
+            <div class="wf-kpi-label">N° Hectáreas — Sector Agrícola</div>
+            <div class="wf-kpi-value">—</div>
+          </div>
+          <div class="wf-kpi f1">
+            <div class="wf-kpi-label">M3 Disponibilizados</div>
+            <div class="wf-kpi-value">—</div>
+          </div>
+          <div class="wf-kpi f1">
+            <div class="wf-kpi-label">Acciones del Sector</div>
+            <div class="wf-kpi-value">—</div>
+          </div>
+        </div>
+        <div class="wf-row" style="flex:1;min-height:0;">
+          <div class="wf-col f2">
+            <div class="wf-section-label">Indicadores de Acceso a Tecnología de Eficiencia Hídrica</div>
+            <div class="wf-box" style="min-height:70px;">
+              <div class="wf-box-label">TABLA / BARRAS: N° empresas, N° hectáreas,<br>M3 disponibilizados, % absorción tecnología</div>
+            </div>
+            <div class="wf-section-label">Indicadores de Gestión Hídrica</div>
+            <div class="wf-box" style="min-height:55px;">
+              <div class="wf-box-label">TABLA: Productividad del agua, KW/año, Ingresos/M3</div>
+            </div>
+            <div class="wf-section-label">Indicadores de Innovación</div>
+            <div class="wf-box" style="min-height:50px;">
+              <div class="wf-box-label">TABLA: N° empresas con innovación, M3 disponibilizados innovación</div>
+            </div>
+          </div>
+          <div class="wf-col f1">
+            <div class="wf-section-label">Distribución por Eje — Sector Seleccionado</div>
+            <div class="wf-box" style="flex:1;min-height:80px;">
+              <div class="wf-box-label">GRÁFICO BARRAS<br>Acciones por Eje<br>dentro del sector</div>
+            </div>
+            <div class="wf-section-label">Distribución Presupuestaria</div>
+            <div class="wf-box" style="min-height:60px;">
+              <div class="wf-box-label">BASAL vs APALANCADO<br>del sector seleccionado</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     PÁGINA 5 — AVANCE DE ACCIONES
+═══════════════════════════════════════════ -->
+<div class="pbi-frame" id="page-5">
+  <div class="wf-page-tag">PÁG 05 / 08</div>
+  <div class="wf-full">
+    <div class="wf-sidebar">
+      <div class="wf-sidebar-header">
+        <div class="wf-logo-box">LOGO PROGRAMA</div>
+        <div class="wf-logo-box" style="height:20px;font-size:8px;">DPS · CORFO · GORE</div>
+      </div>
+      <div class="wf-sidebar-nav">
+        <div class="wf-nav-item"><div class="nav-icon"></div>Resumen Ejecutivo</div>
+        <div class="wf-nav-item"><div class="nav-icon"></div>Indicadores / Eje</div>
+        <div class="wf-nav-item"><div class="nav-icon"></div>Indicadores / Sector</div>
+        <div class="wf-nav-item active"><div class="nav-icon"></div>Avance Acciones</div>
+        <div class="wf-nav-sep"></div>
+        <div class="wf-nav-item"><div class="nav-icon"></div>Presupuesto</div>
+        <div class="wf-nav-item"><div class="nav-icon"></div>Territorio</div>
+        <div class="wf-nav-item"><div class="nav-icon"></div>Gobernanza</div>
+      </div>
+      <div class="wf-sidebar-footer">Actualizado: [fecha]</div>
+    </div>
+    <div class="wf-main">
+      <div class="wf-topbar">
+        <div class="wf-topbar-title">Avance de Acciones — Cumplimiento por Etapa</div>
+        <div class="wf-topbar-right">
+          <div class="wf-chip active-filter">EJE: TODOS</div>
+          <div class="wf-chip">PPTO: TODOS</div>
+          <div class="wf-chip">ESTADO: TODOS</div>
+        </div>
+      </div>
+      <div class="wf-filter-strip">
+        <div class="wf-filter-label">Eje:</div>
+        <div class="wf-filter-btn sel">Todos</div>
+        <div class="wf-filter-btn">C</div>
+        <div class="wf-filter-btn">T</div>
+        <div class="wf-filter-btn">I</div>
+        <div class="wf-filter-btn">G</div>
+        <div style="margin-left:16px;" class="wf-filter-label">PPTO:</div>
+        <div class="wf-filter-btn sel">Todos</div>
+        <div class="wf-filter-btn">Basal</div>
+        <div class="wf-filter-btn">Apalancado</div>
+        <div style="margin-left:16px;" class="wf-filter-label">Estado:</div>
+        <div class="wf-filter-btn sel">Todos</div>
+        <div class="wf-filter-btn">Activo</div>
+      </div>
+      <div class="wf-body">
+        <div class="wf-row" style="flex:1;min-height:0;gap:12px;">
+          <!-- Tabla principal -->
+          <div class="wf-col f2" style="overflow:hidden;">
+            <div class="wf-section-label">26 acciones · ordenadas por eje</div>
+            <table class="wf-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Nombre Acción</th>
+                  <th>Eje</th>
+                  <th>PPTO</th>
+                  <th>E1</th>
+                  <th>E2</th>
+                  <th>E3</th>
+                  <th>E4</th>
+                  <th>E5</th>
+                  <th style="width:90px;">Avance Total</th>
+                  <th>Estado</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>C1.1</td><td>Tres cursos y día de campo</td><td>C</td><td>Basal</td><td>✓</td><td>✓</td><td>—</td><td>—</td><td>—</td><td class="td-bar"><div class="td-mini-bar"><div class="td-mini-fill" style="width:40%"></div></div>40%</td><td>En prog.</td></tr>
+                <tr><td>C1.2</td><td>Cursos minería/turismo</td><td>C</td><td>Basal</td><td>✓</td><td>—</td><td>—</td><td>—</td><td>—</td><td class="td-bar"><div class="td-mini-bar"><div class="td-mini-fill" style="width:20%"></div></div>20%</td><td>En prog.</td></tr>
+                <tr><td>C1.3</td><td>Seminario difusión</td><td>C</td><td>Basal</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td class="td-bar"><div class="td-mini-bar"><div class="td-mini-fill" style="width:0%"></div></div>0%</td><td>No inic.</td></tr>
+                <tr><td>C2.2</td><td>Grupos Transfer. Tecnológica</td><td>C</td><td>Apal.</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td class="td-bar"><div class="td-mini-bar"><div class="td-mini-fill" style="width:100%"></div></div>100%</td><td>Comp.</td></tr>
+                <tr><td>T1.1</td><td>Captura tecnológica nacional</td><td>T</td><td>Basal</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td class="td-bar"><div class="td-mini-bar"><div class="td-mini-fill" style="width:7%"></div></div>7%</td><td>En prog.</td></tr>
+                <tr><td>I1.1</td><td>Medición eficiencia hídrica</td><td>I</td><td>Basal</td><td>✓</td><td>✓</td><td>—</td><td>—</td><td>—</td><td class="td-bar"><div class="td-mini-bar"><div class="td-mini-fill" style="width:31%"></div></div>31%</td><td>En prog.</td></tr>
+                <tr><td colspan="11" style="color:#AAA;font-style:italic;text-align:center;padding:6px;">... 20 acciones más</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <!-- Panel derecho -->
+          <div class="wf-col f1">
+            <div class="wf-section-label">Avance Total del Programa</div>
+            <div class="wf-box" style="height:80px;">
+              <div class="wf-box-label">GAUGE / KPI CIRCULAR<br>% Avance General</div>
+            </div>
+            <div class="wf-section-label">Detalle Etapa Seleccionada</div>
+            <div class="wf-box" style="flex:1;min-height:60px;">
+              <div class="wf-box-label">Al hacer clic en una acción<br>se muestra aquí el detalle<br>de etapas con descripción<br>y fecha estimada</div>
+              <div class="wf-box-sublabel">Interacción: Drill-through</div>
+            </div>
+            <div class="wf-section-label">Resumen Estado</div>
+            <div class="wf-progress-row">
+              <div class="wf-progress-name">Completadas</div>
+              <div class="wf-progress-track"><div class="wf-progress-fill" style="width:15%"></div></div>
+              <div class="wf-progress-pct">4</div>
+            </div>
+            <div class="wf-progress-row">
+              <div class="wf-progress-name">En progreso</div>
+              <div class="wf-progress-track"><div class="wf-progress-fill" style="width:31%"></div></div>
+              <div class="wf-progress-pct">8</div>
+            </div>
+            <div class="wf-progress-row">
+              <div class="wf-progress-name">No iniciadas</div>
+              <div class="wf-progress-track"><div class="wf-progress-fill" style="width:54%"></div></div>
+              <div class="wf-progress-pct">14</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     PÁGINA 6 — ANÁLISIS PRESUPUESTARIO
+═══════════════════════════════════════════ -->
+<div class="pbi-frame" id="page-6">
+  <div class="wf-page-tag">PÁG 06 / 08</div>
+  <div class="wf-full">
+    <div class="wf-sidebar">
+      <div class="wf-sidebar-header">
+        <div class="wf-logo-box">LOGO PROGRAMA</div>
+        <div class="wf-logo-box" style="height:20px;font-size:8px;">DPS · CORFO · GORE</div>
+      </div>
+      <div class="wf-sidebar-nav">
+        <div class="wf-nav-item"><div class="nav-icon"></div>Resumen Ejecutivo</div>
+        <div class="wf-nav-item"><div class="nav-icon"></div>Indicadores / Eje</div>
+        <div class="wf-nav-item"><div class="nav-icon"></div>Indicadores / Sector</div>
+        <div class="wf-nav-item"><div class="nav-icon"></div>Avance Acciones</div>
+        <div class="wf-nav-sep"></div>
+        <div class="wf-nav-item active"><div class="nav-icon"></div>Presupuesto</div>
+        <div class="wf-nav-item"><div class="nav-icon"></div>Territorio</div>
+        <div class="wf-nav-item"><div class="nav-icon"></div>Gobernanza</div>
+      </div>
+      <div class="wf-sidebar-footer">Actualizado: [fecha]</div>
+    </div>
+    <div class="wf-main">
+      <div class="wf-topbar">
+        <div class="wf-topbar-title">Análisis Presupuestario — Basal vs Apalancado</div>
+        <div class="wf-topbar-right">
+          <div class="wf-chip">AÑO: TODOS</div>
+        </div>
+      </div>
+      <div class="wf-body">
+        <div class="wf-row" style="flex-shrink:0;">
+          <div class="wf-kpi f1">
+            <div class="wf-kpi-label">Total Ppto Basal (3 años)</div>
+            <div class="wf-kpi-value" style="font-size:16px;">$XXX M</div>
+          </div>
+          <div class="wf-kpi f1">
+            <div class="wf-kpi-label">Total Ppto Apalancado (3 años)</div>
+            <div class="wf-kpi-value" style="font-size:16px;">$XXX M</div>
+          </div>
+          <div class="wf-kpi f1">
+            <div class="wf-kpi-label">Ratio Apalancamiento</div>
+            <div class="wf-kpi-value" style="font-size:16px;">X : 1</div>
+          </div>
+          <div class="wf-kpi f1">
+            <div class="wf-kpi-label">% Monto Apalancado Total</div>
+            <div class="wf-kpi-value" style="font-size:16px;">—</div>
+          </div>
+        </div>
+        <div class="wf-row" style="flex:1;min-height:0;">
+          <div class="wf-col f2">
+            <div class="wf-section-label">Presupuesto por Eje y Año</div>
+            <div class="wf-box f1" style="min-height:90px;">
+              <div class="wf-box-label">GRÁFICO BARRAS AGRUPADAS<br>Eje C / T / I / G · por Año 1, 2, 3<br>Separado: Basal vs Apalancado</div>
+            </div>
+            <div class="wf-section-label">Presupuesto por Acción</div>
+            <table class="wf-table">
+              <thead>
+                <tr><th>ID Acción</th><th>Nombre</th><th>Eje</th><th>Tipo</th><th>Año 1</th><th>Año 2</th><th>Año 3</th><th>Total</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>C1.1</td><td>Tres cursos...</td><td>C</td><td>Basal</td><td>$4.5M</td><td>$4.5M</td><td>$4.5M</td><td>$13.5M</td></tr>
+                <tr><td>C2.3</td><td>Transferencia PDT</td><td>C</td><td>Apal.</td><td>$71.5M</td><td>$71.5M</td><td>$71.5M</td><td>$214.5M</td></tr>
+                <tr><td>...</td><td colspan="6" style="color:#AAA;font-style:italic;">resto de acciones</td><td></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="wf-col f1">
+            <div class="wf-section-label">Distribución Basal vs Apalancado</div>
+            <div class="wf-box" style="min-height:90px;">
+              <div class="wf-box-label">DONUT<br>Basal / Apalancado<br>% del total</div>
+            </div>
+            <div class="wf-section-label">Origen de Fondos</div>
+            <div class="wf-box" style="min-height:70px;">
+              <div class="wf-box-label">BARRAS APILADAS<br>Público vs Privado<br>por Eje</div>
+            </div>
+            <div class="wf-section-label">Filtro Año</div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;">
+              <div class="wf-filter-btn sel">Todos</div>
+              <div class="wf-filter-btn">Año 1</div>
+              <div class="wf-filter-btn">Año 2</div>
+              <div class="wf-filter-btn">Año 3</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     PÁGINA 7 — VISTA TERRITORIAL
+═══════════════════════════════════════════ -->
+<div class="pbi-frame" id="page-7">
+  <div class="wf-page-tag">PÁG 07 / 08</div>
+  <div class="wf-full">
+    <div class="wf-sidebar">
+      <div class="wf-sidebar-header">
+        <div class="wf-logo-box">LOGO PROGRAMA</div>
+        <div class="wf-logo-box" style="height:20px;font-size:8px;">DPS · CORFO · GORE</div>
+      </div>
+      <div class="wf-sidebar-nav">
+        <div class="wf-nav-item"><div class="nav-icon"></div>Resumen Ejecutivo</div>
+        <div class="wf-nav-item"><div class="nav-icon"></div>Indicadores / Eje</div>
+        <div class="wf-nav-item"><div class="nav-icon"></div>Indicadores / Sector</div>
+        <div class="wf-nav-item"><div class="nav-icon"></div>Avance Acciones</div>
+        <div class="wf-nav-sep"></div>
+        <div class="wf-nav-item"><div class="nav-icon"></div>Presupuesto</div>
+        <div class="wf-nav-item active"><div class="nav-icon"></div>Territorio</div>
+        <div class="wf-nav-item"><div class="nav-icon"></div>Gobernanza</div>
+      </div>
+      <div class="wf-sidebar-footer">Actualizado: [fecha]</div>
+    </div>
+    <div class="wf-main">
+      <div class="wf-topbar">
+        <div class="wf-topbar-title">Vista Territorial — Distribución por Provincia y Comuna</div>
+        <div class="wf-topbar-right">
+          <div class="wf-chip" style="background:#FFECEC;color:#AA3030;border:1px solid #FFAAAA;">⚠ DATOS PENDIENTES</div>
+        </div>
+      </div>
+      <div class="wf-filter-strip">
+        <div class="wf-filter-label">Provincia:</div>
+        <div class="wf-filter-btn sel">Todas</div>
+        <div class="wf-filter-btn">Elqui</div>
+        <div class="wf-filter-btn">Limarí</div>
+        <div class="wf-filter-btn">Choapa</div>
+        <div style="margin-left:auto;" class="wf-filter-label">Indicador:</div>
+        <div class="wf-filter-btn sel">N° Empresas</div>
+        <div class="wf-filter-btn">N° Hectáreas</div>
+        <div class="wf-filter-btn">M3</div>
+      </div>
+      <div class="wf-body">
+        <div class="wf-row" style="flex:1;min-height:0;">
+          <div class="wf-col f2">
+            <div class="wf-section-label">Distribución por Provincia</div>
+            <div class="wf-row" style="flex-shrink:0;">
+              <div class="wf-kpi f1">
+                <div class="wf-kpi-label">Provincia de Elqui</div>
+                <div class="wf-kpi-value">—</div>
+                <div class="wf-kpi-bar"><div class="wf-kpi-fill" style="width:0%"></div></div>
+              </div>
+              <div class="wf-kpi f1">
+                <div class="wf-kpi-label">Provincia de Limarí</div>
+                <div class="wf-kpi-value">—</div>
+                <div class="wf-kpi-bar"><div class="wf-kpi-fill" style="width:0%"></div></div>
+              </div>
+              <div class="wf-kpi f1">
+                <div class="wf-kpi-label">Provincia de Choapa</div>
+                <div class="wf-kpi-value">—</div>
+                <div class="wf-kpi-bar"><div class="wf-kpi-fill" style="width:0%"></div></div>
+              </div>
+            </div>
+            <div class="wf-section-label">Distribución por Comuna (15 comunas)</div>
+            <div class="wf-box f1" style="min-height:80px;">
+              <div class="wf-box-label">TABLA O TREEMAP<br>Indicador seleccionado por Comuna<br>Coloreado por Provincia</div>
+              <div class="wf-box-sublabel">Estructura pendiente confirmar con cliente</div>
+            </div>
+          </div>
+          <div class="wf-col f1">
+            <div class="wf-section-label">Mapa Región de Coquimbo</div>
+            <div class="wf-map f1" style="min-height:120px;">
+              <div class="wf-map-icon">🗺</div>
+              <div class="wf-box-label">MAPA COROPLÉTICO<br>Región de Coquimbo<br>Por provincia / comuna</div>
+              <div class="wf-box-sublabel">Requiere shape file de comunas</div>
+            </div>
+            <div class="wf-section-label">Datos requeridos para activar esta página</div>
+            <div style="background:#FFFDE7;border:1px solid #F0E060;border-radius:4px;padding:10px;font-family:var(--mono);font-size:9px;color:#6B5800;line-height:1.7;">
+              · Definir nivel: provincia o comuna<br>
+              · Cumplimiento de indicadores por territorio<br>
+              · Confirmar qué indicadores aplican territorio<br>
+              · Shape file comunas Región de Coquimbo
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     PÁGINA 8 — GOBERNANZA
+═══════════════════════════════════════════ -->
+<div class="pbi-frame" id="page-8">
+  <div class="wf-page-tag">PÁG 08 / 08</div>
+  <div class="wf-full">
+    <div class="wf-sidebar">
+      <div class="wf-sidebar-header">
+        <div class="wf-logo-box">LOGO PROGRAMA</div>
+        <div class="wf-logo-box" style="height:20px;font-size:8px;">DPS · CORFO · GORE</div>
+      </div>
+      <div class="wf-sidebar-nav">
+        <div class="wf-nav-item"><div class="nav-icon"></div>Resumen Ejecutivo</div>
+        <div class="wf-nav-item"><div class="nav-icon"></div>Indicadores / Eje</div>
+        <div class="wf-nav-item"><div class="nav-icon"></div>Indicadores / Sector</div>
+        <div class="wf-nav-item"><div class="nav-icon"></div>Avance Acciones</div>
+        <div class="wf-nav-sep"></div>
+        <div class="wf-nav-item"><div class="nav-icon"></div>Presupuesto</div>
+        <div class="wf-nav-item"><div class="nav-icon"></div>Territorio</div>
+        <div class="wf-nav-item active"><div class="nav-icon"></div>Gobernanza</div>
+      </div>
+      <div class="wf-sidebar-footer">Actualizado: [fecha]</div>
+    </div>
+    <div class="wf-main">
+      <div class="wf-topbar">
+        <div class="wf-topbar-title">Gobernanza — Eje G · Colaboración y Gobernanza</div>
+        <div class="wf-topbar-right">
+          <div class="wf-chip">G1 — BASAL</div>
+        </div>
+      </div>
+      <div class="wf-body">
+        <div class="wf-row" style="flex-shrink:0;">
+          <div class="wf-kpi f1">
+            <div class="wf-kpi-label">N° Participantes Gobernanza</div>
+            <div class="wf-kpi-value">—</div>
+            <div class="wf-kpi-bar"><div class="wf-kpi-fill" style="width:20%"></div></div>
+          </div>
+          <div class="wf-kpi f1">
+            <div class="wf-kpi-label">% Acuerdos Cumplidos</div>
+            <div class="wf-kpi-value">—</div>
+            <div class="wf-kpi-bar"><div class="wf-kpi-fill" style="width:20%"></div></div>
+          </div>
+          <div class="wf-kpi f1">
+            <div class="wf-kpi-label">Avance G1.1</div>
+            <div class="wf-kpi-value">20%</div>
+            <div class="wf-kpi-bar"><div class="wf-kpi-fill" style="width:20%"></div></div>
+          </div>
+          <div class="wf-kpi f1">
+            <div class="wf-kpi-label">% Monto Apalancado — Eje G</div>
+            <div class="wf-kpi-value">—</div>
+            <div class="wf-kpi-bar"><div class="wf-kpi-fill" style="width:0%"></div></div>
+          </div>
+        </div>
+        <div class="wf-row" style="flex:1;min-height:0;">
+          <div class="wf-col f1">
+            <div class="wf-section-label">Indicador 1 — N° Participantes Gobernanza</div>
+            <div class="wf-box f1" style="min-height:70px;">
+              <div class="wf-box-label">GRÁFICO BARRA HORIZONTAL<br>Meta vs Cumplimiento<br>con % de logro</div>
+            </div>
+            <div class="wf-section-label">Indicador 2 — % Acuerdos Suscritos</div>
+            <div class="wf-box f1" style="min-height:70px;">
+              <div class="wf-box-label">GAUGE CIRCULAR<br>% de cumplimiento<br>80% objetivo</div>
+            </div>
+          </div>
+          <div class="wf-col f1">
+            <div class="wf-section-label">Indicador 3 — Agenda Inversión Hídrica</div>
+            <div class="wf-box f1" style="min-height:70px;">
+              <div class="wf-box-label">INDICADOR BINARIO<br>Publicada / No publicada<br>por año</div>
+            </div>
+            <div class="wf-section-label">Avance de Etapas G1.1</div>
+            <div class="wf-box f1" style="min-height:70px;">
+              <div class="wf-box-label">BARRA DE PROGRESO POR ETAPA<br>E1 · E2 · E3 · E4 · E5<br>Con descripción de cada hito</div>
+            </div>
+          </div>
+          <div class="wf-col f1">
+            <div class="wf-section-label">Comités Gestores</div>
+            <div class="wf-box" style="min-height:80px;">
+              <div class="wf-box-label">TABLA<br>Comités activos, frecuencia<br>reuniones, acuerdos</div>
+            </div>
+            <div class="wf-section-label">Distribución Territorial Gobernanza</div>
+            <div class="wf-box f1" style="min-height:70px;">
+              <div class="wf-box-label">DISTRIBUCIÓN POR PROVINCIA<br>Participantes por<br>Elqui / Limarí / Choapa</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- NAV CONTROLS -->
+<div class="nav-controls">
+  <div class="nav-pages">
+    <button class="nav-btn active" onclick="goTo(1)">01 · Portada</button>
+    <button class="nav-btn" onclick="goTo(2)">02 · Resumen Ejecutivo</button>
+    <button class="nav-btn" onclick="goTo(3)">03 · Indicadores / Eje</button>
+    <button class="nav-btn" onclick="goTo(4)">04 · Indicadores / Sector</button>
+    <button class="nav-btn" onclick="goTo(5)">05 · Avance Acciones</button>
+    <button class="nav-btn" onclick="goTo(6)">06 · Presupuesto</button>
+    <button class="nav-btn" onclick="goTo(7)">07 · Territorio</button>
+    <button class="nav-btn" onclick="goTo(8)">08 · Gobernanza</button>
+  </div>
+  <div class="nav-arrows">
+    <button class="arrow-btn" onclick="prev()">←</button>
+    <button class="arrow-btn" onclick="next()">→</button>
+  </div>
+</div>
+
+<!-- ANNOTATION -->
+<div class="annotation" id="annotation">
+  <strong>PÁG 01 — Portada / Menú de Navegación:</strong>
+  Pantalla de entrada al dashboard. Muestra los logos institucionales, KPIs globales del programa y menú de acceso directo a cada sección. No tiene filtros — es solo orientación y contexto general.
+</div>
+
+<script>
+  let current = 1;
+  const total = 8;
+
+  const annotations = {
+    1: '<strong>PÁG 01 — Portada / Menú de Navegación:</strong> Pantalla de entrada al dashboard. Muestra logos institucionales, KPIs globales del programa y menú de acceso directo a cada sección. Sin filtros — orientación y contexto general.',
+    2: '<strong>PÁG 02 — Resumen Ejecutivo:</strong> Vista consolidada del programa completo. Los 8 indicadores resumen, avance por eje estratégico, distribución presupuestaria y estado de acciones. Sin filtros de sector o eje — foto fija del programa.',
+    3: '<strong>PÁG 03 — Indicadores por Eje Estratégico:</strong> El usuario selecciona un eje (C / T / I / G) y ve todos los indicadores de ese eje con su cumplimiento. Filtro adicional por tipo de presupuesto (Basal / Apalancado). Una sola página dinámica reemplaza 4 páginas estáticas.',
+    4: '<strong>PÁG 04 — Indicadores por Sector Productivo:</strong> El usuario selecciona Agrícola / Minería / Turismo / Industria y ve los indicadores de ese sector agrupados por categoría (acceso tecnología, gestión hídrica, innovación). Filtro secundario por eje.',
+    5: '<strong>PÁG 05 — Avance de Acciones:</strong> Tabla de las 26 acciones con estado de cumplimiento por etapa (E1–E5). Filtros por eje, tipo PPTO y estado de acción. Al seleccionar una acción se muestra el detalle de sus etapas en el panel derecho.',
+    6: '<strong>PÁG 06 — Análisis Presupuestario:</strong> Presupuesto basal vs apalancado por eje y por año (Año 1, 2, 3). Ratio de apalancamiento, distribución de fondos públicos vs privados. Filtro por año.',
+    7: '<strong>PÁG 07 — Vista Territorial:</strong> Distribución de indicadores clave por provincia (Elqui / Limarí / Choapa) y comuna. <em>Esta página quedará como placeholder hasta confirmar con el cliente la granularidad y obtener los datos territoriales.</em>',
+    8: '<strong>PÁG 08 — Gobernanza:</strong> Página dedicada al Eje G con sus indicadores específicos: participantes, acuerdos suscritos, agenda de inversión hídrica y avance de etapas de G1.1. Incluye distribución territorial de participantes.'
+  };
+
+  function goTo(n) {
+    document.getElementById('page-' + current).classList.remove('active');
+    document.querySelectorAll('.nav-btn')[current - 1].classList.remove('active');
+    current = n;
+    document.getElementById('page-' + current).classList.add('active');
+    document.querySelectorAll('.nav-btn')[current - 1].classList.add('active');
+    document.getElementById('annotation').innerHTML = annotations[current];
+  }
+
+  function next() { if (current < total) goTo(current + 1); }
+  function prev() { if (current > 1) goTo(current - 1); }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight') next();
+    if (e.key === 'ArrowLeft') prev();
+  });
+</script>
+</body>
+</html>
