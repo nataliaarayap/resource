@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VBA — Ciclos e interacción con Excel · MediRed S.A.</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --navy:   #000B5D;
+  --midb:   #16578D;
+  --ltb:    #7E9EC2;
+  --teal:   #3CB4C8;
+  --teal2:  #1D9E75;
+  --white:  #FFFFFF;
+  --bg:     #FFFFFF;
+  --bg2:    #F5F7FA;
+  --bg3:    #EEF3F8;
+  --text:   #1A1A2E;
+  --text2:  #5A6070;
+  --text3:  #8892A4;
+  --border: rgba(0,0,0,0.12);
+  --border2:rgba(0,0,0,0.22);
+  --rad:    10px;
+  --rad-sm: 6px;
+  --shadow: 0 2px 12px rgba(0,11,93,0.08);
+}
+
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: #F0F4FA;
+  color: var(--text);
+  min-height: 100vh;
+  padding: 0;
+}
+
+.page-header {
+  background: var(--navy);
+  padding: 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 16px rgba(0,11,93,0.25);
+}
+.page-header-inner {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.hdr-badge {
+  background: var(--teal);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 99px;
+  letter-spacing: .04em;
+  flex-shrink: 0;
+}
+.hdr-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+  flex: 1;
+}
+.hdr-sub {
+  font-size: 12px;
+  color: var(--ltb);
+}
+
+.main {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 28px 20px 60px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.section {
+  background: var(--bg);
+  border-radius: var(--rad);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  border: 0.5px solid rgba(0,11,93,0.08);
+}
+
+.sec-hdr {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  background: var(--navy);
+  cursor: pointer;
+  user-select: none;
+  transition: background .15s;
+}
+.sec-hdr:hover { background: #0A1570; }
+.num-badge {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--teal);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700; color: #fff; flex-shrink: 0;
+}
+.sec-title { font-size: 14px; font-weight: 600; color: #fff; flex: 1; }
+.sec-icon { color: var(--ltb); font-size: 20px; transition: transform .25s; }
+.sec-hdr.open .sec-icon { transform: rotate(180deg); }
+
+.sec-body {
+  display: none;
+  padding: 22px 22px 24px;
+  background: var(--bg);
+}
+.sec-body.open { display: block; }
+
+.intro-text {
+  font-size: 13px;
+  color: var(--text2);
+  line-height: 1.65;
+  margin-bottom: 18px;
+}
+.intro-text code {
+  font-family: 'Cascadia Code','Consolas','Courier New',monospace;
+  font-size: 12px;
+  background: var(--bg3);
+  padding: 1px 5px;
+  border-radius: 3px;
+  color: var(--midb);
+}
+
+.grid2   { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.grid-lr { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 18px; }
+.grid3   { display: grid; grid-template-columns: 1.2fr 1fr; gap: 18px; }
+
+.label-sm {
+  font-size: 11px; font-weight: 600;
+  color: var(--text3);
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  margin-bottom: 7px;
+}
+
+/* ── Sheet ─── */
+.sheet-wrap {
+  border: 0.5px solid var(--border2);
+  border-radius: var(--rad-sm);
+  overflow: hidden;
+  font-size: 12px;
+}
+.sheet-hdr { display: flex; background: var(--navy); }
+.sh-col {
+  padding: 5px 0;
+  text-align: center;
+  color: rgba(255,255,255,.9);
+  font-size: 11px;
+  font-weight: 600;
+  border-right: 0.5px solid rgba(255,255,255,.12);
+}
+.sheet-row {
+  display: flex;
+  border-top: 0.5px solid #E8ECF4;
+  transition: background .2s;
+}
+.sheet-row.reading {
+  background: rgba(60,180,200,.22) !important;
+  outline: 1.5px solid var(--teal);
+  outline-offset: -1px;
+}
+.sheet-row.written { background: rgba(29,158,117,.15) !important; }
+.sheet-cell {
+  padding: 5px 8px;
+  border-right: 0.5px solid #E8ECF4;
+  color: var(--text);
+  min-height: 27px;
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  transition: background .2s;
+}
+.sheet-cell.row-num {
+  background: var(--bg2);
+  color: var(--text3);
+  font-size: 11px;
+  justify-content: center;
+  width: 28px;
+  flex-shrink: 0;
+}
+.sheet-cell.active-cell {
+  background: rgba(60,180,200,.30) !important;
+  outline: 2px solid var(--teal);
+  outline-offset: -2px;
+}
+.sheet-cell.col-hdr {
+  font-weight: 600;
+  font-size: 11px;
+  color: var(--text2);
+  background: var(--bg2);
+}
+
+/* ── Code box ─── */
+.code-box {
+  background: #FAFBFD;
+  border: 0.5px solid var(--border);
+  border-radius: var(--rad-sm);
+  padding: 12px 14px;
+  font-family: 'Cascadia Code','Consolas','Courier New',monospace;
+  font-size: 12px;
+  line-height: 1.8;
+}
+.ck  { color: #2E75B6; font-weight: 600; }
+.cs  { color: #A31515; }
+.cc  { color: #4A7A4A; }
+.code-line {
+  padding: 1px 4px;
+  border-radius: 3px;
+  transition: background .18s;
+  display: block;
+}
+.code-line.active {
+  background: rgba(60,180,200,.2);
+  border-left: 3px solid var(--teal);
+  padding-left: 5px;
+}
+.indent { display: inline-block; width: 18px; }
+.indent2 { display: inline-block; width: 36px; }
+
+/* ── Vars box ─── */
+.vars-box {
+  border: 0.5px solid var(--border);
+  border-radius: var(--rad-sm);
+  overflow: hidden;
+  font-size: 12px;
+}
+.vars-hdr {
+  background: var(--midb);
+  color: #fff;
+  padding: 6px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .04em;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.var-row {
+  display: flex;
+  align-items: center;
+  border-top: 0.5px solid #E8ECF4;
+  padding: 5px 12px;
+  gap: 8px;
+  transition: background .15s;
+}
+.var-row:nth-child(even) { background: var(--bg2); }
+.var-name {
+  color: var(--midb);
+  font-family: 'Cascadia Code','Consolas','Courier New',monospace;
+  font-size: 11px;
+  width: 64px;
+  flex-shrink: 0;
+}
+.var-val {
+  font-family: 'Cascadia Code','Consolas','Courier New',monospace;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text);
+  flex: 1;
+  transition: color .2s;
+}
+.var-val.changed { color: var(--teal2); }
+.var-arrow { font-size: 11px; color: var(--text3); flex-shrink: 0; }
+.var-cell  { font-size: 11px; color: var(--ltb); font-family: monospace; }
+
+/* ── Cell equation box ─── */
+.cell-eq {
+  border: 0.5px solid var(--border);
+  border-radius: var(--rad-sm);
+  padding: 11px 14px;
+  margin-top: 12px;
+  background: var(--bg2);
+}
+.eq-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 3px 0; }
+.token {
+  padding: 2px 9px;
+  border-radius: 4px;
+  font-family: 'Cascadia Code','Consolas','Courier New',monospace;
+  font-size: 12px;
+  font-weight: 500;
+}
+.t-var  { background: rgba(22,87,141,.12); color: var(--midb); }
+.t-val  { background: rgba(60,180,200,.18); color: #0D7A8A; }
+.t-cell { background: rgba(29,158,117,.15); color: var(--teal2); font-weight: 700; }
+.t-op   { color: var(--text3); font-size: 13px; }
+
+.hint-box {
+  border: 0.5px solid rgba(60,180,200,.4);
+  border-left: 3px solid var(--teal);
+  border-radius: 0 var(--rad-sm) var(--rad-sm) 0;
+  background: rgba(60,180,200,.06);
+  padding: 9px 12px;
+  font-size: 12px;
+  color: var(--text2);
+  line-height: 1.6;
+  margin-top: 10px;
+}
+
+/* ── Controls ─── */
+.ctrl-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  flex-wrap: wrap;
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 16px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 0.5px solid var(--border2);
+  border-radius: var(--rad-sm);
+  background: var(--bg);
+  color: var(--text);
+  transition: background .12s, transform .1s;
+  outline: none;
+}
+.btn:hover { background: var(--bg2); }
+.btn:active { transform: scale(.97); }
+.btn.primary {
+  background: var(--navy);
+  color: #fff;
+  border-color: var(--navy);
+}
+.btn.primary:hover { background: #0A1570; }
+.btn:disabled { opacity: .38; cursor: default; pointer-events: none; }
+.iter-label { font-size: 11px; color: var(--text3); margin-left: 4px; }
+
+/* ── Msg box ─── */
+.msg-box {
+  border: 0.5px solid var(--border);
+  border-radius: var(--rad-sm);
+  padding: 9px 13px;
+  font-size: 12px;
+  margin-top: 11px;
+  min-height: 38px;
+  color: var(--text2);
+  background: var(--bg2);
+  line-height: 1.55;
+  transition: all .18s;
+}
+.msg-box.info {
+  border-color: rgba(60,180,200,.5);
+  color: var(--midb);
+  background: rgba(60,180,200,.07);
+}
+.msg-box.done {
+  border-color: rgba(29,158,117,.5);
+  color: var(--teal2);
+  background: rgba(29,158,117,.07);
+}
+
+/* ── Tabs ─── */
+.tab-bar {
+  display: flex;
+  border-bottom: 0.5px solid var(--border);
+  margin-bottom: 16px;
+  gap: 0;
+}
+.tab {
+  padding: 8px 18px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  color: var(--text2);
+  border-bottom: 2.5px solid transparent;
+  transition: all .15s;
+  background: none;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+}
+.tab:hover { color: var(--navy); }
+.tab.active { color: var(--navy); border-bottom-color: var(--teal); }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* ── Legend ─── */
+.legend {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  font-size: 11px;
+  margin-top: 8px;
+  color: var(--text3);
+}
+.leg-item { display: flex; align-items: center; gap: 5px; }
+.leg-dot  { width: 12px; height: 12px; border-radius: 2px; flex-shrink: 0; }
+
+.divider { height: 0.5px; background: var(--border); margin: 14px 0; }
+
+.badge-meta  { display:inline-block;padding:2px 7px;border-radius:99px;font-size:11px;font-weight:600;background:rgba(29,158,117,.12);color:var(--teal2); }
+.badge-below { display:inline-block;padding:2px 7px;border-radius:99px;font-size:11px;font-weight:600;background:rgba(186,117,23,.1);color:#854F0B; }
+
+/* ── Animations ─── */
+@keyframes slide-in { from{opacity:0;transform:translateY(-3px)} to{opacity:1;transform:none} }
+.slide-in { animation: slide-in .18s ease; }
+
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <span class="hdr-badge">VBA 5</span>
+    <span class="hdr-title">Ciclos e interacción con Excel</span>
+    <span class="hdr-sub">MediRed S.A. · Prof. Natalia Araya Plaza · UCN</span>
+  </div>
+</div>
+
+<div class="main">
+
+<!-- ══ SECCIÓN 1 ══════════════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="sec-hdr open" onclick="toggleSec(this,'body1')" id="hdr1">
+    <div class="num-badge">1</div>
+    <span class="sec-title"><i class="ti ti-table" style="margin-right:6px"></i>¿Qué es Cells(f, c)?</span>
+    <i class="ti ti-chevron-down sec-icon"></i>
+  </div>
+  <div class="sec-body open" id="body1">
+    <p class="intro-text">
+      Cada celda de Excel tiene una dirección numérica. <code>Cells(f, c)</code> apunta exactamente a la celda en la fila <strong>f</strong> y columna <strong>c</strong>. Mueve los controles y observa qué celda se resalta en la hoja.
+    </p>
+    <div class="grid2">
+      <div>
+        <div class="label-sm">Hoja de cálculo</div>
+        <div class="sheet-wrap" id="s1-sheet"></div>
+        <div class="legend">
+          <div class="leg-item">
+            <div class="leg-dot" style="background:rgba(60,180,200,.35);outline:2px solid #3CB4C8;outline-offset:-1px"></div>
+            Celda activa
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="label-sm">Controles</div>
+        <div style="display:flex;flex-direction:column;gap:14px;">
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px;">
+              <span style="color:var(--text2)">f &nbsp;(fila)</span>
+              <span style="font-family:monospace;font-weight:700;color:var(--navy)" id="fval">3</span>
+            </div>
+            <input type="range" min="1" max="6" value="3" step="1" id="s1f" oninput="updateS1()" style="width:100%">
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px;">
+              <span style="color:var(--text2)">c &nbsp;(columna)</span>
+              <span style="font-family:monospace;font-weight:700;color:var(--navy)" id="cval">2</span>
+            </div>
+            <input type="range" min="1" max="4" value="2" step="1" id="s1c" oninput="updateS1()" style="width:100%">
+          </div>
+        </div>
+        <div class="cell-eq">
+          <div class="eq-row">
+            <span class="token t-var">Cells(f, c)</span>
+            <span class="t-op">→</span>
+            <span class="token t-var" id="s1-expr">Cells(3, 2)</span>
+            <span class="t-op">→</span>
+            <span class="token t-cell" id="s1-cellname">B3</span>
+          </div>
+          <div class="eq-row" style="margin-top:7px;font-size:11px;color:var(--text3)">
+            fila <strong id="s1-f2" style="color:var(--navy)">3</strong> · columna <strong id="s1-c2" style="color:var(--navy)">2</strong> → letra <strong id="s1-cletter" style="color:var(--navy)">B</strong> → celda <strong id="s1-badge" style="color:var(--teal2)">B3</strong>
+          </div>
+        </div>
+        <div class="hint-box">
+          <i class="ti ti-bulb" style="color:var(--teal);margin-right:4px"></i>
+          A = columna 1, B = 2, C = 3, D = 4... En un ciclo, <strong>f</strong> cambia en cada vuelta — la celda apuntada baja una fila automáticamente.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SECCIÓN 2 ══════════════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="sec-hdr" onclick="toggleSec(this,'body2')" id="hdr2">
+    <div class="num-badge">2</div>
+    <span class="sec-title"><i class="ti ti-repeat" style="margin-right:6px"></i>For...Next y Do While — recorrer fila por fila</span>
+    <i class="ti ti-chevron-down sec-icon"></i>
+  </div>
+  <div class="sec-body" id="body2">
+    <p class="intro-text">
+      Ejecuta el ciclo paso a paso. Observa cómo <code>f</code> avanza, qué celda lee en cada vuelta y cuándo el ciclo termina.
+    </p>
+    <div class="tab-bar">
+      <button class="tab active" onclick="switchTab(0)">For...Next</button>
+      <button class="tab" onclick="switchTab(1)">Do While...Loop</button>
+    </div>
+
+    <!-- FOR -->
+    <div class="tab-panel active" id="tab0">
+      <div class="grid-lr">
+        <div>
+          <div class="label-sm">Código VBA</div>
+          <div class="code-box">
+            <span class="code-line" id="fl0"><span class="ck">Option Explicit</span></span>
+            <span class="code-line" id="fl1"><span class="ck">Sub</span> LeerTabla()</span>
+            <span class="code-line" id="fl2"><span class="indent"></span><span class="ck">Dim</span> f <span class="ck">As Integer</span></span>
+            <span class="code-line" id="fl3"><span class="indent"></span><span class="ck">Dim</span> nombre <span class="ck">As String</span></span>
+            <span class="code-line" id="fl4"><span class="indent"></span><span class="ck">Dim</span> atenc <span class="ck">As Integer</span></span>
+            <span class="code-line" id="fl5" style="margin-top:6px"><span class="indent"></span><span class="ck">For</span> f = 2 <span class="ck">To</span> 6</span>
+            <span class="code-line" id="fl6"><span class="indent2"></span>nombre = Cells(f, 1).Value</span>
+            <span class="code-line" id="fl7"><span class="indent2"></span>atenc  = Cells(f, 2).Value</span>
+            <span class="code-line" id="fl8"><span class="indent"></span><span class="ck">Next</span> f</span>
+            <span class="code-line" id="fl9"><span class="ck">End Sub</span></span>
+          </div>
+          <div class="msg-box" id="for-msg">Presiona <strong>Siguiente paso</strong> para comenzar.</div>
+          <div class="ctrl-bar">
+            <button class="btn primary" onclick="stepFor()" id="btn-for"><i class="ti ti-player-play"></i> Siguiente paso</button>
+            <button class="btn" onclick="resetFor()"><i class="ti ti-refresh"></i> Reiniciar</button>
+            <span class="iter-label" id="for-counter"></span>
+          </div>
+        </div>
+        <div>
+          <div class="label-sm">Hoja — MediRed S.A.</div>
+          <div class="sheet-wrap" id="for-sheet"></div>
+          <div class="divider"></div>
+          <div class="vars-box">
+            <div class="vars-hdr"><i class="ti ti-variable"></i> Variables en memoria</div>
+            <div class="var-row"><span class="var-name">f</span><span class="var-val" id="fv-f">—</span><span class="var-arrow">→</span><span class="var-cell" id="fv-fcell">—</span></div>
+            <div class="var-row"><span class="var-name">nombre</span><span class="var-val" id="fv-nom">—</span></div>
+            <div class="var-row"><span class="var-name">atenc</span><span class="var-val" id="fv-at">—</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DO WHILE -->
+    <div class="tab-panel" id="tab1">
+      <div class="grid-lr">
+        <div>
+          <div class="label-sm">Código VBA</div>
+          <div class="code-box">
+            <span class="code-line" id="dl0"><span class="ck">Option Explicit</span></span>
+            <span class="code-line" id="dl1"><span class="ck">Sub</span> LeerHastaVacio()</span>
+            <span class="code-line" id="dl2"><span class="indent"></span><span class="ck">Dim</span> f <span class="ck">As Integer</span></span>
+            <span class="code-line" id="dl3"><span class="indent"></span><span class="ck">Dim</span> nombre <span class="ck">As String</span></span>
+            <span class="code-line" id="dl4"><span class="indent"></span>f = 2</span>
+            <span class="code-line" id="dl5" style="margin-top:6px"><span class="indent"></span><span class="ck">Do While</span> Cells(f, 1).Value &lt;&gt; <span class="cs">""</span></span>
+            <span class="code-line" id="dl6"><span class="indent2"></span>nombre = Cells(f, 1).Value</span>
+            <span class="code-line" id="dl7"><span class="indent2"></span>f = f + 1</span>
+            <span class="code-line" id="dl8"><span class="indent"></span><span class="ck">Loop</span></span>
+            <span class="code-line" id="dl9"><span class="ck">End Sub</span></span>
+          </div>
+          <div class="msg-box" id="dw-msg">Presiona <strong>Siguiente paso</strong> para comenzar.</div>
+          <div class="ctrl-bar">
+            <button class="btn primary" onclick="stepDW()" id="btn-dw"><i class="ti ti-player-play"></i> Siguiente paso</button>
+            <button class="btn" onclick="resetDW()"><i class="ti ti-refresh"></i> Reiniciar</button>
+            <span class="iter-label" id="dw-counter"></span>
+          </div>
+        </div>
+        <div>
+          <div class="label-sm">Hoja — MediRed S.A.</div>
+          <div class="sheet-wrap" id="dw-sheet"></div>
+          <div class="divider"></div>
+          <div class="vars-box">
+            <div class="vars-hdr"><i class="ti ti-variable"></i> Variables en memoria</div>
+            <div class="var-row"><span class="var-name">f</span><span class="var-val" id="dv-f">—</span><span class="var-arrow">→</span><span class="var-cell" id="dv-fcell">—</span></div>
+            <div class="var-row"><span class="var-name">nombre</span><span class="var-val" id="dv-nom">—</span></div>
+            <div class="var-row"><span class="var-name">condición</span><span class="var-val" id="dv-cond">—</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SECCIÓN 3 ══════════════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="sec-hdr" onclick="toggleSec(this,'body3')" id="hdr3">
+    <div class="num-badge">3</div>
+    <span class="sec-title"><i class="ti ti-circuit-board" style="margin-right:6px"></i>Ciclo + condicional + acumulador</span>
+    <i class="ti ti-chevron-down sec-icon"></i>
+  </div>
+  <div class="sec-body" id="body3">
+    <p class="intro-text">
+      El ciclo recorre la tabla de MediRed fila por fila. En cada fila evalúa si el médico cumple la meta de atenciones, acumula el total y escribe el estado directamente en la hoja. Ejecuta paso a paso para ver cómo interactúan ciclo, condicional y acumulador.
+    </p>
+    <div class="grid3">
+      <div>
+        <div class="label-sm">Código VBA</div>
+        <div class="code-box" style="font-size:11.5px">
+          <span class="code-line" id="cl0"><span class="ck">Option Explicit</span></span>
+          <span class="code-line" id="cl1"><span class="ck">Sub</span> AnalizarMedicos()</span>
+          <span class="code-line" id="cl2"><span class="indent"></span><span class="ck">Dim</span> f      <span class="ck">As Integer</span></span>
+          <span class="code-line" id="cl3"><span class="indent"></span><span class="ck">Dim</span> nombre <span class="ck">As String</span></span>
+          <span class="code-line" id="cl4"><span class="indent"></span><span class="ck">Dim</span> atenc  <span class="ck">As Integer</span></span>
+          <span class="code-line" id="cl5"><span class="indent"></span><span class="ck">Dim</span> total  <span class="ck">As Integer</span></span>
+          <span class="code-line" id="cl6"><span class="indent"></span><span class="ck">Dim</span> estado <span class="ck">As String</span></span>
+          <span class="code-line" id="cl7"><span class="indent"></span>f = 2 : total = 0</span>
+          <span class="code-line" id="cl8" style="margin-top:6px"><span class="indent"></span><span class="ck">Do While</span> Cells(f, 1).Value &lt;&gt; <span class="cs">""</span></span>
+          <span class="code-line" id="cl9"><span class="indent2"></span>nombre = Cells(f, 1).Value</span>
+          <span class="code-line" id="cl10"><span class="indent2"></span>atenc  = Cells(f, 2).Value</span>
+          <span class="code-line" id="cl11"><span class="indent2"></span>total  = total + atenc</span>
+          <span class="code-line" id="cl12"><span class="indent2"></span><span class="ck">If</span> atenc &gt;= 50 <span class="ck">Then</span></span>
+          <span class="code-line" id="cl13"><span class="indent2"></span><span class="indent"></span>estado = <span class="cs">"Meta cumplida"</span></span>
+          <span class="code-line" id="cl14"><span class="indent2"></span><span class="ck">Else</span></span>
+          <span class="code-line" id="cl15"><span class="indent2"></span><span class="indent"></span>estado = <span class="cs">"Bajo meta"</span></span>
+          <span class="code-line" id="cl16"><span class="indent2"></span><span class="ck">End If</span></span>
+          <span class="code-line" id="cl17"><span class="indent2"></span>Cells(f, 3).Value = estado</span>
+          <span class="code-line" id="cl18"><span class="indent2"></span>f = f + 1</span>
+          <span class="code-line" id="cl19"><span class="indent"></span><span class="ck">Loop</span></span>
+          <span class="code-line" id="cl20" style="margin-top:6px"><span class="indent"></span>Cells(8, 2).Value = total</span>
+          <span class="code-line" id="cl21"><span class="ck">End Sub</span></span>
+        </div>
+        <div class="msg-box" id="comp-msg">Presiona <strong>Siguiente paso</strong> para ejecutar línea por línea.</div>
+        <div class="ctrl-bar">
+          <button class="btn primary" onclick="stepComp()" id="btn-comp"><i class="ti ti-player-play"></i> Siguiente paso</button>
+          <button class="btn" onclick="resetComp()"><i class="ti ti-refresh"></i> Reiniciar</button>
+        </div>
+      </div>
+      <div>
+        <div class="label-sm">Hoja — MediRed S.A.</div>
+        <div class="sheet-wrap" id="comp-sheet"></div>
+        <div class="divider"></div>
+        <div class="vars-box">
+          <div class="vars-hdr"><i class="ti ti-variable"></i> Variables en memoria</div>
+          <div class="var-row"><span class="var-name">f</span><span class="var-val" id="cv-f">—</span><span class="var-arrow">→</span><span class="var-cell" id="cv-fcell">—</span></div>
+          <div class="var-row"><span class="var-name">nombre</span><span class="var-val" id="cv-nom">—</span></div>
+          <div class="var-row"><span class="var-name">atenc</span><span class="var-val" id="cv-at">—</span></div>
+          <div class="var-row"><span class="var-name">total</span><span class="var-val" id="cv-tot">—</span></div>
+          <div class="var-row"><span class="var-name">estado</span><span class="var-val" id="cv-est">—</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /main -->
+
+<script>
+const MED = [
+  {nombre:'Soto',   atenc:45, sede:'Norte'},
+  {nombre:'Muñoz',  atenc:62, sede:'Sur'},
+  {nombre:'Vargas', atenc:38, sede:'Centro'},
+  {nombre:'Lagos',  atenc:71, sede:'Oriente'},
+  {nombre:'Rivas',  atenc:55, sede:'Norte'},
+];
+
+const COLS = ['','A','B','C','D','E','F','G','H'];
+function colLetter(c){ return COLS[c] || String(c); }
+function cellName(f,c){ return colLetter(c)+f; }
+
+/* ── Section toggle ─────────────────────────────────────────────── */
+function toggleSec(hdr,bodyId){
+  const body = document.getElementById(bodyId);
+  hdr.classList.toggle('open');
+  body.classList.toggle('open');
+  const ic = hdr.querySelector('.sec-icon');
+  if(ic) ic.style.transform = hdr.classList.contains('open') ? 'rotate(180deg)' : '';
+}
+
+/* ── Tab switch ──────────────────────────────────────────────────── */
+function switchTab(idx){
+  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',i===idx));
+  document.querySelectorAll('.tab-panel').forEach((p,i)=>p.classList.toggle('active',i===idx));
+}
+
+/* ══ SECCIÓN 1 ══════════════════════════════════════════════════════ */
+function buildS1Sheet(){
+  const el = document.getElementById('s1-sheet');
+  const cw = [28,90,80,60,60];
+  let h = `<div class="sheet-hdr">`;
+  ['','A','B','C','D'].forEach((l,i)=>h+=`<div class="sh-col" style="width:${cw[i]}px">${l}</div>`);
+  h += '</div>';
+  const rows = [
+    ['Médico','Atenc.','Sede','Ingr.'],
+    ['Soto',45,'Norte','$1.575k'],
+    ['Muñoz',62,'Sur','$2.170k'],
+    ['Vargas',38,'Centro','$1.330k'],
+    ['Lagos',71,'Oriente','$2.485k'],
+    ['Rivas',55,'Norte','$1.925k'],
+  ];
+  rows.forEach((row,ri)=>{
+    h += `<div class="sheet-row" id="s1r${ri+1}">`;
+    h += `<div class="sheet-cell row-num" style="width:${cw[0]}px">${ri+1}</div>`;
+    row.forEach((v,ci)=>{
+      const st = ri===0 ? 'class="sheet-cell col-hdr"' : 'class="sheet-cell"';
+      h += `<div ${st} id="s1c${ri+1}_${ci+1}" style="width:${cw[ci+1]}px">${v}</div>`;
+    });
+    h += '</div>';
+  });
+  el.innerHTML = h;
+}
+
+function updateS1(){
+  const f = +document.getElementById('s1f').value;
+  const c = +document.getElementById('s1c').value;
+  document.getElementById('fval').textContent = f;
+  document.getElementById('cval').textContent = c;
+  const cn = cellName(f,c);
+  const cl = colLetter(c);
+  document.getElementById('s1-expr').textContent = `Cells(${f}, ${c})`;
+  document.getElementById('s1-cellname').textContent = cn;
+  document.getElementById('s1-f2').textContent = f;
+  document.getElementById('s1-c2').textContent = c;
+  document.getElementById('s1-cletter').textContent = cl;
+  document.getElementById('s1-badge').textContent = cn;
+  for(let r=1;r<=6;r++) for(let cc=1;cc<=4;cc++){
+    const el = document.getElementById(`s1c${r}_${cc}`);
+    if(el) el.classList.toggle('active-cell', r===f && cc===c);
+  }
+}
+
+buildS1Sheet(); updateS1();
+
+/* ══ SECCIÓN 2A — For...Next ════════════════════════════════════════ */
+function buildGenSheet(id, hasFila7){
+  const el = document.getElementById(id);
+  const cw = [28,110,58];
+  let h = `<div class="sheet-hdr">`;
+  ['','A - Médico','B - Atenc.'].forEach((l,i)=>h+=`<div class="sh-col" style="width:${cw[i]}px">${l}</div>`);
+  h += '</div>';
+  h += `<div class="sheet-row"><div class="sheet-cell row-num" style="width:28px">1</div><div class="sheet-cell col-hdr" style="width:110px">Médico</div><div class="sheet-cell col-hdr" style="width:58px">Atenc.</div></div>`;
+  MED.forEach((d,i)=>{
+    const prefix = id.startsWith('for') ? 'fsr' : 'dsr';
+    h += `<div class="sheet-row" id="${prefix}${i+2}"><div class="sheet-cell row-num" style="width:28px">${i+2}</div><div class="sheet-cell" style="width:110px">${d.nombre}</div><div class="sheet-cell" style="width:58px">${d.atenc}</div></div>`;
+  });
+  if(hasFila7){
+    const prefix = id.startsWith('for') ? 'fsr' : 'dsr';
+    h += `<div class="sheet-row" id="${prefix}7"><div class="sheet-cell row-num" style="width:28px">7</div><div class="sheet-cell" style="width:110px;font-style:italic;color:var(--text3)">(vacía)</div><div class="sheet-cell" style="width:58px"></div></div>`;
+  }
+  el.innerHTML = h;
+}
+
+buildGenSheet('for-sheet', false);
+buildGenSheet('dw-sheet', true);
+
+function hlRow(prefix, row){
+  const max = prefix==='dsr' ? 7 : 6;
+  for(let i=2;i<=max;i++){
+    const r = document.getElementById(prefix+i);
+    if(r) r.className = 'sheet-row' + (i===row ? ' reading' : '');
+  }
+}
+
+function setActiveLine(prefix, ids, max){
+  for(let i=0;i<=max;i++){
+    const e = document.getElementById(prefix+'l'+i);
+    if(e) e.classList.remove('active');
+  }
+  ids.forEach(id=>{ const e=document.getElementById(id); if(e)e.classList.add('active'); });
+}
+
+function setMsg(id, text, type){
+  const el = document.getElementById(id);
+  el.className = 'msg-box ' + (type||'');
+  el.innerHTML = text;
+  el.classList.add('slide-in');
+  setTimeout(()=>el.classList.remove('slide-in'),200);
+}
+
+function setVar(id, val, sub){
+  const e = document.getElementById(id);
+  if(e){ e.textContent=val; e.classList.add('changed'); setTimeout(()=>e.classList.remove('changed'),500); }
+  if(sub!==undefined){ const e2=document.getElementById(id.replace('v-','v-f').replace(id,id+'cell')); }
+}
+
+/* FOR */
+let forF=1, forSt=0;
+function resetFor(){
+  forF=1; forSt=0;
+  hlRow('fsr',-1);
+  setActiveLine('f',['fl0'],9);
+  ['fv-f','fv-nom','fv-at'].forEach(id=>{ const e=document.getElementById(id); if(e)e.textContent='—'; });
+  document.getElementById('fv-fcell').textContent='—';
+  setMsg('for-msg','Presiona <strong>Siguiente paso</strong> para comenzar.','');
+  document.getElementById('for-counter').textContent='';
+  document.getElementById('btn-for').disabled=false;
+}
+resetFor();
+
+function stepFor(){
+  if(forSt===0){
+    setActiveLine('f',['fl5'],9);
+    forF=2;
+    document.getElementById('fv-f').textContent=forF;
+    document.getElementById('fv-fcell').textContent='→ fila '+forF;
+    document.getElementById('for-counter').textContent='Iteración 1';
+    hlRow('fsr',forF);
+    setMsg('for-msg',`<strong>For f = 2 To 6</strong>: f toma el valor 2. Se lee la fila ${forF}.`,'info');
+    forSt++; return;
+  }
+  const phase=(forSt-1)%3;
+  if(phase===0){
+    setActiveLine('f',['fl6'],9);
+    const nom=MED[forF-2].nombre;
+    document.getElementById('fv-nom').textContent=`"${nom}"`;
+    setMsg('for-msg',`<strong>Cells(${forF}, 1).Value</strong> → celda A${forF} → "${nom}" asignado a <em>nombre</em>.`,'info');
+    forSt++; return;
+  }
+  if(phase===1){
+    setActiveLine('f',['fl7'],9);
+    const at=MED[forF-2].atenc;
+    document.getElementById('fv-at').textContent=at;
+    setMsg('for-msg',`<strong>Cells(${forF}, 2).Value</strong> → celda B${forF} → ${at} asignado a <em>atenc</em>.`,'info');
+    forSt++; return;
+  }
+  if(phase===2){
+    setActiveLine('f',['fl8'],9);
+    const prev=forF; forF++;
+    if(forF>6){
+      document.getElementById('fv-f').textContent=forF+' (fin)';
+      document.getElementById('fv-fcell').textContent='— ciclo terminado';
+      hlRow('fsr',-1);
+      setMsg('for-msg',`<strong>Next f</strong>: f avanza de ${prev} a ${forF}. ${forF} > 6 → el ciclo <strong>termina</strong>.`,'done');
+      document.getElementById('for-counter').textContent='Ciclo completado ✓';
+      document.getElementById('btn-for').disabled=true;
+      forSt++; return;
+    }
+    document.getElementById('fv-f').textContent=forF;
+    document.getElementById('fv-fcell').textContent='→ fila '+forF;
+    document.getElementById('for-counter').textContent='Iteración '+(forF-1);
+    hlRow('fsr',forF);
+    setMsg('for-msg',`<strong>Next f</strong>: f avanza de ${prev} a ${forF}. Siguiente vuelta.`,'info');
+    forSt++; return;
+  }
+}
+
+/* DO WHILE */
+let dwF=2, dwSt=0;
+function resetDW(){
+  dwF=2; dwSt=0;
+  hlRow('dsr',-1);
+  setActiveLine('d',['dl0'],9);
+  ['dv-f','dv-nom','dv-cond'].forEach(id=>{ const e=document.getElementById(id); if(e)e.textContent='—'; });
+  document.getElementById('dv-fcell').textContent='—';
+  setMsg('dw-msg','Presiona <strong>Siguiente paso</strong> para comenzar.','');
+  document.getElementById('dw-counter').textContent='';
+  document.getElementById('btn-dw').disabled=false;
+}
+resetDW();
+
+function stepDW(){
+  if(dwSt===0){
+    setActiveLine('d',['dl4'],9);
+    dwF=2;
+    document.getElementById('dv-f').textContent=dwF;
+    document.getElementById('dv-fcell').textContent='→ fila '+dwF;
+    document.getElementById('dw-counter').textContent='f inicializado';
+    setMsg('dw-msg','<strong>f = 2</strong>: En Do While debemos inicializar f manualmente — el ciclo no lo hace solo.','info');
+    dwSt++; return;
+  }
+  const data=[...MED,null];
+  const phase=(dwSt-1)%3;
+  const idx=dwF-2;
+  const cur=data[idx];
+  if(phase===0){
+    setActiveLine('d',['dl5'],9);
+    hlRow('dsr',dwF);
+    if(!cur){
+      document.getElementById('dv-cond').textContent=`A${dwF} = "" → FALSO`;
+      setMsg('dw-msg',`<strong>Cells(${dwF}, 1)</strong> está vacía — la condición <strong>es FALSA</strong>. El ciclo termina.`,'done');
+      document.getElementById('dw-counter').textContent='Ciclo completado ✓';
+      document.getElementById('btn-dw').disabled=true;
+      dwSt++; return;
+    }
+    document.getElementById('dv-cond').textContent=`A${dwF}="${cur.nombre}" → VERDADERO`;
+    setMsg('dw-msg',`<strong>Cells(${dwF}, 1)</strong> = "${cur.nombre}" — no está vacía. Condición <strong>VERDADERA</strong> → entra al ciclo.`,'info');
+    dwSt++; return;
+  }
+  if(phase===1){
+    setActiveLine('d',['dl6'],9);
+    document.getElementById('dv-nom').textContent=`"${cur.nombre}"`;
+    setMsg('dw-msg',`<strong>Cells(${dwF}, 1).Value</strong> → celda A${dwF} → "${cur.nombre}" asignado a <em>nombre</em>.`,'info');
+    dwSt++; return;
+  }
+  if(phase===2){
+    setActiveLine('d',['dl7','dl8'],9);
+    const prev=dwF; dwF++;
+    document.getElementById('dv-f').textContent=dwF;
+    document.getElementById('dv-fcell').textContent='→ fila '+dwF;
+    document.getElementById('dw-counter').textContent='Iteración '+(dwF-1);
+    setMsg('dw-msg',`<strong>f = f + 1</strong>: f avanza de ${prev} a ${dwF}. <strong>Loop</strong>: vuelve a evaluar la condición.`,'info');
+    dwSt++; return;
+  }
+}
+
+/* ══ SECCIÓN 3 — Compuesto ══════════════════════════════════════════ */
+function buildCompSheet(){
+  const el=document.getElementById('comp-sheet');
+  const cw=[28,95,50,90];
+  let h=`<div class="sheet-hdr">`;
+  ['','A','B','C'].forEach((l,i)=>h+=`<div class="sh-col" style="width:${cw[i]}px">${l}</div>`);
+  h+='</div>';
+  h+=`<div class="sheet-row"><div class="sheet-cell row-num" style="width:28px">1</div><div class="sheet-cell col-hdr" style="width:95px">Médico</div><div class="sheet-cell col-hdr" style="width:50px">Atenc.</div><div class="sheet-cell col-hdr" style="width:90px">Estado</div></div>`;
+  MED.forEach((d,i)=>{
+    h+=`<div class="sheet-row" id="csr${i+2}"><div class="sheet-cell row-num" style="width:28px">${i+2}</div><div class="sheet-cell" style="width:95px">${d.nombre}</div><div class="sheet-cell" style="width:50px">${d.atenc}</div><div class="sheet-cell" id="cest${i+2}" style="width:90px;font-size:11px"></div></div>`;
+  });
+  h+=`<div class="sheet-row"><div class="sheet-cell row-num" style="width:28px">7</div><div class="sheet-cell" style="width:95px;font-style:italic;color:var(--text3)">(vacía)</div><div class="sheet-cell" style="width:50px"></div><div class="sheet-cell" style="width:90px"></div></div>`;
+  h+=`<div class="sheet-row" id="csr8"><div class="sheet-cell row-num" style="width:28px">8</div><div class="sheet-cell" style="width:95px;font-weight:600;font-size:11px;color:var(--text2)">TOTAL</div><div class="sheet-cell" id="ctot" style="width:50px;font-weight:700"></div><div class="sheet-cell" style="width:90px"></div></div>`;
+  el.innerHTML=h;
+}
+buildCompSheet();
+
+let compF=2, compTotal=0, compIter=0, compSeq=[], compBuilt=false;
+
+function buildCS(){
+  compTotal=0;
+  const s=[];
+  s.push({lines:['cl7'],msg:'<strong>f = 2, total = 0</strong>: variables inicializadas.',type:'info',fn:()=>{
+    compF=2; compTotal=0;
+    cv('f','2','→ fila 2'); cv('tot','0'); cv('nom','—'); cv('at','—'); cv('est','—');
+  }});
+  MED.forEach((d,i)=>{
+    const fila=i+2;
+    s.push({lines:['cl8'],msg:`<strong>Cells(${fila}, 1)</strong> = "${d.nombre}" — no está vacía. Condición <strong>VERDADERA</strong> → entra.`,type:'info',fn:()=>{
+      compF=fila; cv('f',String(fila),'→ fila '+fila); hlCompRow(fila);
+    }});
+    s.push({lines:['cl9','cl10'],msg:`Lee fila ${fila}: <em>nombre</em> = "${d.nombre}", <em>atenc</em> = ${d.atenc}.`,type:'info',fn:()=>{
+      cv('nom',`"${d.nombre}"`); cv('at',String(d.atenc));
+    }});
+    s.push({lines:['cl11'],msg:`<strong>total = total + ${d.atenc}</strong> = ${compTotal} + ${d.atenc} = ${compTotal+d.atenc}.`,type:'info',fn:()=>{
+      compTotal+=d.atenc; cv('tot',String(compTotal));
+    }});
+    const meta=d.atenc>=50;
+    s.push({lines: meta?['cl12','cl13']:['cl12','cl14','cl15'],
+      msg:`${d.atenc} >= 50 → <strong>${meta?'VERDADERO':'FALSO'}</strong> → estado = "${meta?'Meta cumplida':'Bajo meta'}".`,
+      type:'info',fn:()=>{
+        const est=meta?'Meta cumplida':'Bajo meta';
+        cv('est',`"${est}"`);
+        const el=document.getElementById('cest'+fila);
+        if(el){
+          el.textContent=est;
+          el.innerHTML=meta?`<span class="badge-meta">${est}</span>`:`<span class="badge-below">${est}</span>`;
+        }
+      }
+    });
+    s.push({lines:['cl17'],msg:`<strong>Cells(${fila}, 3).Value = "${d.atenc>=50?'Meta cumplida':'Bajo meta'}"</strong>: escribe el estado en la celda C${fila}.`,type:'info',fn:()=>{}});
+    s.push({lines:['cl18'],msg:`<strong>f = f + 1</strong>: f avanza de ${fila} a ${fila+1}. <strong>Loop</strong>: vuelve a evaluar la condición.`,type:'info',fn:()=>{
+      const nf=fila+1; cv('f',String(nf),'→ fila '+nf);
+    }});
+  });
+  s.push({lines:['cl8'],msg:`<strong>Cells(${MED.length+2}, 1)</strong> está vacía. Condición <strong>FALSA</strong> → el ciclo termina.`,type:'done',fn:()=>{
+    hlCompRow(-1); cv('f',String(MED.length+2),'— vacía');
+  }});
+  s.push({lines:['cl20'],msg:`<strong>Cells(8, 2).Value = ${compTotal}</strong>: escribe el total en la celda B8.`,type:'done',fn:()=>{
+    const el=document.getElementById('ctot');
+    if(el){el.textContent=compTotal; el.style.color='var(--teal2)';}
+    const r8=document.getElementById('csr8'); if(r8)r8.classList.add('written');
+  }});
+  return s;
+}
+
+function cv(key,val,sub){
+  const e=document.getElementById('cv-'+key);
+  if(e){e.textContent=val; e.classList.add('changed'); setTimeout(()=>e.classList.remove('changed'),500);}
+  if(sub){const e2=document.getElementById('cv-fcell'); if(e2)e2.textContent=sub;}
+}
+
+function hlCompRow(row){
+  for(let i=2;i<=6;i++){
+    const r=document.getElementById('csr'+i);
+    if(r)r.className='sheet-row'+(i===row?' reading':'');
+  }
+}
+
+function resetComp(){
+  compF=2; compTotal=0; compIter=0; compSeq=[]; compBuilt=false;
+  hlCompRow(-1);
+  for(let i=2;i<=6;i++){const e=document.getElementById('cest'+i);if(e)e.innerHTML='';}
+  const ct=document.getElementById('ctot');if(ct){ct.textContent='';ct.style.color='';}
+  const r8=document.getElementById('csr8');if(r8)r8.className='sheet-row';
+  ['cv-f','cv-nom','cv-at','cv-tot','cv-est'].forEach(id=>{const e=document.getElementById(id);if(e){e.textContent='—';e.style.color='';}});
+  document.getElementById('cv-fcell').textContent='—';
+  setActiveLine('c',['cl0'],21);
+  setMsg('comp-msg','Presiona <strong>Siguiente paso</strong> para ejecutar línea por línea.','');
+  document.getElementById('btn-comp').disabled=false;
+}
+resetComp();
+
+function stepComp(){
+  if(!compBuilt){compSeq=buildCS(); compBuilt=true; compTotal=0;}
+  if(compIter>=compSeq.length){document.getElementById('btn-comp').disabled=true;return;}
+  const step=compSeq[compIter];
+  step.fn();
+  setActiveLine('c',step.lines,21);
+  setMsg('comp-msg',step.msg,step.type);
+  compIter++;
+  if(compIter>=compSeq.length) document.getElementById('btn-comp').disabled=true;
+}
+</script>
+</body>
+</html>
