@@ -642,6 +642,67 @@ body {
   </div>
 </div>
 
+
+<!-- ══ SECCIÓN 4 ══════════════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="sec-hdr" onclick="toggleSec(this,'body4')" id="hdr4">
+    <div class="num-badge">4</div>
+    <span class="sec-title"><i class="ti ti-arrows-diagonal" style="margin-right:6px"></i>Doble ciclo — f y c se mueven juntos</span>
+    <i class="ti ti-chevron-down sec-icon"></i>
+  </div>
+  <div class="sec-body" id="body4">
+    <p class="intro-text">
+      En el doble ciclo, <code>f</code> avanza lento (una vez por médico) y <code>c</code> avanza rápido (recorre todos los meses dentro de cada médico). Ejecuta paso a paso y observa cómo la celda resaltada se mueve primero hacia la derecha y luego baja una fila.
+    </p>
+    <div class="grid3">
+      <div>
+        <div class="label-sm">Código VBA</div>
+        <div class="code-box" style="font-size:11.5px">
+          <span class="code-line" id="dbl0"><span class="ck">Option Explicit</span></span>
+          <span class="code-line" id="dbl1"><span class="ck">Sub</span> TotalesSemestrales()</span>
+          <span class="code-line" id="dbl2"><span class="indent"></span><span class="ck">Dim</span> f      <span class="ck">As Integer</span></span>
+          <span class="code-line" id="dbl3"><span class="indent"></span><span class="ck">Dim</span> c      <span class="ck">As Integer</span></span>
+          <span class="code-line" id="dbl4"><span class="indent"></span><span class="ck">Dim</span> total  <span class="ck">As Integer</span></span>
+          <span class="code-line" id="dbl5" style="margin-top:6px"><span class="indent"></span><span class="cc">' Ciclo externo: médico por médico</span></span>
+          <span class="code-line" id="dbl7" style="margin-top:2px"><span class="indent"></span><span class="ck">For</span> f = 2 <span class="ck">To</span> 11</span>
+          <span class="code-line" id="dbl9"><span class="indent2"></span>total = 0</span>
+          <span class="code-line" id="dbl10" style="margin-top:4px"><span class="indent2"></span><span class="cc">' Ciclo interno: mes por mes</span></span>
+          <span class="code-line" id="dbl10b"><span class="indent2"></span><span class="ck">For</span> c = 3 <span class="ck">To</span> 8</span>
+          <span class="code-line" id="dbl11"><span class="indent2"></span><span class="indent"></span>total = total + Cells(f, c).Value</span>
+          <span class="code-line" id="dbl12"><span class="indent2"></span><span class="ck">Next</span> c</span>
+          <span class="code-line" id="dbl13" style="margin-top:4px"><span class="indent2"></span>Cells(f, 9).Value = total</span>
+          <span class="code-line" id="dbl14"><span class="indent"></span><span class="ck">Next</span> f</span>
+          <span class="code-line" id="dbl15"><span class="ck">End Sub</span></span>
+        </div>
+        <div class="hint-box" style="margin-top:10px">
+          <i class="ti ti-bulb" style="color:var(--teal);margin-right:4px"></i>
+          <strong>f avanza lento</strong> — una vez por médico.<br>
+          <strong>c avanza rápido</strong> — recorre los 6 meses dentro de cada f.<br>
+          <code>Cells(f, c)</code> apunta exactamente a la celda resaltada en cada paso.
+        </div>
+        <div class="msg-box" id="dbl-msg">Presiona <strong>Siguiente paso</strong> para ejecutar línea por línea.</div>
+        <div class="ctrl-bar">
+          <button class="btn primary" onclick="stepDbl()" id="btn-dbl"><i class="ti ti-player-play"></i> Siguiente paso</button>
+          <button class="btn" onclick="resetDbl()"><i class="ti ti-refresh"></i> Reiniciar</button>
+        </div>
+      </div>
+      <div>
+        <div class="label-sm">Hoja — MediRed S.A. (10 médicos × 6 meses)</div>
+        <div class="sheet-wrap" id="dbl-sheet" style="font-size:11px"></div>
+        <div class="divider"></div>
+        <div class="vars-box">
+          <div class="vars-hdr"><i class="ti ti-variable"></i> Variables en memoria</div>
+          <div class="var-row"><span class="var-name">f</span><span class="var-val" id="dv2-f">—</span><span class="var-arrow">→</span><span class="var-cell" id="dv2-fcell">—</span></div>
+          <div class="var-row"><span class="var-name">c</span><span class="var-val" id="dv2-c">—</span></div>
+          <div class="var-row"><span class="var-name">Cells(f,c)</span><span class="var-val" id="dv2-celda">—</span></div>
+          <div class="var-row"><span class="var-name">total</span><span class="var-val" id="dv2-total">—</span></div>
+          <div class="var-row" style="background:rgba(60,180,200,.06)"><span class="var-name" style="color:var(--teal2)">paso a paso</span><span class="var-val" id="dv2-acc" style="color:var(--teal2)">—</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 </div><!-- /main -->
 
 <script>
@@ -995,6 +1056,165 @@ function stepComp(){
   compIter++;
   if(compIter>=compSeq.length) document.getElementById('btn-comp').disabled=true;
 }
+
+// ══ SECCIÓN 4 — Doble ciclo ══════════════════════════════════════════
+const COLS6 = ['','A','B','C','D','E','F','G','H','I','J','K'];
+function colL(c){return COLS6[c]||c;}
+
+const MED6 = [
+  {nombre:'Soto',    sede:'Norte',   meses:[42,38,51,45,39,47]},
+  {nombre:'Muñoz',   sede:'Sur',     meses:[58,63,55,70,62,68]},
+  {nombre:'Vargas',  sede:'Centro',  meses:[31,28,35,33,29,36]},
+  {nombre:'Lagos',   sede:'Oriente', meses:[72,68,75,80,71,77]},
+  {nombre:'Rivas',   sede:'Norte',   meses:[50,54,48,52,56,49]},
+  {nombre:'Tapia',   sede:'Sur',     meses:[85,90,82,88,91,86]},
+  {nombre:'Fuentes', sede:'Centro',  meses:[25,22,30,27,24,28]},
+  {nombre:'Paredes', sede:'Oriente', meses:[65,69,62,71,67,73]},
+  {nombre:'Cáceres', sede:'Norte',   meses:[44,41,47,43,46,42]},
+  {nombre:'Espinoza',sede:'Sur',     meses:[55,58,53,60,57,62]},
+];
+const MESES6n=['Ene','Feb','Mar','Abr','May','Jun'];
+
+function buildDblSheet(){
+  const el=document.getElementById('dbl-sheet');
+  if(!el) return;
+  const cw=[28,75,42,42,42,42,42,42,52];
+  let h=`<div class="sheet-hdr">`;
+  ['','Médico','Ene','Feb','Mar','Abr','May','Jun','Total'].forEach((l,i)=>
+    h+=`<div class="sh-col" style="width:${cw[i]}px;font-size:10px">${l}</div>`);
+  h+='</div>';
+  h+=`<div class="sheet-row"><div class="sheet-cell row-num" style="width:28px">1</div>`;
+  h+=`<div class="sheet-cell col-hdr" style="width:75px;font-size:10px">Médico</div>`;
+  MESES6n.forEach(m=>h+=`<div class="sheet-cell col-hdr" style="width:42px;font-size:10px">${m}</div>`);
+  h+=`<div class="sheet-cell col-hdr" style="width:52px;font-size:10px">Total</div></div>`;
+  MED6.forEach((d,i)=>{
+    const rn=i+2;
+    h+=`<div class="sheet-row" id="dbr${rn}">`;
+    h+=`<div class="sheet-cell row-num" style="width:28px">${rn}</div>`;
+    h+=`<div class="sheet-cell" style="width:75px;font-size:10px">${d.nombre}</div>`;
+    d.meses.forEach((v,ci)=>
+      h+=`<div class="sheet-cell" id="dbc${rn}_${ci+3}" style="width:42px;font-size:11px">${v}</div>`);
+    h+=`<div class="sheet-cell" id="dbt${rn}" style="width:52px;font-weight:600"></div>`;
+    h+='</div>';
+  });
+  el.innerHTML=h;
+}
+
+function hlDblCell(f,c){
+  for(let r=2;r<=11;r++){
+    const row=document.getElementById('dbr'+r);
+    if(row) row.className='sheet-row';
+    for(let cc=3;cc<=8;cc++){
+      const e=document.getElementById(`dbc${r}_${cc}`);
+      if(e) e.classList.remove('active-cell');
+    }
+  }
+  if(f>=2&&f<=11){
+    const row=document.getElementById('dbr'+f);
+    if(row) row.className='sheet-row reading';
+  }
+  if(f>=2&&f<=11&&c>=3&&c<=8){
+    const e=document.getElementById(`dbc${f}_${c}`);
+    if(e) e.classList.add('active-cell');
+  }
+}
+
+function setDV(key,val,sub){
+  const e=document.getElementById('dv2-'+key);
+  if(e){e.textContent=val;e.classList.add('changed');setTimeout(()=>e.classList.remove('changed'),500);}
+  if(sub!==undefined){const e2=document.getElementById('dv2-fcell');if(e2)e2.textContent=sub;}
+}
+
+let dblIter=0,dblSeq=[],dblBuilt=false,dblRunTotal=0;
+
+function buildDblSeq(){
+  const seq=[];
+  dblRunTotal=0;
+  seq.push({lines:['dbl7'],msg:'<strong>For f = 2 To 11</strong>: el ciclo externo está listo. f comenzará en 2 (primera fila de datos).',type:'info',fn:()=>{
+    setDV('f','—');setDV('c','—');setDV('celda','—');setDV('total','—');setDV('acc','—','-');
+    hlDblCell(-1,-1);
+  }});
+  for(let f=2;f<=11;f++){
+    const med=MED6[f-2];
+    let fTotal=0;
+    seq.push({lines:['dbl7'],msg:`<strong>f = ${f}</strong>: ciclo externo entra. Médico: <em>${med.nombre}</em> (fila ${f}).`,type:'info',fn:()=>{
+      fTotal=0;
+      setDV('f',String(f),'→ fila '+f);setDV('c','—');setDV('celda','—');setDV('total','0');setDV('acc','0');
+      hlDblCell(f,-1);
+    }});
+    seq.push({lines:['dbl9'],msg:`<strong>total = 0</strong>: reiniciamos el acumulador antes de recorrer los meses de ${med.nombre}.`,type:'info',fn:()=>{
+      fTotal=0; setDV('total','0');
+    }});
+    for(let c=3;c<=8;c++){
+      const m=c-3; const val=med.meses[m];
+      seq.push({lines:['dbl10b'],msg:`<strong>For c = ${c}</strong>: ciclo interno → mes ${MESES6n[m]}. <strong>Cells(${f}, ${c}) → ${colL(c)}${f} = ${val}</strong>.`,type:'info',fn:()=>{
+        setDV('c',String(c));
+        setDV('celda',`Cells(${f},${c}) = ${colL(c)}${f} = ${val}`);
+        hlDblCell(f,c);
+      }});
+      seq.push({lines:['dbl11'],msg:`<strong>total = total + ${val}</strong> → ${fTotal} + ${val} = ${fTotal+val}.`,type:'info',fn:()=>{
+        fTotal+=val; setDV('total',String(fTotal));setDV('acc',`+${val} → ${fTotal}`);
+      }});
+      if(c<8){
+        seq.push({lines:['dbl12'],msg:`<strong>Next c</strong>: c avanza de ${c} a ${c+1}. Siguiente mes: ${MESES6n[m+1]}.`,type:'info',fn:()=>{
+          setDV('c',String(c+1));
+        }});
+      } else {
+        seq.push({lines:['dbl12'],msg:`<strong>Next c</strong>: c = ${c+1} > 8 → el ciclo interno termina. Total del semestre para ${med.nombre}: <strong>${fTotal}</strong>.`,type:'done',fn:()=>{
+          setDV('c','9 (fin)');
+        }});
+      }
+    }
+    seq.push({lines:['dbl13'],msg:`<strong>Cells(${f}, 9).Value = ${fTotal}</strong>: escribe el total <strong>${fTotal}</strong> en la columna Total de la fila ${f}.`,type:'done',fn:()=>{
+      const el=document.getElementById('dbt'+f);
+      if(el){el.textContent=fTotal;el.style.color='var(--teal2)';}
+      const row=document.getElementById('dbr'+f);
+      if(row) row.classList.add('written');
+    }});
+    if(f<11){
+      seq.push({lines:['dbl14'],msg:`<strong>Next f</strong>: f avanza de ${f} a ${f+1}. Siguiente médico: ${MED6[f-1].nombre}.`,type:'info',fn:()=>{
+        hlDblCell(-1,-1);
+      }});
+    } else {
+      seq.push({lines:['dbl14'],msg:`<strong>Next f</strong>: f = ${f+1} > 11 → el ciclo externo termina. Los 10 médicos han sido procesados.`,type:'done',fn:()=>{
+        hlDblCell(-1,-1);
+        document.getElementById('btn-dbl').disabled=true;
+      }});
+    }
+  }
+  return seq;
+}
+
+function resetDbl(){
+  dblIter=0;dblSeq=[];dblBuilt=false;dblRunTotal=0;
+  hlDblCell(-1,-1);
+  for(let r=2;r<=11;r++){
+    const t=document.getElementById('dbt'+r);if(t){t.textContent='';t.style.color='';}
+    const row=document.getElementById('dbr'+r);if(row)row.className='sheet-row';
+  }
+  setActiveLine('dbl',['dbl0'],15);
+  ['dv2-f','dv2-c','dv2-celda','dv2-total','dv2-acc'].forEach(id=>{
+    const e=document.getElementById(id);if(e){e.textContent='—';e.style.color='';}
+  });
+  const fc=document.getElementById('dv2-fcell');if(fc)fc.textContent='—';
+  setMsg('dbl-msg','Presiona <strong>Siguiente paso</strong> para ejecutar línea por línea.','');
+  document.getElementById('btn-dbl').disabled=false;
+}
+
+function stepDbl(){
+  if(!dblBuilt){dblSeq=buildDblSeq();dblBuilt=true;}
+  if(dblIter>=dblSeq.length){document.getElementById('btn-dbl').disabled=true;return;}
+  const step=dblSeq[dblIter];
+  step.fn();
+  setActiveLine('dbl',step.lines,15);
+  setMsg('dbl-msg',step.msg,step.type);
+  dblIter++;
+  if(dblIter>=dblSeq.length) document.getElementById('btn-dbl').disabled=true;
+}
+
+buildDblSheet();
+resetDbl();
+
 </script>
 </body>
 </html>
