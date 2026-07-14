@@ -431,7 +431,7 @@
           <div class="slots" id="slotsContainer"></div>
           <div class="hint">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-            <span>Si ninguno de estos horarios te acomoda, selecciona la tarjeta "Ningún horario me acomoda" para que quede registro de que respondiste.</span>
+            <span>Si ninguno de estos horarios te acomoda, selecciona la tarjeta "Ningún horario Sin disponibilidad" para que quede registro de que respondiste.</span>
           </div>
         </div>
 
@@ -550,8 +550,8 @@ function renderSlots(horarios){
   noneEl.innerHTML = `
     <div class="slot-check">${checkIcon}</div>
     <div class="slot-day">Ningún horario</div>
-    <div class="slot-date">me acomoda</div>
-    <div class="slot-time">${noneIcon}Avisaré por correo</div>
+    <div class="slot-date">Sin disponibilidad</div>
+    
   `;
   noneEl.addEventListener('click', ()=>{
     document.querySelectorAll('.slot').forEach(s=>{
